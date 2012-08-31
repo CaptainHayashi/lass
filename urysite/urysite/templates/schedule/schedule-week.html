@@ -1,0 +1,56 @@
+{% comment %}
+    SCHEDULE - Week view subtemplate
+    DON'T PANIC!  This is probably the most complex template in URY.
+{% endcomment %}
+
+<table id="schedule-week-table">
+    <thead>
+        <tr>
+            <th>Time</th>
+
+            {% if day_links == false %}
+
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+                <th>Sunday</th>
+
+            {% else %}
+
+                <th><a href="">Monday</a></th>
+                <th><a href="">Tuesday</a></th>
+                <th><a href="">Wednesday</a></th>
+                <th><a href="">Thursday</a></th>
+                <th><a href="">Friday</a></th>
+                <th><a href="">Saturday</a></th>
+                <th><a href="">Sunday</a></th>
+
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for key,row in schedule_table %}
+            {% with hourEven=row.hour|divisibleby:2 %}
+            {% ifchanged hourEven %}
+                {% cycle 'light' 'dark' as shade %}
+            {% endifchanged %}
+            {% endwith %}
+
+            <tr>
+                <th class="default-{{ shade }}"
+                    style="height: {{ row.duration }}px;">
+                  {% if row.time|divisibleby:60 %}
+                      {{ row.hour }}:00
+                  {% endif %}
+                </th>
+
+                {% for entry in row.contents %}
+                    {% include "schedule/schedule-week-row.html" %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

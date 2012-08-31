@@ -1,0 +1,75 @@
+{# SCHEDULE - Day view subtemplate #}
+
+<ul id="schedule-day-list">
+  {% for pos,show in schedule %}
+
+  {#- Block colour -#}
+  {#- - Get colours for the show block through its identifier -#}
+  {%- if show.block is defined and show.block.identifier is defined -%}
+    {%- set blockid = show.block.identifier -%}
+  {%- else -%}
+    {%- set blockid = 'default' -%}
+  {%- endif -%}
+
+  {#- - Next choose the appropriate shade #}
+  {%- if hour % 2 == 0 -%}
+    {%- set colour = blockid ~ '-light' -%}
+  {%- else -%}
+    {%- set colour = blockid ~ '-dark' -%}
+  {%- endif -%} 
+
+  {#- Formatted start and end for tooltips #}
+  {%- set fstart = "%u:%02u"|format(show.start.hour % 24, show.start.minute) %}
+  {%- set fend = "%u:%02u"|format(show.end.hour % 24, show.end.minute) %}
+
+  {# Formatted presenter string #}
+  {%- set fpresent = '' -%}
+
+  {%- if show.presenters is defined -%}
+    {%- for presenter in show.presenters -%}
+      {%- set pname = presenter.fname ~ ' ' ~ presenter.sname -%}
+
+      {%- if loop.first -%}
+        {%- set fpresent = ', with ' ~ pname -%}
+      {%- elseif loop.last -%}
+        {%- set fpresent = fpresent ~ ' and ' ~ pname -%}
+      {%- else -%}
+        {%- set fpresent = fpresent ~ ', ' ~ pname -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+
+  {#- Override stuff if Jukebox #}
+  {%- if show.is_jukebox is defined and show.is_jukebox == true -%}
+    {%- set colour = 'jukebox' -%}
+    {%- set fpresent = '' -%}
+  {%- endif %}	       
+
+  {# Actually print out the show now. #}
+  <li class="{{ colour }}">
+    {%- if show.is_jukebox is defined and show.is_jukebox == true -%}
+    <hgroup>
+      <h3>{{ show.summary }}</h3>
+      <h4>From {{ fstart }} to {{ fend }}</h4>
+    </hgroup>
+    {%- else %}
+
+    <hgroup>
+      <h3>
+	<a href="/shows/?entryid={{ show.entryid }}">
+	  {{ show.summary }}
+	</a>
+      </h3>
+      <h4>
+	From {{ fstart }} to {{ fend }}{{ fpresent }}
+      </h4>
+    </hgroup>
+
+    <p>
+      {{ show.description }}
+    </p>
+
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>

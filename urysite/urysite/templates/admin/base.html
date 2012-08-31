@@ -1,0 +1,112 @@
+{% load admin_static %}
+{% load url from future %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <link rel="stylesheet"
+              type="text/css"
+              href="//ury.york.ac.uk/portal/css/reset.css" />
+        <link rel="stylesheet"
+              type="text/css"
+              href="//ury.york.ac.uk/portal/css/style.css" />
+        <link rel="stylesheet"
+              type="text/css"
+              href="{% block stylesheet %}{% static "admin/css/base.css" %}{% endblock %}" />
+        {% block extrastyle %}{% endblock %}
+        {% if LANGUAGE_BIDI %}
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}" />
+        {% endif %}
+        <script type="text/javascript">
+            window.__admin_media_prefix__ = "{% filter escapejs %}{% static "admin/" %}{% endfilter %}";
+        </script>
+        {% block extrahead %}{% endblock %}
+        {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE" />{% endblock %}
+    </head>
+    <body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}">
+        {% if not is_popup %}
+            <header class="bar">
+                <div id="branding" class="fleft">
+                    {% block branding %}{% endblock %}
+                </div>
+                {% if user.is_active and user.is_staff %}
+                    <span>
+                        {% trans 'Welcome,' %}
+                        <strong>
+                            {% filter force_escape %}
+                                {% firstof user.first_name user.username %}
+                            {% endfilter %}
+                        </strong>
+                    </span>
+                    <span class="fright">
+                        {% block userlinks %}
+                            {% url 'django-admindocs-docroot' as docsroot %}
+                            {% if docsroot %}
+                                <a href="{{ docsroot }}">{% trans 'Documentation' %}</a> |
+                            {% endif %}
+                            <a href="{% url 'admin:password_change' %}">
+                                {% trans 'Change password' %}
+                            </a> |
+                            <a href="{% url 'admin:logout' %}">
+                                {% trans 'Log out' %}
+                            </a>
+                        {% endblock %}
+                    </span>
+                {% endif %}
+                {% block nav-global %}{% endblock %}
+            </header>
+            {% block breadcrumbs %}
+                <div class="breadcrumbs">
+                    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+                    {% if title %} &rsaquo; {{ title }}{% endif %}
+                </div>
+            {% endblock %}
+        {% endif %}
+
+        <div id="page">
+            {% block content_title %}
+                {% if title %}
+                    <h1 class="logotype">{{ title }}</h1>
+                {% endif %}
+            {% endblock %}
+
+            <div id="content-stripe" class="clearfix">
+                {% block messages %}
+                    {% if messages %}
+                        <ul class="messagelist">
+                            {% for message in messages %}
+                                <li
+                                    {% if message.tags %}
+                                        class="{{ message.tags }}"
+                                    {% endif %}
+                                >
+                                    {{ message }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endblock messages %}
+
+                {% block precontent %}{% endblock precontent %}
+                <div id="content"
+                     class="{% block coltype %}colM{% endblock %}">
+                    {% block pretitle %}{% endblock %}
+
+                    {% block content %}
+                        {% block object-tools %}{% endblock %}
+                        {{ content }}
+                    {% endblock %}
+                    {% block sidebar %}{% endblock %}
+                    <br class="clear" />
+                </div>
+            </div>
+        </div>
+
+        {% block footer %}
+            <footer class="bar"></footer>
+        {% endblock %}
+    </body>
+</html>

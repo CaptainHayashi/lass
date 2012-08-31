@@ -1,0 +1,20 @@
+
+<td class="{{ show.block.identifier|default:'default' }}-shade
+    {% if isShowStart %}
+        schedule-showstart
+    {% elif isShowEnd %}
+        schedule-showend
+    {% endif %}
+    "
+    style="height: {{ row.duration }}px; }}"
+    title="{{ show.tooltip }}"
+    >
+
+  {% if isShowStart %}
+
+  <a href="/shows/?entryid={{ show.entryid }}">
+    {{ show.summary }}
+  </a>
+
+  {% endif %}
+</td>

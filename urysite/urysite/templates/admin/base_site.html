@@ -1,0 +1,12 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block title %}{{ title }} | {% trans 'myURY SiteAdmin' %}{% endblock %}
+
+{% block branding %}
+<span id="site-name" class="header-left">
+    {% trans 'My((<span class="r">URY</span>)) | SiteAdmin' %}
+</span>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

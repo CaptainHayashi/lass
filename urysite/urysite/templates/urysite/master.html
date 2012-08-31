@@ -1,0 +1,73 @@
+{% load static %}
+{% load sitetree %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            {% block title %}URY
+            -
+            {% block title-rhs %}{{ section.title }}
+            {% endblock title-rhs %}
+            {% endblock title %}
+        </title>
+        <link rel="stylesheet" type="text/css"
+              href="{% static "css/site.css" %}">
+    </head>
+    <body>
+        <header>
+            <div id="top-bar">
+                <span class="socialBtn">
+                    <a href="http://www.twitter.com/ury1350">
+                        <img alt="Twitter"
+                             src="{% static "img/twitter.png" %}">
+                    </a>
+                    <a href="http://www.facebook.com/pages/University-Radio-York/6168619549">
+                        <img alt="Facebook"
+                             src="{% static "img/FaceBook-icon.png" %}">
+                    </a>
+                    <a href="https://plus.google.com/104651573423729444340?prsrc=3">
+                        <img style="width:19px; height:19px;"
+                             alt="Google+"
+                             src="https://ssl.gstatic.com/images/icons/gplus-32.png">
+                    </a>
+                </span>
+                <nav id="sitemenu">
+                    {% sitetree_menu from "main" include "trunk, this-children" %}
+                </nav>
+            </div>
+
+            <div id="masthead"> 
+                <div style="display:inline-block; *display:inline; zoom:1; text-align:center; width:430px;">
+                    <img src="{% static "img/ury-logo.png" %}"
+                         alt="((URY))"
+                         id="URYlogo">
+                    <h1 id="sitetitle">UNIVERSITY RADIO YORK</h1>
+                </div>
+                                
+                <div style="display:inline-block; *display:inline; zoom:1; vertical-align:top; margin-top:30px; width:600px; position:relative;">
+                    <div class="btnTransCont" style="position:absolute; top:auto; left:auto; width:150px; font-size:13pt; display:block; right:0px; bottom:0px; text-shadow:none; -webkit-text-shadow:none; -khtml-text-shadow:none; -moz-text-shadow:none;">
+                        <a href="http://www.google.com" class="btnTrans" style="display:block; text-align:center; padding:0px; font-size:13pt;">
+                            <span style="display:block; width:150px; height:120px; padding-top:14pt;">
+                                <img src="img/webcam.jpg" alt="Web Cams" style="width:150px; height:120px; border:0px none;">
+                            </span>
+                                                
+                            <span style="display:block; width:150px;">listen live</span>
+                            <span class="transBG" style="z-index:-1; border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; -khtml-border-radius:5px;"></span>
+                        </a>
+                    </div>
+                                        
+                    <div style="width:100%;">
+                        <h1>ON AIR</h1>
+                    </div>
+                    <br>
+                    <div>
+                        <h1>UP NEXT:</h1>
+                    </div>
+            </div>
+        </header>
+        <div id="content">
+            {% block body %}
+            {% endblock body %}
+        </div>
+    </body>
+</html>

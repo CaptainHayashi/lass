@@ -1,0 +1,55 @@
+{% extends "urysite/master.html" %}
+{% block title %}URY Shows - {{ show.title }}{% endblock title %}
+{% block body %}
+<article class="show-page">
+    <header>
+        <h1>{{ show.title }}</h1>
+        <p>
+            {{ show.description|default:"A URY show." }}
+        </p>
+    </header>
+    <div class="article-body">
+        <section>
+            <h1>Show stuff</h1>
+            <p>
+                Will go here eventually
+            </p>
+        </section>
+    </div>
+    <aside>
+        <section class="show-credits">
+            <h1>Credits</h1>
+
+            {% regroup show.showcredit_set.all by credit_type.plural as c %}
+            <ul>
+                {% for credit_group in c %}
+                <li>
+                    {{ credit_group.grouper }} 
+                    <ul>
+                        {{ credit_group.list|unordered_list }}
+                    </ul>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+        <section class="show-times">
+            <h1>Schedule</h1>
+            <ol>
+            {% for season in show.season_set.all %}
+                <li>
+                    {{ season.title }}
+                    <ul>
+                    {% for timeslot in season.timeslot_set.all %}
+                        <li>
+                            {{ timeslot.start_time }}
+                            to
+                            {{ timeslot.end_time }}
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </section>
+    </aside>
+</article>
+{% endblock body %}

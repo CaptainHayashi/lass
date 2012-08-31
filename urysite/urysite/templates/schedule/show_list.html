@@ -1,0 +1,26 @@
+{% extends "urysite/master.html" %}
+{% load url from future %}
+{% load endless %}
+{% block title %}URY Shows{% endblock title %}
+{% block body %}
+<section>
+    <h1>URY Shows</h1>
+    <section class="show-list">
+        <h1>All Shows</h1>
+        <p>
+            TODO: Limit by term and type?
+        </p>
+        {% paginate show_list %}
+        <ul>
+            {% for show in show_list %}
+                <li>
+                    <a href="{% url 'show_detail' pk=show.id %}">
+                        {{ show }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+        {% show_pages %}
+    </section>
+</section>
+{% endblock body %}

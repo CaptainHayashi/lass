@@ -1,0 +1,20 @@
+{# Main template for Schedule page. #}
+
+{% extends 'lt-headered.twig' %}
+
+{% block header %}
+<form id="show-search" method="get" action="{{ uri_prefix }}/shows/search.php" style="float : right; text-align : right; width : 500px;">
+    <label for="search">Search our show library: </label>
+    <input id="search" name="search" type="search" placeholder="Show title or presenter" />
+    <input type="submit" value="Search" />
+</form>
+{{ parent() }}
+{% endblock header %}
+
+{% block contentbody %}
+<div class="infobox">
+   <section>
+     {% include 'schedule-view.twig' %}
+   </section>
+</div>
+{% endblock contentbody %}

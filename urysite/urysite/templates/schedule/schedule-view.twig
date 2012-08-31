@@ -1,0 +1,112 @@
+{# Includeable schedule view, for use with WFC addSchedule function #}
+{%- if schedule_error is defined %}
+
+<h2>Sorry</h2>
+<p>
+  Unfortunately, something went wrong when trying to display the URY
+  schedule.  We will try to bring the schedule back online as soon as
+  possible--bear with us!
+</p>
+  Some more information may have been given below, which may contain
+  further information on what to do if you see this message.  If in doubt,
+  please contact the Computing Team on the email supplied in the footer.
+</p>
+<p style="text-align : center;">
+  <strong>{{ schedule_error }}</strong>
+</p>
+
+{% else %}
+
+{%- if schedule_view == 'break' %}
+{% if schedule_headers is not defined or schedule_headers %}
+<header>1
+  <hgroup>
+    <h2>{{ schedule_header }}</h2>
+    <h3>Week Commencing {{ schedule_dayString }}</h3>
+  </hgroup>
+  <nav>
+    <ul class="schedule-nav">
+      <li>
+        <a href="index.php?{{ schedule_prevDate.toQueryStringWithoutDay }}">
+          &lt; Previous Week
+        </a>
+      </li>
+      <li>
+        <a href="index.php?{{ schedule_nextDate.toQueryStringWithoutDay }}">
+	  Next Week &gt;
+        </a>
+      </li>
+    </ul>
+  </nav>
+</header>
+{% endif %}
+
+<p>
+  URY don't broadcast during holidays - we'll see you 
+  next term!
+</p>
+{%- elseif schedule_view == 'day' %}
+
+{% if schedule_headers is not defined or schedule_headers %}
+<header>
+  <hgroup>
+    <h2>{{ schedule_header }}</h2>
+    <h3>{{ schedule_dayString }}</h3>
+  </hgroup>
+
+  <nav>
+    <ul class="schedule-nav">
+      <li>
+        <a href="index.php?{{ schedule_prevDate.toQueryString }}">
+          &lt; Previous Day
+        </a>
+      </li>
+      <li>
+        <a href="index.php?{{ schedule_thisDate.toQueryStringWithoutDay }}">
+	  Back to Week
+        </a>	  
+      </li>
+      <li>
+        <a href="index.php?{{ schedule_nextDate.toQueryString }}">
+	  Next Day &gt;
+        </a>
+      </li>
+    </ul>
+  </nav>
+</header>  
+{% endif %}
+
+{%- include 'schedule-day.twig' %}
+{%- else %}
+
+{% if schedule_headers is not defined or schedule_headers %}
+<header>
+  <hgroup>
+    <h2>{{ schedule_header }}</h2>
+    <h3>Week Commencing {{ schedule_dayString}}</h3>
+  </hgroup>
+  <nav>
+    <ul class="schedule-nav">
+      <li>
+        <a href="index.php?{{ schedule_prevDate.toQueryStringWithoutDay }}">
+          &lt; Previous Week
+        </a>
+      </li>
+      <li>
+        <a href="index.php?{{ schedule_nextDate.toQueryStringWithoutDay }}">
+	  Next Week &gt;
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <p>
+    Click on the name of a day to go to the schedule page for
+    that day; click on the name of a show to visit its own
+    pages, or just hover over a show to find out more about it.
+  </p>
+</header>
+{% endif %}
+
+{%- include 'schedule-week.twig' -%}
+{% endif %}
+{% endif %}

@@ -1,0 +1,294 @@
+/* BEGIN PASTED FROM SWEETBUN BLOCK */
+
+body {
+    color: white;
+    font-family: Helvetica, arial;
+    height: 100%;
+    margin: 0px;
+    background: url('../img/bg3.png') #5c67a0 no-repeat top;
+    z-index: 0;
+}
+
+#top-bar {
+    position: relative;
+    left: 0px;
+    bottom: 0px;
+    width: 100%;
+    z-index: 1;
+    min-width: 1050px;  
+    overflow: hidden;
+    height: 16pt;
+    background: rgba(0, 0, 0, 0.4);
+    text-align: center;
+}
+
+.socialBtn {
+    float: right;
+    margin-right: 4px;
+}
+
+.socialBtn img {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    top: 1px;
+}
+
+#content {
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    height: auto !important;
+    height: 100%;
+    width: 1050px;
+}
+
+.transTextCont, .btnTransTextCont, .menuTransTextCont {
+    position: relative;
+    padding: 1px;
+    height: auto;
+    z-index: 2;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.box {
+    font-size: 12pt;
+    vertical-align: top;
+    overflow: hidden;
+}
+
+.box h2 {
+    padding: 0px;
+    margin: 0px;
+    margin-left: 5px;
+}
+
+.btnTransTextCont {
+    display: inline;
+    text-align: center;
+    padding-bottom: 2px;
+    padding-top: 2px;
+    
+}
+.menuTransTextCont {
+    position: relative;
+    /*display: block;*/
+    padding: 0px 0.5%;
+}
+
+.transBG, .menuTransBG, .outerMenutransBG {
+    display: inline;
+    position: absolute;
+    width: auto;
+    height: auto;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    top: 0px;
+    background-color: #000000;
+    -moz-opacity: 0.4;
+    -khtml-opacity: 0.4;
+    opacity: 0.4;
+    z-index: 1;
+}
+ .menuTransBG {
+    -moz-opacity: 0.4;
+    -khtml-opacity: 0.4;
+    opacity: 0.4;
+    z-index: -1;
+    background-color: transparent;
+    border: none;
+}
+
+.outerMenutransBG {
+    background-color: transparent;
+}
+
+.btnTransCont, #sitemenu li, .menuTransCont {
+    display: inline;
+    position: relative;
+    left: 0px;
+    top: 0px;
+    white-space: nowrap;
+}
+
+.menuTransCont {
+    display: inline;
+    /*display: inline-block !important;*/
+ }
+
+.btnTrans
+{
+    display: inline;
+    padding-left: 15px;
+    padding-right: 15px;
+    text-decoration: none;
+}
+
+.btnTrans: link, .btnTrans: visited {color: white;}      /* link */
+.btnTrans: hover {color: black;}  /* mouse over link */
+.btnTrans: active {color: #0000FF;}  /* selected link, no IE */
+
+.btnTrans .transBG: hover, .btnTrans: hover .transBG
+{
+    background-color: white;
+}
+
+.btnTrans .transBG: active, .btnTrans: active .transBG
+{
+    background-color: #666666;
+}
+
+.menuTrans, #sitemenu a
+{
+    /*display: block;*/
+    position: relative;
+    text-decoration: none;
+}
+
+.menuTrans: link, .menuTrans: visited{color: white;}      /* link */
+.menuTrans: hover {color: black;}  /* mouse over link */
+.menuTrans: active {color: #0000FF;}  /* selected link, no IE? */
+
+.menuTrans .menuTransBG: hover, .menuTrans: hover .menuTransBG
+{
+    background-color: white;
+}
+
+.menuTrans .transBG: active, .menuTrans: active .transBG
+{
+    background-color: #666666;
+}
+
+.txtPositioner
+{
+    /*padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 15px;*/
+    padding: 15px;
+}
+
+.socialBtn a 
+{
+    text-decoration: none;
+}
+
+.socialBtn a: link, .socialBtn a: visited
+{
+    -moz-opacity: 0.6;
+    -khtml-opacity: 0.6;
+    opacity: 0.6;
+}
+
+.socialBtn a: hover
+{
+    -moz-opacity: 1;
+    -khtml-opacity: 1;
+    opacity: 1;
+}
+
+img 
+{
+    border: 0px none;
+}
+
+/*
+#URYlogo
+{
+animation: throb 0.5s linear 0.5s infinite alternate;
+-moz-animation: throb 0.5s linear 0.5s infinite alternate;
+Safari and Chrome: 
+-webkit-animation: throb 0.5s linear 0.5s infinite alternate;
+}
+*/
+@keyframes throb
+{
+25%  { transform: scale(1.06,1.03); -ms-transform: scale(1.06,1.03); /* IE 9 */ -webkit-transform: scale(1.06,1.03); /* Safari and Chrome */ -o-transform: scale(1.06,1.03); /* Opera */ -moz-transform: scale(1.06,1.03); /* Firefox */}
+}
+
+@-moz-keyframes throb /* Firefox */
+{
+25%  { transform: scale(1.06,1.03); -ms-transform: scale(1.06,1.03); /* IE 9 */ -webkit-transform: scale(1.06,1.03); /* Safari and Chrome */ -o-transform: scale(1.06,1.03); /* Opera */ -moz-transform: scale(1.06,1.03); /* Firefox */}
+}
+
+@-webkit-keyframes throb /*Safari and Chrome */
+{
+25%  {transform: scale(1.06,1.03); -ms-transform: scale(1.06,1.03); /* IE 9 */ -webkit-transform: scale(1.06,1.03); /* Safari and Chrome */ -o-transform: scale(1.06,1.03); /* Opera */ -moz-transform: scale(1.06,1.03); /* Firefox */}
+}
+/* END PASTED FROM SWEETBUN BLOCK */
+
+/* ((URY)) austerity CSS */
+
+body {
+    font-family: Verdana, helvetica, Arial, sans-serif;
+}
+
+#masthead {
+    width: 1050px;
+    height: 220px;
+    margin: 0 auto;
+    font: 18pt bold Helvetica, arial;
+    text-shadow: 1px 2px black;
+    -webkit-text-shadow: 1px 2px black;
+    -khtml-text-shadow: 1px 2px black;
+    -moz-text-shadow: 1px 2px black;
+}
+
+#masthead h1 {
+    font-size: 100%;
+}
+
+#sitetitle {
+    text-align: center;
+    font-size: 100%;
+}
+
+#sitemenu {
+}
+
+#sitemenu ul {
+    list-style-type: none;
+    list-style-position: outside;
+    padding: 0px;
+    margin: 0px;
+    font-size: 14pt;
+    vertical-align: top
+}
+
+#sitemenu ul li {
+    display: inline;
+}
+
+article {
+    width: 100%;
+    background-color: gainsboro;
+    display: table;
+}
+
+article>header {
+    display: table-caption;
+}
+
+article>.article-body {
+    width: 700px;
+    display: table-cell;
+}
+
+article>aside {
+    width: 325px;
+    background-color: gray;
+    display: table-cell;
+} 
+
+article>aside>section {
+    border: 1px solid black;
+    padding: 0;
+    margin: 2px;
+}
+
+article>aside>section>h1 {
+    background-color: black;
+    color: white;
+    margin: 0;
+}

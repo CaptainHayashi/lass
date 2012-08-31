@@ -1,0 +1,8 @@
+{% extends "urysite/master.html" %}
+{% block title-rhs %}{{ flatpage.title }} {% endblock title-rhs %}
+{% block body %}
+        <section>
+            <h1>{{ flatpage.title }}</h1>
+	    {{ flatpage.content }}
+        </section>
+{% endblock body %}
