@@ -56,5 +56,4 @@ def foreign_key(source_meta,
     return models.ForeignKey(
         dest,
         db_column=db_column,
-        help_text='The %s this %s concerns.' % format_tuple)       
- 
+        help_text='The %s this %s concerns.' % format_tuple)

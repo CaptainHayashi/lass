@@ -71,6 +71,7 @@ class SeasonInline(admin.TabularInline):
 
 admin.site.register(Season, SeasonAdmin)
 
+
 ## Show ##
 
 class ShowAdmin(admin.ModelAdmin):

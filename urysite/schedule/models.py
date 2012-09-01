@@ -5,10 +5,12 @@ this module are in the 'schedule' schema in URY.
 
 """
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.db import models
 from people.models import Person
 from urysite import model_extensions as exts
+from django.core.exceptions import ObjectDoesNotExist
+from django.utils import timezone
 import timedelta
 
 
@@ -34,7 +36,7 @@ class Approver(Person):
 
 
 #################################
-## Schedule entity ABCs/mixins ## 
+## Schedule entity ABCs/mixins ##
 #################################
 
 class ScheduleEntity(models.Model):
@@ -59,7 +61,7 @@ class ScheduleEntity(models.Model):
 
     approver = models.ForeignKey(
         Approver,
-        null = True,
+        null=True,
         db_column='approverid',
         help_text="""The approver of this %s.
 
@@ -73,7 +75,7 @@ class MetadataSubjectMixin(object):
 
     """
 
-    # Don't forget to override this! 
+    # Don't forget to override this!
     def metadata_set(self):
         """Returns the QuerySet that provides the metadata.
 
@@ -108,8 +110,8 @@ class MetadataSubjectMixin(object):
         key_id = MetadataKey.objects.get(name=key).id
         return self.metadata_set().filter(
             metadata_key__pk=key_id).exclude(
-            effective_from__gte=datetime.now()).order_by(
-            '-effective_from').latest().metadata_value
+                effective_from__gte=datetime.now()).order_by(
+                    '-effective_from').latest().metadata_value
 
 
 ###########
@@ -124,8 +126,10 @@ class Term(models.Model):
         managed = False
 
     def __unicode__(self):
-        return '%s Term (%s -> %s)' % (self.name,
-            self.start, self.end)
+        return '%s Term (%s -> %s)' % (
+            self.name,
+            datetime.date(self.start),
+            datetime.date(self.end))
 
     id = exts.primary_key('termid')
 
@@ -154,7 +158,6 @@ class ShowType(models.Model):
 
     def __unicode__(self):
         return self.name
-
 
     id = exts.primary_key_from_meta(Meta)
 
@@ -190,7 +193,7 @@ class Show(models.Model, MetadataSubjectMixin):
 
     def metadata_set(self):
         return self.showmetadata_set
- 
+
     id = exts.primary_key_from_meta(Meta)
 
     show_type = models.ForeignKey(
@@ -214,17 +217,13 @@ class Show(models.Model, MetadataSubjectMixin):
         source model's metadata class.
 
         """
-        return exts.foreign_key(src_meta, 'Show', db_column, 'show') 
-
-    @staticmethod
-    def get_shows_for_day(day):
-        """Retrieves a list of all shows that lie within a day."""
+        return exts.foreign_key(src_meta, 'Show', db_column, 'show')
 
 
 class Season(models.Model, MetadataSubjectMixin):
     """A season of a URY show.
 
-    Seasons map onto terms of scheduled timeslots for a show. 
+    Seasons map onto terms of scheduled timeslots for a show.
 
     """
 
@@ -266,7 +265,7 @@ class Season(models.Model, MetadataSubjectMixin):
             src_meta,
             'Season',
             db_column,
-            'season') 
+            'season')
 
 
 ##############
@@ -274,7 +273,7 @@ class Season(models.Model, MetadataSubjectMixin):
 ##############
 
 class MetadataKey(models.Model):
-    """A metadata key, which defines the semantics of a piece of 
+    """A metadata key, which defines the semantics of a piece of
     metadata.
 
     """
@@ -292,6 +291,13 @@ class MetadataKey(models.Model):
         max_length=255,
         help_text="""A human-readable name for the metadata key.""")
 
+    allow_multiple = models.BooleanField(
+        default=False,
+        help_text="""If True, multiple instances of this metadata key
+            can be active at the same time (e.g. arbitrary tags).
+
+            """)
+
 
 class Metadata(models.Model):
     """An item of textual show metadata.
@@ -307,10 +313,11 @@ class Metadata(models.Model):
         """Returns a concise Unicode representation of the metadata.
 
         """
-        return '%s -> %s (ef %s on %s)' % (self.metadata_key.name,
-             self.metadata_value,
-             self.effective_from,
-             self.attached_element())
+        return '%s -> %s (ef %s on %s)' % (
+            self.metadata_key.name,
+            self.metadata_value,
+            self.effective_from,
+            self.attached_element())
 
     def attached_element():
         """The element to which this metadatum is attached.
@@ -328,7 +335,6 @@ class Metadata(models.Model):
         MetadataKey,
         help_text="""The key, or type, of the metadata entry.""",
         db_column='metadata_key_id')
-
 
     metadata_value = models.TextField(
         help_text="""The value of this metadata entry.""")
@@ -360,15 +366,15 @@ class ShowMetadata(Metadata):
 
     class Meta(Metadata.Meta):
         db_table = 'show_metadata'  # in schema 'schedule'
-        verbose_name='show metadatum'
-        verbose_name_plural='show metadata'
+        verbose_name = 'show metadatum'
+        verbose_name_plural = 'show metadata'
 
     def attached_element():
         return show
 
     id = exts.primary_key_from_meta(Meta)
 
-    show = Show.make_foreign_key(Meta) 
+    show = Show.make_foreign_key(Meta)
 
 
 class SeasonMetadata(Metadata):
@@ -378,17 +384,17 @@ class SeasonMetadata(Metadata):
 
     class Meta(Metadata.Meta):
         db_table = 'season_metadata'  # in schema 'schedule'
-        verbose_name='season metadatum'
-        verbose_name_plural='season metadata'
+        verbose_name = 'season metadatum'
+        verbose_name_plural = 'season metadata'
 
     def attached_element():
         return season
 
     id = exts.primary_key_from_meta(Meta)
 
-    season = Season.make_foreign_key(Meta) 
+    season = Season.make_foreign_key(Meta)
 
-   
+
 class ShowCreditType(models.Model):
     """A type of show credit, as used in ShowCredit.
 
@@ -435,7 +441,6 @@ class ShowCredit(models.Model):
     def __unicode__(self):
         return self.person.full_name()
 
-
     id = exts.primary_key_from_meta(Meta)
 
     show = models.ForeignKey(
@@ -475,7 +480,14 @@ class Timeslot(models.Model):
         db_table = 'show_season_timeslot'
         managed = False
         verbose_name = 'show timeslot'
+        get_latest_by = 'start_time'
 
+    def __unicode__(self):
+        """Provides a Unicode representation of this timeslot."""
+        return "%s (%s to %s)" % (
+            self.season,
+            self.start_time,
+            self.end_time())
 
     id = exts.primary_key_from_meta(Meta)
 
@@ -491,7 +503,136 @@ class Timeslot(models.Model):
 
     def end_time(self):
         """Calculates the end time of this timeslot."""
-        return self.start_time + self.duration 
+        return self.start_time + self.duration
+
+    @classmethod
+    def timeslots_in_day(cls,
+                         date=None,
+                         add_interday=False,
+                         add_jukebox=False):
+        """Lists all schedule timeslots occurring on a given date.
+
+        Only the date portion of the input is considered.
+
+        If no date is given, the default is today's date.
+
+        If add_jukebox is True, any gaps in the list will be
+        automatically filled with references to the URY Jukebox,
+        including gaps between day boundaries and the first/last
+        items on the day's schedule.
+
+        """
+        if date is None:
+            date = datetime.today()
+
+        # First, get the shows that start on the given date.
+        timeslots = cls.objects.filter(
+            start_time__year=date.year,
+            start_time__month=date.month,
+            start_time__day=date.day
+        ).order_by('start_time')
+
+        # If the first show doesn't start at midnight, this means
+        # one of two things:
+        #   1) There is no show between midnight and the first show
+        #   2) A show that started before today ends today
+        # We'll need to check for the second case now.
+        midnight_on_date = timezone.make_aware(
+            datetime(
+                date.year,
+                date.month,
+                date.day,
+                0,
+                0,
+                0,
+                0),
+            timezone.get_default_timezone()
+        )
+        try:
+            last_show_before_date = cls.objects.filter(
+                start_time__lt=midnight_on_date
+            ).latest()
+            if last_show_before_date.end_time() > midnight_on_date:
+                timeslots.insert(0, last_show_before_date)
+        except ObjectDoesNotExist:
+            pass
+
+        # TODO: add URY Jukebox preprocessing
+        return timeslots
+
+    @classmethod
+    def timeslots_in_week(cls,
+                          start_date=None,
+                          add_overrun=False,
+                          add_jukebox=False,
+                          delete_duplicates=False,
+                          as_one_list=False):
+        """Lists all timeslots in the week starting on a given date.
+
+        This function simply collates the results of timeslots_in_day
+        for the seven day period beginning on the inputted date.  As
+        such, see that function for more information about how this
+        function operates.
+
+        Keyword arguments:
+        start_date -- the date of the day on which the week starts;
+            this does not have to be a Monday, and only the date
+            portion is considered if this is a datetime
+            (default today)
+        add_overrun -- if True, any instances of a timeslot running
+            across the day boundary will be added to the start of the
+            day in which they end as well as the day in which they
+            started (default False)
+        add_jukebox -- if True, any gaps in the list(s) will be
+            filled automatically with "phantom" timeslots under the
+            URY Jukebox pseudo-show (default False)
+        delete_duplicates -- if True, the first show of each day in
+            the week will be deleted if it is the same show as the
+            last show of the preceding day (default False)
+        as_one_list -- if True, the results are collated into one
+            list; if False, the results are returned as a list of
+            seven lists (one for each day); this does not otherwise
+            affect the way in which the results are calculated
+            (default False)
+
+        The result is given as a list of seven lists, each
+        representing a day of the week, unless as_one_list is True.
+
+        If no start date is given, the default is today's date.
+
+        If add_jukebox is True, any gaps in the list(s) will be
+        automatically filled with references to the URY Jukebox.
+
+        """
+        if start_date is None:
+            start_date = datetime.today()
+
+        results = []
+        # Let's compute the days making up this week as a list here,
+        # so we can just iterate straight over them later.
+        days = map(
+            lambda day: start_date + datetime.timedelta(days=day),
+            range(0, 6))
+
+        for day in days:
+            day_sched = cls.timeslots_in_day(
+                day,
+                add_overrun,
+                add_jukebox)
+
+            if delete_duplicates is True:
+                # Is the first show of the day the same as the last
+                # show of yesterday?  If so, remove it from today so
+                # we have no duplicates
+                if (len(results) > 0
+                        and day_sched[0] == results[-1][-1]):
+                    day_sched.pop(0)
+
+            if as_one_list is True:
+                results.extend(day_sched)
+            else:
+                results.append(day_sched)
+
 
 ############
 ## BLOCKS ##
@@ -514,7 +655,6 @@ class Block(models.Model):
     def __unicode__(self):
         return self.name
 
-
     id = exts.primary_key_from_meta(Meta)
 
     name = models.CharField(
@@ -535,7 +675,7 @@ class Block(models.Model):
 
             A lower number indicates a higher priority.
 
-            """) 
+            """)
 
     is_listable = models.BooleanField(
         default=False,
@@ -562,7 +702,6 @@ class BlockNameRule(models.Model):
 
     def __unicode__(self):
         return "%s -> %s" % (self.regex, self.block)
-
 
     id = exts.primary_key_from_meta(Meta)
 
@@ -594,7 +733,6 @@ class BlockShowRule(models.Model):
 
     def __unicode__(self):
         return "%s -> %s" % (self.show, self.block)
-
 
     id = exts.primary_key_from_meta(Meta)
 
