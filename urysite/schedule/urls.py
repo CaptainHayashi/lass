@@ -6,7 +6,7 @@ from schedule.views import schedule_week
 urlpatterns = patterns(
     'schedule.views',
     #url(r'^$', 'index'),
-    url(r'^(?P<year>\d\d\d\d)/(?P<week>[wW]([01234]?\d|5[0123]))/$',
+    url(r'^(?P<year>\d\d\d\d)/[wW](eek)?(?P<week>([01234]?\d|5[0123]))/$',
         schedule_week,
         name='schedule_week'),
     url(r'^shows/$',

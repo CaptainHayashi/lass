@@ -1,7 +1,20 @@
+{% extends "urysite/master.html" %}
+{% load url from future %}
+{% block title %}URY - Week Commencing {{ week_start|date }}{% endblock title %}
+{% block body %}
 {% comment %}
     SCHEDULE - Week view subtemplate
     DON'T PANIC!  This is probably the most complex template in URY.
 {% endcomment %}
+
+<nav>
+    <a href="{% url 'schedule_week' year=prev_year week=prev_week %}">
+        Previous Week
+    </a>
+    <a href="{% url 'schedule_week' year=next_year week=next_week %}">
+        Next Week
+    </a>
+</nav>
 
 <table id="schedule-week-table">
     <thead>
@@ -54,3 +67,4 @@
         {% endfor %}
     </tbody>
 </table>
+{% endblock body %}
