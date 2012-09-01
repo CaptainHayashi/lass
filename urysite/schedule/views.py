@@ -14,15 +14,13 @@ def get_week_start(year, week):
     # datetime, replace the following:
     week_start_str = '%s %s 1' % (year, week)
     return datetime.strptime(week_start_str, '%Y %W %w')
- 
 
-def schedule_week(request, year, week):
-    """The week-at-a-glance schedule view.
+
+def schedule_week_from_date(request, week_start):
+    """The week-at-a-glance schedule view, with the week specified
+    by a date object denoting its starting day.
 
     """
-    # WEEK STARTS
-    week_start = get_week_start(year, week)
-
     next_start = week_start + timedelta(weeks=1)
     next_year, next_week, next_day = next_start.isocalendar()
 
@@ -39,3 +37,30 @@ def schedule_week(request, year, week):
             'prev_start': prev_start,
             'prev_year': prev_year,
             'prev_week': prev_week})
+
+
+def to_monday(date):
+    """Given a date, find the date of the Monday of its week."""
+    days_after_monday = date.weekday()
+    return date - timedelta(days=days_after_monday)
+
+
+def index(request):
+    """The view that gets brought up if you navigate to 'schedule'.
+
+    Currently this just gets the weekly schedule for the current
+    week.
+    """
+    return schedule_week_from_date(
+        request,
+        to_monday(datetime.today()))
+
+
+def schedule_week(request, year, week):
+    """The week-at-a-glance schedule view.
+
+    """
+    # WEEK STARTS
+    return schedule_week_from_date(
+        request, 
+        get_week_start(year, week))

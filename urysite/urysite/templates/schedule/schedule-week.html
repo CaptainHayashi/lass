@@ -7,6 +7,11 @@
     DON'T PANIC!  This is probably the most complex template in URY.
 {% endcomment %}
 
+<hgroup>
+    <h1>URY Schedule</h1>
+    <h2>Week Commencing {{ week_start|date }}</h2>
+</hgroup>
+
 <nav>
     <a href="{% url 'schedule_week' year=prev_year week=prev_week %}">
         Previous Week

@@ -1,11 +1,13 @@
 from django.conf.urls import patterns, include, url
 from django.views.generic import ListView, DetailView
 from schedule.models import Show
-from schedule.views import schedule_week
+from schedule.views import schedule_week, index
 
 urlpatterns = patterns(
     'schedule.views',
-    #url(r'^$', 'index'),
+    url(r'^$',
+        index,
+        name='schedule_index'),
     url(r'^(?P<year>\d\d\d\d)/[wW](eek)?(?P<week>([01234]?\d|5[0123]))/$',
         schedule_week,
         name='schedule_week'),
