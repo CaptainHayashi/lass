@@ -293,3 +293,41 @@ article>aside>section>h1 {
     color: white;
     margin: 0;
 }
+
+/* SCHEDULE */
+
+ol#schedule-day {
+    list-style-type: none;
+    list-style-position: outside;
+    padding: 0;
+}
+
+#schedule-day li {
+    padding: 5px;
+    margin: 5px;
+    background-color: rgba(0, 0, 0, 0.4);
+    position: relative;
+    top: 0;
+}
+
+.schedule-day-show-time {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    margin: 0;
+    font-size: 24pt;
+    opacity: 0.5;
+}
+
+.schedule-day-show-title {
+    margin: 0;
+    font-size: 20pt;
+}
+
+.schedule-day-show-by-line {
+    margin: 0;
+    margin-left: 2em;
+    font-size: 14pt;
+    font-style: italic;
+    opacity: 0.8;
+}

@@ -110,6 +110,30 @@ class RoleVisibility(models.Model):
     description = models.TextField()
 
 
+####################
+## Person proxies ##
+####################
+
+# These two models are used to make the case where multiple people
+# are associated with a model (in different ways- for example creator
+# of a data item, approver of that item, etc) less ambiguous.
+
+class Creator(Person):
+    """A creator of show data."""
+    class Meta:
+        proxy = True
+
+
+class Approver(Person):
+    """A person who has approved a schedule change."""
+    class Meta:
+        proxy = True
+
+
+###########
+## Roles ##
+###########
+
 class Role(models.Model):
     class Meta:
         db_table = 'roles'  # in schema 'roles'
