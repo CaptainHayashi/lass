@@ -1,7 +1,8 @@
+"""Models pertaining to people and various subtypes of people."""
+
 from django.db import models
+from urysite import model_extensions as exts
 
-
-## LeRouge #
 
 class Person(models.Model):
     """A person tracked by the URY people database.
@@ -19,6 +20,7 @@ class Person(models.Model):
     class Meta:
         db_table = 'member'
         managed = False
+        app_label = 'people'
 
     def full_name(self):
         """Retrieves the full name of this person.
@@ -46,9 +48,7 @@ class Person(models.Model):
         """
         return self.full_name()
 
-    id = models.AutoField(
-        primary_key=True,
-        db_column='memberid')
+    id = exts.primary_key('memberid')
 
     first_name = models.CharField(
         max_length=255,
@@ -93,22 +93,6 @@ class Person(models.Model):
         db_column='joined')
 
 
-class RoleVisibility(models.Model):
-    class Meta:
-        db_table = 'visibilities'
-        managed = False
-
-    def __unicode__(self):
-        return self.name
-
-    id = models.AutoField(
-        primary_key=True,
-        db_column='visibilitylevel')
-
-    name = models.CharField(max_length=100)
-
-    description = models.TextField()
-
 
 ####################
 ## Person proxies ##
@@ -122,40 +106,11 @@ class Creator(Person):
     """A creator of show data."""
     class Meta:
         proxy = True
+        app_label = 'people'
 
 
 class Approver(Person):
     """A person who has approved a schedule change."""
     class Meta:
         proxy = True
-
-
-###########
-## Roles ##
-###########
-
-class Role(models.Model):
-    class Meta:
-        db_table = 'roles'  # in schema 'people'
-        managed = False
-
-    def __unicode__(self):
-        return self.alias
-
-    id = models.AutoField(
-        primary_key=True,
-        db_column='roleid')
-
-    alias = models.CharField(max_length=100)
-
-    visibility_level = models.ForeignKey(
-        RoleVisibility,
-        db_column='visibilitylevel')
-
-    is_group_root = models.BooleanField(
-        db_column='isgrouproot')
-
-    is_active = models.BooleanField(
-        db_column='isactive')
-
-    ordering = models.IntegerField()
+        app_label = 'people'

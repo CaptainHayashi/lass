@@ -1,6 +1,6 @@
 from schedule.models import Block
 from schedule.models import BlockShowRule, BlockRangeRule
-from schedule.models import Show, ShowCredit, ShowCreditType
+from schedule.models import Show, ShowCredit
 from schedule.models import Season
 from schedule.models import Timeslot
 from django.contrib import admin
@@ -39,11 +39,6 @@ class TimeslotInline(admin.TabularInline):
 
 
 admin.site.register(Timeslot, TimeslotAdmin)
-
-
-## ShowCreditType ##
-
-admin.site.register(ShowCreditType)
 
 
 ## ShowCredit ##

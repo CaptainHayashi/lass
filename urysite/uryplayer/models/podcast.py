@@ -2,6 +2,10 @@
 # __init__.py
 
 from django.db import models
+from urysite.models import Metadata, MetadataSubjectMixin
+from urysite import model_extensions as exts
+from people.models import Person
+
 
 class Podcast(models.Model, MetadataSubjectMixin):
     """A podcast in the URY player.
@@ -10,7 +14,7 @@ class Podcast(models.Model, MetadataSubjectMixin):
 
     class Meta:
         db_table = 'podcast'  # in schema "uryplayer"
-        ordering = ['podcast_type', '-date_submitted']
+        ordering = ['-date_submitted']
         managed = False
         app_label = 'uryplayer'
 

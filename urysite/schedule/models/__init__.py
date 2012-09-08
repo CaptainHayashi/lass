@@ -14,5 +14,5 @@ from schedule.models.timeslot import Timeslot, TimeslotMetadata, Range
 # before.  Confusing, eh?
 from schedule.models.block_direct_rule import BlockShowRule
 
-from schedule.models.credit import ShowCredit, ShowCreditType
+from schedule.models.credit import ShowCredit
 

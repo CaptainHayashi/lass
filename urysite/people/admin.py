@@ -1,4 +1,4 @@
-from people.models import Role, Person
+from people.models import Role, Person, CreditType
 from django.contrib import admin
 
 
@@ -19,3 +19,11 @@ class RoleAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Role, RoleAdmin)
+
+
+## CreditType ##
+
+admin.site.register(CreditType)
+
+
+
