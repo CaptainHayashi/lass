@@ -136,7 +136,7 @@ class Approver(Person):
 
 class Role(models.Model):
     class Meta:
-        db_table = 'roles'  # in schema 'roles'
+        db_table = 'roles'  # in schema 'people'
         managed = False
 
     def __unicode__(self):
