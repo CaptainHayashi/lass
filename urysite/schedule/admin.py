@@ -1,5 +1,5 @@
 from schedule.models import Block
-from schedule.models import BlockNameRule, BlockShowRule
+from schedule.models import BlockShowRule, BlockRangeRule
 from schedule.models import Show, ShowCredit, ShowCreditType
 from schedule.models import Season
 from schedule.models import Timeslot
@@ -10,6 +10,9 @@ from django.contrib import admin
 
 class BlockShowRuleInline(admin.TabularInline):
     model = BlockShowRule
+
+class BlockRangeRuleInline(admin.TabularInline):
+    model = BlockRangeRule
 
 
 ## Block ##

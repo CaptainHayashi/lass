@@ -5,12 +5,13 @@
 
 from django.db import models
 from urysite import model_extensions as exts
+from schedule.models import BlockRangeRule
 from schedule.models.season import Season
 from schedule.models.metadata import Metadata, MetadataSubjectMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from datetime import datetime, timedelta as td
-from django.db.models import F
+from django.db.models import F, Q
 import timedelta
 
 
@@ -74,6 +75,55 @@ class Timeslot(models.Model, MetadataSubjectMixin):
 
         """
         return self.season
+
+    def block(self):
+        """Returns the block that the timeslot is in, if any.
+
+        This will return a Block object if a block is matched, or
+        None if there wasn't one (one can associate to Block.default()
+        in this case, if a block is needed).
+
+        """
+        # Season rules take precedence
+        season_block = self.season.block()
+        if season_block is None:
+            # TODO: add direct rules for timeslot
+            # Now do season based checks
+            #block_show_matches = self.blockshowrule_set.filter(
+            #    show=self).order_by('-priority')
+            #if block_show_matches.exists():
+            #block = block_show_matches[0]
+            #else:
+            # TODO: add time-range rules for timeslot
+
+            # Get start as distance from midnight, and end as
+            # distance plus duration
+            slot_start = self.start_time - self.start_time.replace(
+                hour=0,
+                minute=0,
+                second=0,
+                microsecond=0)
+            slot_end = slot_start + self.duration
+            assert slot_start < slot_end, "Slot starts after end."
+
+            # Now we can do simple inequalities to match the
+            # time-ranges, with the caveat that we'll have to check
+            # against the slot projected forwards one day to make
+            # sure that ranges starting the day before the show and
+            # ending on the day of the show are considered correctly.
+            block_range_matches = BlockRangeRule.objects.filter(
+                Q(start_time__lte=slot_start,
+                  end_time__gte=slot_end) |
+                Q(start_time__lte=slot_start + td(days=1),
+                  end_time__gte=slot_end + td(days=1))).order_by(
+                      '-block__priority')
+            if block_range_matches.exists():
+                block = block_range_matches[0].block
+            else:
+                block = None
+        else:
+            block = season_block 
+        return block
 
     def __unicode__(self):
         """Provides a Unicode representation of this timeslot."""

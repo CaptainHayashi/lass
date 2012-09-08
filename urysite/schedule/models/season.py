@@ -33,6 +33,32 @@ class Season(models.Model, MetadataSubjectMixin):
     def metadata_parent(self):
         return self.show
 
+    def block(self):
+        """Returns the block that the season is in, if any.
+
+        This will return a Block object if a block is matched, or
+        None if there wasn't one (one can associate to Block.default()
+        in this case, if a block is needed).
+
+        For timeslots, use their block() methods instead so as to pull
+        in timeslot specific matching rules.
+
+        """
+        # Show rules take precedence
+        show_block = self.show.block()
+        if show_block is None:
+            # TODO: add direct rules for season
+            # Now do season based checks
+            #block_show_matches = self.blockshowrule_set.filter(
+            #    show=self).order_by('-priority')
+            #if block_show_matches.exists():
+            #block = block_show_matches[0]
+            #else:
+            block = None
+        else:
+            block = show_block 
+        return block
+
     id = exts.primary_key_from_meta(Meta)
 
     show = models.ForeignKey(

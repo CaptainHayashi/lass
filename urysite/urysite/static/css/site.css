@@ -263,22 +263,34 @@ body {
 
 article {
     width: 100%;
-    background-color: gainsboro;
     display: table;
 }
 
 article>header {
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.3);
     display: table-caption;
+    margin-bottom: 5px;
+}
+
+article>header>h1 {
+    font-size: 35px;
+    padding: 5px;
+    margin: 0;
 }
 
 article>.article-body {
     width: 700px;
+    margin: 0;
+    padding: 0;
+    padding-right: 5px;
     display: table-cell;
 }
 
 article>aside {
+    border-radius: 5px;
     width: 325px;
-    background-color: gray;
+    background-color: rgba(0, 0, 0, 0.3);
     display: table-cell;
 } 
 
@@ -291,23 +303,82 @@ article>aside>section {
 article>aside>section>h1 {
     background-color: black;
     color: white;
+    padding: 5px;
     margin: 0;
 }
 
 /* SCHEDULE */
 
+.schedule-header {
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 40px;
+    display: block;
+}
+
+.schedule-header nav {
+    /*position: absolute;*/
+    top: 0;
+    left: 0;
+    display: block;
+    /*height: 100%;
+    width: 100%;*/
+}
+
+.schedule-header h2 {
+    position: absolute;
+    bottom: 5px;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+}
+
+.schedule-header-prev, .schedule-header-next {
+}
+
+.schedule-header-prev {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+}
+
+.schedule-header-next {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
+
+/* -- DAY SCHEDULE */
+
 ol#schedule-day {
     list-style-type: none;
     list-style-position: outside;
     padding: 0;
+    margin: 0;
+}
+
+#schedule-day li:first-child {
+    margin-top: 0;
+}
+
+#schedule-day li:last-child {
+    margin-bottom: 0;
 }
 
 #schedule-day li {
+    /* Colouring is done by the block-xyz classes. */
     padding: 5px;
-    margin: 5px;
-    background-color: rgba(0, 0, 0, 0.4);
+    /* Use this and the first/last-child stuff to separate items. */
+    margin-bottom: 5px;
     position: relative;
     top: 0;
+    border-radius:5px;
+    overflow: hidden;
+}
+
+#schedule-day li p {
+    margin: 5px;
 }
 
 .schedule-day-show-time {
@@ -326,8 +397,36 @@ ol#schedule-day {
 
 .schedule-day-show-by-line {
     margin: 0;
-    margin-left: 2em;
-    font-size: 14pt;
+    margin-top: -4px;
+    margin-left: 20px;
+    font-size: 18px;
     font-style: italic;
     opacity: 0.8;
+}
+
+.schedule-day-block-name {
+    position: absolute;
+    bottom: -16px;
+    left: -16px;
+    z-index: -2;
+    font-size: 60px;
+    opacity: 0.2;
+    padding: 0;
+    margin: 0;
+}
+
+.block-default {
+    background-color: rgba(65, 65, 65, 0.7);
+}
+
+.block-jukebox {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.block-flagship {
+    background-color: rgba(7, 119, 170, 0.7);
+}
+
+.block-music {
+    background-color: rgba(64, 16, 48, 0.7);
 }

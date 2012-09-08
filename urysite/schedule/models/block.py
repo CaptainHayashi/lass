@@ -5,8 +5,12 @@
 
 from django.db import models
 from urysite import model_extensions as exts
-from schedule.models.show import Show
+import timedelta
 
+
+###########
+## Block ##
+###########
 
 class Block(models.Model):
     """A block of programming.
@@ -56,24 +60,24 @@ class Block(models.Model):
             """)
 
 
-# Block matching rules #
+class BlockRangeRule(models.Model):
+    """Block rules that associate timeslots falling into given ranges
+    with corresponding blocks.
 
-
-class BlockNameRule(models.Model):
-    """A name-based matching rule for blocks.
-
-    A block matching rule that matches shows whose names match the
-    given regular expression.
+    This is the lowest priority rule type.
 
     """
 
     class Meta:
-        db_table = 'block_name_rule'  # In schema 'schedule'
+        db_table = 'block_range_rule'  # In schema 'schedule'
         managed = False  # It's in another schema, so can't manage
         app_label = 'schedule'
 
     def __unicode__(self):
-        return "%s -> %s" % (self.regex, self.block)
+        return "{0} to {1} -> {2}".format(
+            self.start_time,
+            self.end_time,
+            self.block)
 
     id = exts.primary_key_from_meta(Meta)
 
@@ -81,38 +85,8 @@ class BlockNameRule(models.Model):
         Block,
         help_text='The block this rule matches against.')
 
-    regex = models.CharField(
-        max_length=255,
-        help_text="""The Perl-compatible regular expression that
-            show names must match in order to match this block.
+    start_time = timedelta.TimedeltaField(
+        help_text='The start of the range defining this block.')
 
-        """)
-
-
-class BlockShowRule(models.Model):
-    """A show-based matching rule for blocks.
-
-    A block matching rule that matches the attached show only.
-
-    This rule takes precedence over all other rules, except any
-    directly matching timeslots.
-
-    """
-
-    class Meta:
-        db_table = 'block_show_rule'  # In schema 'schedule'
-        managed = False  # It's in another schema, so can't manage
-        app_label = 'schedule'
-
-    def __unicode__(self):
-        return "%s -> %s" % (self.show, self.block)
-
-    id = exts.primary_key_from_meta(Meta)
-
-    block = models.ForeignKey(
-        Block,
-        help_text='The block this rule matches against.')
-
-    show = models.ForeignKey(
-        Show,
-        help_text='The show this rule assigns a block to.')
+    end_time = timedelta.TimedeltaField(
+        help_text='The end of the range defining this block.')

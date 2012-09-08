@@ -2,41 +2,59 @@
 {% load url from future %}
 {% block title %}URY - {{ day_start|date }}{% endblock title %}
 {% block body %}
-<hgroup>
-    <h1>URY Schedule</h1>
-    <h2>Schedule for {{ day_start|date:"l, jS F Y" }}</h2>
-</hgroup>
 
-<nav>
-    <a href="{% url 'schedule_day' year=prev_year week=prev_week day=prev_day %}">
-        Previous Day 
-    </a>
-    <a href="{% url 'schedule_day' year=next_year week=next_week day=next_day %}">
-        Next Day
-    </a>
-</nav>
+<article class="schedule-page">
+    <header>
+        <h1>URY Schedule</h1>
+        <div class="schedule-header">
+            <h2>Schedule for {{ day_start|date:"l, jS F Y" }}</h2>
+            <nav>
+                <a href="{% url 'schedule_day' year=prev_year week=prev_week day=prev_day %}"
+                   class="schedule-header-prev">
+                    Previous Day 
+                </a>
+                <a href="{% url 'schedule_day' year=next_year week=next_week day=next_day %}"
+                   class="schedule-header-next">
+                    Next Day
+                </a>
+            </nav>
+        </div>
+    </header>
 
-<ol id="schedule-day">
-    {% for slot in schedule %}
-        <li class="schedule-item">
-            <hgroup>
-                <h1 class="schedule-day-show-time">
-                    {{ slot.start_time|date:"H:i" }}
-                </h1>
-                <h2 class="schedule-day-show-title">
-                    {{ slot.title }}
-                </h2>
-                {% if slot.by_line %}
-                <h3 class="schedule-day-show-by-line">
-                    with {{slot.by_line}}
-                </h3> 
-                {% endif %}
-            </hgroup>
+    <div class="article-body">
+        <ol id="schedule-day">
+            {% for slot in schedule %}
+            <li class="schedule-item
+                      block-{{ slot.block.tag|default:"default" }}">
+                    <hgroup>
+                        <h1 class="schedule-day-show-time">
+                            {{ slot.start_time|date:"H:i" }}
+                        </h1>
+                        <h2 class="schedule-day-show-title">
+                            {{ slot.title }}
+                        </h2>
+                        {% if slot.by_line %}
+                        <h3 class="schedule-day-show-by-line">
+                            with {{slot.by_line}}
+                        </h3> 
+                        {% endif %}
+                    </hgroup>
+            
+                    {% if slot.block %}
+                        <span class="schedule-day-block-name">
+                            {{ slot.block.name }}
+                        </span>
+                    {% endif %}
 
-            <p>
-                {{slot.description}}
-            </p>
-        </li>
-    {% endfor %}
-</ol>
+                    <p>
+                        {{slot.description}}
+                    </p>
+                </li>
+            {% endfor %}
+        </ol>
+    </div>
+    <aside>
+        <p>Something here</p>
+    </aside>
+</article>
 {% endblock body %}

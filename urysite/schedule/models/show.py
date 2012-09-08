@@ -94,7 +94,25 @@ class Show(models.Model, MetadataSubjectMixin):
                 credits[-1].person.full_name()))
         return by_line
 
+    def block(self):
+        """Returns the block that the show is in, if any.
 
+        This will return a Block object if a block is matched, or
+        None if there wasn't one (one can associate to Block.default()
+        in this case, if a block is needed).
+
+        For seasons and timeslots, use their block() methods instead
+        so as to pull in season and timeslot specific matching rules.
+
+        """
+        # Show rules take precedence
+        block_matches = self.blockshowrule_set.order_by(
+                '-block__priority')
+        if (len(block_matches)) > 0:
+            block = block_matches[0].block
+        else:
+            block = None
+        return block
 
     id = exts.primary_key_from_meta(Meta)
 
@@ -139,6 +157,3 @@ class ShowMetadata(Metadata):
     id = exts.primary_key_from_meta(Meta)
 
     show = Show.make_foreign_key(Meta)
-
-
-
