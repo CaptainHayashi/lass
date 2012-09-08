@@ -2,7 +2,8 @@
 # models further up the list
 from schedule.models.term import Term
 
-from schedule.models.metadata import MetadataKey, Metadata, MetadataSubjectMixin
+from schedule.models.metadata import MetadataKey, Metadata
+from schedule.models.metadata import MetadataSubjectMixin
 
 from schedule.models.block import Block, BlockRangeRule
 
@@ -15,4 +16,3 @@ from schedule.models.timeslot import Timeslot, TimeslotMetadata, Range
 from schedule.models.block_direct_rule import BlockShowRule
 
 from schedule.models.credit import ShowCredit
-

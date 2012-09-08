@@ -40,7 +40,7 @@ class Range(object):
         self.exclude_after_end = exclude_after_end
         self.exclude_subsuming = exclude_subsuming
         self.with_jukebox_entries = with_jukebox_entries
- 
+
     def __getattr__(self, attr):
         """Ensures that any attempts to get an attribute that isn't
         in the Range class are sent to the data object it wraps.
@@ -122,7 +122,7 @@ class Timeslot(models.Model, MetadataSubjectMixin):
             else:
                 block = None
         else:
-            block = season_block 
+            block = season_block
         return block
 
     def __unicode__(self):
@@ -175,7 +175,6 @@ class Timeslot(models.Model, MetadataSubjectMixin):
             season=Season.jukebox_season(),
             start_time=start_time,
             duration=duration)
-            
 
     @classmethod
     def add_jukebox_entries(cls,
@@ -224,7 +223,7 @@ class Timeslot(models.Model, MetadataSubjectMixin):
                     # factor that into the index calculations
                     offset += 1
         return timeslots
-                 
+
     @classmethod
     def timeslots_in_range(cls,
                            start,
@@ -233,7 +232,7 @@ class Timeslot(models.Model, MetadataSubjectMixin):
                            exclude_after_end=False,
                            exclude_subsuming=False,
                            with_jukebox_entries=True):
-        """Returns all the timeslots within a range defined by two 
+        """Returns all the timeslots within a range defined by two
         datetime objects.
 
         Keyword arguments:
@@ -257,7 +256,7 @@ class Timeslot(models.Model, MetadataSubjectMixin):
         # THIS IS NOT A TRIVIAL FUNCTION!
 
         # We need the dates to be "timezone aware", because otherwise
-        # Bad Things happen (the datetime stuff we'll be comparing 
+        # Bad Things happen (the datetime stuff we'll be comparing
         # against is all timezone aware)
         start = timezone.make_aware(
             start,
@@ -266,7 +265,6 @@ class Timeslot(models.Model, MetadataSubjectMixin):
             end,
             timezone.get_default_timezone())
 
-
         # Start with ALL the timeslots (Django doesn't execute
         # database queries immediately so this is perfectly fine,
         # we'll be whittling this query down soon!
@@ -274,12 +272,12 @@ class Timeslot(models.Model, MetadataSubjectMixin):
 
         # ADVICE: Whenever you see an inequality on duration, just
         # mentally move the subtraction of 'start_time' over to
-        # an addition on the other end, and replace duration + 
+        # an addition on the other end, and replace duration +
         # start_time with end_time.  That should make sense hopefully
 
         # (this is because the model doesn't store end times in the
         # database)
-        
+
         # Get rid of shows that start and end before the range
         # (diagrammatically, ##|  |  )
         timeslots = timeslots.exclude(
@@ -320,7 +318,7 @@ class Timeslot(models.Model, MetadataSubjectMixin):
             timeslots = timeslots.exclude(
                 start_time__lt=start,
                 duration__gt=end - F('start_time'))
- 
+
         # Of course, we want some form of ordering
         timeslots = timeslots.order_by("start_time")
 
@@ -344,7 +342,6 @@ class Timeslot(models.Model, MetadataSubjectMixin):
             exclude_after_end,
             exclude_subsuming,
             with_jukebox_entries)
- 
 
     @classmethod
     def timeslots_in_offset(cls, date=None, offset=None, **keywords):
@@ -370,7 +367,6 @@ class Timeslot(models.Model, MetadataSubjectMixin):
             date + offset,
             **keywords)
 
-
     @classmethod
     def timeslots_in_day(cls, date=None, **keywords):
         """Lists all schedule timeslots occurring between the given
@@ -388,7 +384,7 @@ class Timeslot(models.Model, MetadataSubjectMixin):
             date,
             td(days=1),
             **keywords)
-        
+
     @classmethod
     def timeslots_in_week(cls,
                           date=None,
@@ -454,6 +450,3 @@ class TimeslotMetadata(Metadata):
     id = exts.primary_key_from_meta(Meta)
 
     timeslot = Timeslot.make_foreign_key(Meta)
-
-
-
