@@ -126,14 +126,14 @@ a:visited, a:active {
     color: #fb810d;
 }
 
-header {
+#pageHeader {
     height: 230px;
     -webkit-text-shadow: 1px 2px black;
     -khtml-text-shadow: 1px 2px black;
     -moz-text-shadow: 1px 2px black;
     text-shadow: 1px 2px black;
 }
-header #logo {
+#pageHeader #logo {
     width: 430px;
     display: inline-block;
     text-align: center;
@@ -142,36 +142,36 @@ header #logo {
     border: none;
     float: left;
 }
-header h1, header h2 {
+#pageHeader h1, header h2 {
     text-transform: uppercase;
     margin: 0;
 }
-header div {
+#pageHeader div {
     float: left;
 }
-header a, header a:visited {
+#pageHeader a, #pageHeader a:visited {
     text-decoration: none;
     border: none;
     color: #fff;
 }
-header #show-onup {
+#pageHeader #show-onup {
     padding: 30px 20px 0;
     width: 430px;
 }
-header #show-onup div {
+#pageHeader #show-onup div {
     float: none;
 }
-header #show-onup dl {
+#pageHeader #show-onup dl {
     margin-top: 0; 
 }
-header #show-onup dt {
+#pageHeader #show-onup dt {
     display: none !important;
     visibility: hidden;
 }
-header #show-onup .show-person {
+#pageHeader #show-onup .show-person {
     display: inline-block;
 }
-header #webcam {
+#pageHeader #webcam {
     display: block;
     width: 150px;
     float: right;
