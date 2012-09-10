@@ -41,6 +41,10 @@ class Range(object):
         self.exclude_subsuming = exclude_subsuming
         self.with_jukebox_entries = with_jukebox_entries
 
+    def __repr__(self):
+        """Returns a debug representation of the range."""
+        return self.data.__repr__()
+
     def __getattr__(self, attr):
         """Ensures that any attempts to get an attribute that isn't
         in the Range class are sent to the data object it wraps.
@@ -106,16 +110,23 @@ class Timeslot(models.Model, MetadataSubjectMixin):
             slot_end = slot_start + self.duration
             assert slot_start < slot_end, "Slot starts after end."
 
+            # Because the block range is in local time and the slot
+            # dates are in UTC, we'll need to subtract the local
+            # time's UTC offset in the calculations.
+            utc = self.start_time.astimezone(
+                timezone.get_current_timezone()).utcoffset()
+            day = td(days=1)
+
             # Now we can do simple inequalities to match the
             # time-ranges, with the caveat that we'll have to check
             # against the slot projected forwards one day to make
             # sure that ranges starting the day before the show and
             # ending on the day of the show are considered correctly.
             block_range_matches = BlockRangeRule.objects.filter(
-                Q(start_time__lte=slot_start,
-                  end_time__gte=slot_end) |
-                Q(start_time__lte=slot_start + td(days=1),
-                  end_time__gte=slot_end + td(days=1))).order_by(
+                Q(start_time__lte=slot_start + utc,
+                  end_time__gte=slot_end + utc) |
+                Q(start_time__lte=slot_start + utc + day,
+                  end_time__gte=slot_end + utc + day)).order_by(
                       '-block__priority')
             if block_range_matches.exists():
                 block = block_range_matches[0].block
@@ -154,6 +165,15 @@ class Timeslot(models.Model, MetadataSubjectMixin):
 
         """
         return self.season.show.by_line(self.start_time)
+
+    def is_real_show(self):
+        """Returns True if the timeslot references a real show.
+
+        For example, this will return False if the timeslot is for
+        the Jukebox.
+
+        """
+        return self.season.is_real_show()
 
     @classmethod
     def jukebox_entry(cls,
@@ -254,16 +274,6 @@ class Timeslot(models.Model, MetadataSubjectMixin):
 
         """
         # THIS IS NOT A TRIVIAL FUNCTION!
-
-        # We need the dates to be "timezone aware", because otherwise
-        # Bad Things happen (the datetime stuff we'll be comparing
-        # against is all timezone aware)
-        start = timezone.make_aware(
-            start,
-            timezone.get_default_timezone())
-        end = timezone.make_aware(
-            end,
-            timezone.get_default_timezone())
 
         # Start with ALL the timeslots (Django doesn't execute
         # database queries immediately so this is perfectly fine,
@@ -407,11 +417,9 @@ class Timeslot(models.Model, MetadataSubjectMixin):
 
         """
         if split_days is True:
-            result = map(
-                lambda day: cls.timeslots_in_day(
-                    date + td(days=day),
-                    **keywords),
-                xrange(0, 7))
+            result = [cls.timeslots_in_day(
+                date + td(days=day),
+                **keywords) for day in xrange(0, 7)]
         else:
             result = cls.timeslots_in_offset(
                 date,

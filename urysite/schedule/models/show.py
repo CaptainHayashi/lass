@@ -32,6 +32,9 @@ class ShowType(models.Model):
         default=True,
         db_column='public')
 
+    is_real_show = models.BooleanField(
+        default=True)
+
 
 class Show(models.Model, MetadataSubjectMixin):
     """A show in the URY schedule.
@@ -93,6 +96,17 @@ class Show(models.Model, MetadataSubjectMixin):
                         credits[:-1])),
                 credits[-1].person.full_name()))
         return by_line
+
+    def is_real_show(self):
+        """Returns True if this show constitutes a "real show".
+
+        A real show is technically any show whose type defines it
+        to be; the flag denotes that the show constitutes an actually
+        scheduled event and not an automatically created filler show
+        such as URY Jukebox.
+
+        """
+        return self.show_type.is_real_show
 
     def block(self):
         """Returns the block that the show is in, if any.

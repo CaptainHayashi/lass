@@ -33,6 +33,16 @@ class Season(models.Model, MetadataSubjectMixin):
     def metadata_parent(self):
         return self.show
 
+    def is_real_show(self):
+        """Returns True if the season references a real show.
+
+        For example, this will return False if the season references
+        a show marked as being URY Jukebox, which is obviously not a
+        real show.
+
+        """
+        return self.show.is_real_show()
+
     def block(self):
         """Returns the block that the season is in, if any.
 

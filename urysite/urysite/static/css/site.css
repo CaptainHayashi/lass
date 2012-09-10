@@ -221,8 +221,8 @@ Safari and Chrome:
 
 /* ((URY)) austerity CSS */
 
-body {
-    font-family: Verdana, helvetica, Arial, sans-serif;
+a:link {
+    color: #adf;
 }
 
 #masthead {
@@ -415,18 +415,68 @@ ol#schedule-day {
     margin: 0;
 }
 
+/* -- WEEK SCHEDULE */
+
+table#schedule-week-table {
+    background: none repeat scroll 0% 0% rgba(0, 0, 0, 0.4);
+    border-spacing: 5px 2px;
+    table-layout: fixed;
+    margin: 0 auto;
+    border-radius: 5px;
+    padding-bottom: 5px;
+}
+
+table#schedule-week-table thead tr th {
+    padding: 5px;
+}
+
+/*table#schedule-week-table tr:hover > * {
+    background-color: rgba(255,255,255,0.5) !important;
+}*/
+
+table#schedule-week-table td {
+    padding: 5px;
+    font-size: 14px;
+    text-align: left;
+    vertical-align: top;
+    border-radius: 5px;
+    width: 130px;
+}
+
+.schedule-week-time {
+    width: 30px;
+    padding: 5px;
+    vertical-align: top;
+}
+
+.schedule-week-hour {
+    border-top: 2px solid rgba(0, 0, 0, 0.4);
+    font-size: 20px;
+}
+
+.schedule-week-non-hour {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.schedule-week-continued {
+    display: none;
+}
+
+/* BLOCKS */
+
 .block-default {
-    background-color: rgba(65, 65, 65, 0.7);
+    background-color: rgba(220, 220, 220, 0.4);
 }
 
 .block-jukebox {
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0%, 0%, 0%, 0.2);
 }
 
 .block-flagship {
-    background-color: rgba(7, 119, 170, 0.7);
+    background-color: rgba(30, 144, 255, 0.4);
 }
 
 .block-music {
-    background-color: rgba(64, 16, 48, 0.7);
+    background-color: rgba(139, 0, 139, 0.4);
 }
