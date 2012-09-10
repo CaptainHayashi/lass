@@ -497,7 +497,7 @@ ol#schedule-day {
 .schedule-day-block-name {
     position: absolute;
     bottom: -16px;
-    left: -16px;
+    right: -5px;
     z-index: -2;
     font-size: 60px;
     opacity: 0.2;
