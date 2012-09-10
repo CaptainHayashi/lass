@@ -1,7 +1,24 @@
 {% extends "urysite/master.html" %}
 {% block title %}University Radio York - 1350AM{% endblock title %}
 {% block body %}
-        <section>
+    <!-- Row 1 -->
+        {% include "urysite/boxes/message.html" %}
+        {% include "urysite/boxes/banner.html" %}
+    <!-- Row 2 -->
+        {% include "urysite/boxes/schedule.html" %}
+        <!-- This is a block of 4 boxes -->
+        {% include "urysite/boxes/news.html" %}
+        {% include "urysite/boxes/speech.html" %}
+        {% include "urysite/boxes/music.html" %}
+        {% include "urysite/boxes/chart.html" %}
+    <!-- Row 3 -->
+        {% include "urysite/boxes/photo.html" %}
+    <!-- Row 4 -->
+        {% include "urysite/boxes/podcast.html" %}
+        {% include "urysite/boxes/video.html" %}
+        {% include "urysite/boxes/social.html" %}
+        
+        <section class="box height-2 width-3">
             <h1>URY Django</h1>
             <p>
                 This is a placeholder.  If URY do decide to use
