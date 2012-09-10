@@ -33,6 +33,16 @@ class Season(models.Model, MetadataSubjectMixin):
     def metadata_parent(self):
         return self.show
 
+    def is_real_show(self):
+        """Returns True if the season references a real show.
+
+        For example, this will return False if the season references
+        a show marked as being URY Jukebox, which is obviously not a
+        real show.
+
+        """
+        return self.show.is_real_show()
+
     def block(self):
         """Returns the block that the season is in, if any.
 
@@ -56,7 +66,7 @@ class Season(models.Model, MetadataSubjectMixin):
             #else:
             block = None
         else:
-            block = show_block 
+            block = show_block
         return block
 
     id = exts.primary_key_from_meta(Meta)
@@ -83,7 +93,6 @@ class Season(models.Model, MetadataSubjectMixin):
             show=Show.objects.get(pk=-1),
             term=Term.jukebox_term(),
             date_submitted=datetime.fromtimestamp(0))
-
 
     @staticmethod
     def make_foreign_key(src_meta, db_column='show_season_id'):
@@ -115,5 +124,3 @@ class SeasonMetadata(Metadata):
     id = exts.primary_key_from_meta(Meta)
 
     season = Season.make_foreign_key(Meta)
-
-

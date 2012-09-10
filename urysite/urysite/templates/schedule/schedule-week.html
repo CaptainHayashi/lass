@@ -2,74 +2,63 @@
 {% load url from future %}
 {% block title %}URY - Week Commencing {{ week_start|date }}{% endblock title %}
 {% block body %}
-{% comment %}
-    SCHEDULE - Week view subtemplate
-    DON'T PANIC!  This is probably the most complex template in URY.
-{% endcomment %}
 
-<hgroup>
-    <h1>URY Schedule</h1>
-    <h2>Week Commencing {{ week_start|date }}</h2>
-</hgroup>
+<article class="schedule-page">
+    <header>
+        <h1>URY Schedule</h1>
+        <div class="schedule-header">
+            <h2>Week Commencing {{ week_start|date }}</h2>
+            <nav>
+                <a href="{% url 'schedule_week' year=prev_year week=prev_week %}"
+                   class="schedule-header-prev">
+                    Previous Week
+                </a>
+                <a href="{% url 'schedule_week' year=next_year week=next_week %}"
+                   class="schedule-header-next">
+                    Next Week
+                </a>
+            </nav>
+        </div>
+    </header>
 
-<nav>
-    <a href="{% url 'schedule_week' year=prev_year week=prev_week %}">
-        Previous Week
-    </a>
-    <a href="{% url 'schedule_week' year=next_year week=next_week %}">
-        Next Week
-    </a>
-</nav>
-
-<table id="schedule-week-table">
-    <thead>
-        <tr>
-            <th>Time</th>
-
-            {% if day_links == false %}
-
-                <th>Monday</th>
-                <th>Tuesday</th>
-                <th>Wednesday</th>
-                <th>Thursday</th>
-                <th>Friday</th>
-                <th>Saturday</th>
-                <th>Sunday</th>
-
-            {% else %}
-
-                <th><a href="">Monday</a></th>
-                <th><a href="">Tuesday</a></th>
-                <th><a href="">Wednesday</a></th>
-                <th><a href="">Thursday</a></th>
-                <th><a href="">Friday</a></th>
-                <th><a href="">Saturday</a></th>
-                <th><a href="">Sunday</a></th>
-
-            {% endif %}
-        </tr>
-    </thead>
-    <tbody>
-        {% for key,row in schedule_table %}
-            {% with hourEven=row.hour|divisibleby:2 %}
-            {% ifchanged hourEven %}
-                {% cycle 'light' 'dark' as shade %}
-            {% endifchanged %}
-            {% endwith %}
-
+    <table id="schedule-week-table">
+        <thead>
             <tr>
-                <th class="default-{{ shade }}"
-                    style="height: {{ row.duration }}px;">
-                  {% if row.time|divisibleby:60 %}
-                      {{ row.hour }}:00
-                  {% endif %}
-                </th>
+                <th>Time</th>
 
-                {% for entry in row.contents %}
-                    {% include "schedule/schedule-week-row.html" %}
-                {% endfor %}
+                <th><a href="1">Monday</a></th>
+                <th><a href="2">Tuesday</a></th>
+                <th><a href="3">Wednesday</a></th>
+                <th><a href="4">Thursday</a></th>
+                <th><a href="5">Friday</a></th>
+                <th><a href="6">Saturday</a></th>
+                <th><a href="7">Sunday</a></th>
             </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {% for row in schedule.rows %}
+                <tr>
+                    {% if row.start_time.minute == 0 and row.start_time.second == 0 %}
+                        <th class="schedule-week-time
+                                   schedule-week-hour"
+                            style="height: {{ row.duration }}px;">
+
+                            {{ row.start_time|date:"H:i" }}
+                        </th>
+                    {% else %}
+                        <th class="schedule-week-time
+                                   schedule-week-non-hour"
+                            style="height: {{ row.duration }}px;">
+                            {{ row.start_time|date:"H:i" }}
+                        </th>
+                    {% endif %}                 
+
+                    {% for entry in row.entries %}
+                        {% include "schedule/schedule-week-row.html" %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</article>
 {% endblock body %}

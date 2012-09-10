@@ -32,6 +32,9 @@ class ShowType(models.Model):
         default=True,
         db_column='public')
 
+    is_real_show = models.BooleanField(
+        default=True)
+
 
 class Show(models.Model, MetadataSubjectMixin):
     """A show in the URY schedule.
@@ -61,7 +64,7 @@ class Show(models.Model, MetadataSubjectMixin):
     def credits_at(self, time):
         """Returns a list of all credits for people who worked on this
         show at the given instant in time.
-        
+
         """
         # Why excludes?  Because effective_to might be NULL
         # and we don't want to throw away results where it is
@@ -70,7 +73,7 @@ class Show(models.Model, MetadataSubjectMixin):
             effective_from__gt=time).exclude(
                 effective_to__lt=time).exclude(
                     approver__isnull=True)
-        
+
     def by_line(self, time):
         """Returns a by-line for the show- a human-readable summary
         of all the presenters, co-presenters and other important
@@ -89,10 +92,21 @@ class Show(models.Model, MetadataSubjectMixin):
             by_line = u' and '.join((
                 u', '.join(
                     map(
-                        lambda x: x.person.full_name(), 
+                        lambda x: x.person.full_name(),
                         credits[:-1])),
                 credits[-1].person.full_name()))
         return by_line
+
+    def is_real_show(self):
+        """Returns True if this show constitutes a "real show".
+
+        A real show is technically any show whose type defines it
+        to be; the flag denotes that the show constitutes an actually
+        scheduled event and not an automatically created filler show
+        such as URY Jukebox.
+
+        """
+        return self.show_type.is_real_show
 
     def block(self):
         """Returns the block that the show is in, if any.
@@ -107,7 +121,7 @@ class Show(models.Model, MetadataSubjectMixin):
         """
         # Show rules take precedence
         block_matches = self.blockshowrule_set.order_by(
-                '-block__priority')
+            '-block__priority')
         if (len(block_matches)) > 0:
             block = block_matches[0].block
         else:
