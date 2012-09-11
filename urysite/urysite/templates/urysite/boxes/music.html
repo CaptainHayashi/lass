@@ -9,18 +9,17 @@
           </tr>
       </thead>
       <tbody>
+        {% for song in music %}
           <tr>
-              <td><a href="#">Burial</a></td>
-              <td>Kindred</td>
+            <td><a href="{{ song.link }}">{{ song.artist }}</a></td>
+            <td>{{ song.title }}</td>
           </tr>
+        {% endif %}
+        {% empty %}
           <tr>
-              <td><a href="#">Andrew Bird</a></td>
-              <td>Desperation Birds</td>
+            <td colspan="2">No Music Today!</td>
           </tr>
-          <tr>
-              <td><a href="#">California Analog Dream</a></td>
-              <td>Vondelpark</td>
-          </tr>
+        {% endfor %}
       </tbody>
   </table>
   <footer>
