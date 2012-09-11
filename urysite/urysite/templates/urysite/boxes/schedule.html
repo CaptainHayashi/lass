@@ -1,8 +1,14 @@
 <section id="schedule" class="box height-2 width-1">
   <h2>((URY)) On Air Today</h2>
   <dl>
-      <dt>17:00 - 17:00</dt>
-          <dd><a href="#">URY Jukebox</a></dd>
+    {% for show in schedule %}
+      <dt>{{ show.startTime }} - {{ show.endTime }}</dt>
+          <dd><a href="{{ show.link }}">{{ show.name }}</a></dd>
+      {% endif %}
+    {% empty %}
+      <dt></dt>
+          <dd><a>No Shows Today!</a></dd>
+    {% endfor %}
   </dl>
   <footer>
       <a class="more transHovBG" href="#">+</a>

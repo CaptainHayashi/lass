@@ -5,10 +5,10 @@
         {% include "urysite/boxes/message.html" %}
         {% include "urysite/boxes/banner.html" with banners=banners %}
     <!-- Row 2 -->
-        {% include "urysite/boxes/schedule.html" %}
+        {% include "urysite/boxes/schedule.html" with schedule=schedule %}
         <!-- This is a block of 4 boxes -->
-        {% include "urysite/boxes/news.html" %}
-        {% include "urysite/boxes/speech.html" %}
+        {% include "urysite/boxes/news.html" with news=news %}
+        {% include "urysite/boxes/speech.html" with speech=speech %}
         {% include "urysite/boxes/music.html" %}
         {% include "urysite/boxes/chart.html" %}
     <!-- Row 3 -->

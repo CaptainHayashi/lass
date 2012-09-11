@@ -1,10 +1,14 @@
 <section id="speech" class="box height-1 width-1">
   <h2>Speech</h2>
   <dl>
-      <dt><a href="#">Welcome and Autumn 2012</a></dt>
-          <dd>On behalf of the Speech team at URY welcome to all the freshers coming...</dd>
-      <dt><a href="#">Woman's Quarter: Travelling?</a></dt>
-          <dd>The final episode of Janey Stephenson's excellent series is now available on...</dd>
+    {% for item in speech %}
+      <dt><a href="{{ item.link }}">{{ item.title }}</a></dt>
+          <dd>{{ item.summary }}</dd>
+      {% endif %}
+    {% empty %}
+      <dt></dt>
+          <dd><a>No Speech News Today!</a></dd>
+    {% endfor %}
   </dl>
   <footer>
       <a href="#">Listen to latest YorWorld podcast</a>
