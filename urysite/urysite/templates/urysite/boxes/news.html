@@ -4,7 +4,6 @@
     {% for item in news %}
       <dt><a href="{{ item.link }}">{{ item.title }}</a></dt>
           <dd>{{ item.summary }}</dd>
-      {% endif %}
     {% empty %}
       <dt></dt>
           <dd><a>No News Today!</a></dd>

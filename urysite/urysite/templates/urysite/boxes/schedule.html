@@ -4,7 +4,6 @@
     {% for show in schedule %}
       <dt>{{ show.startTime }} - {{ show.endTime }}</dt>
           <dd><a href="{{ show.link }}">{{ show.name }}</a></dd>
-      {% endif %}
     {% empty %}
       <dt></dt>
           <dd><a>No Shows Today!</a></dd>

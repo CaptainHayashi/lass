@@ -4,7 +4,6 @@
     {% for item in speech %}
       <dt><a href="{{ item.link }}">{{ item.title }}</a></dt>
           <dd>{{ item.summary }}</dd>
-      {% endif %}
     {% empty %}
       <dt></dt>
           <dd><a>No Speech News Today!</a></dd>
