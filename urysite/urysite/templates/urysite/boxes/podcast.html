@@ -2,9 +2,9 @@
   <h2>((URY)) Player</h2>
   <dl class="clearfix">
     {% for item in podcasts %}
-      <dt class="pod-title">{{ item.title }}</dt>
-          <dd class="pod-img"><img alt="{{ item.imgAlt }}" src="{{ item.img }}"></dd>
-          <dd class="pod-desc">{{ item.desc }}</dd>
+      <dt class="podTitle">{{ item.title }}</dt>
+          <dd class="podImg"><img alt="{{ item.imgAlt }}" src="{{ item.img }}"></dd>
+          <dd class="podDesc">{{ item.desc }}</dd>
     {% empty %}
       <dt></dt>
           <dd>No Podcasts Today!</dd>

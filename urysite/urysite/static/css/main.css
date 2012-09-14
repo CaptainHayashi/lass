@@ -111,16 +111,19 @@ body {
 }
 
 a {
-    text-decoration: none;
-    border-bottom: 1px solid;
-}
-a:link {
     color: #feb93a;
+}
+a.link
+{
+	font-weight:600;
+	font-size:95%;
+	-webkit-text-shadow:1px 2px black;
+	-khtml-text-shadow:1px 2px black;
+	-moz-text-shadow:1px 2px black;
+	text-shadow:1px 2px black;
 }
 a:hover {
     color: #ffd079;
-    text-decoration: none;
-    border-bottom: 1px dashed;
 }
 a:visited, a:active {
     color: #fb810d;
@@ -138,8 +141,7 @@ a:visited, a:active {
     display: inline-block;
     text-align: center;
     color: #fff;
-    text-decoration: none;
-    border: none;
+	text-decoration: none;
     float: left;
 }
 #pageHeader h1, header h2 {
@@ -150,25 +152,19 @@ a:visited, a:active {
     float: left;
 }
 #pageHeader a, #pageHeader a:visited {
-    text-decoration: none;
-    border: none;
     color: #fff;
 }
-#pageHeader #show-onup {
+#pageHeader #showOnUp {
     padding: 30px 20px 0;
     width: 430px;
 }
-#pageHeader #show-onup div {
+#pageHeader #showOnUp div {
     float: none;
 }
-#pageHeader #show-onup dl {
+#pageHeader #showOnUp dl {
     margin-top: 0; 
 }
-#pageHeader #show-onup dt {
-    display: none !important;
-    visibility: hidden;
-}
-#pageHeader #show-onup .show-person {
+#pageHeader #showOnUp .showPerson {
     display: inline-block;
 }
 #pageHeader #webcam {
@@ -202,8 +198,7 @@ a:visited, a:active {
 }
 #menu ul li a {
     color: #fff;
-    text-decoration: none;
-    border: none;
+	text-decoration: none;
     display: block;
     padding: 0 10px;
 }
@@ -223,7 +218,6 @@ a:visited, a:active {
 }
 #menu #socialBtn a {
     text-decoration: none;
-    border: none;
 }
 #socialBtn a:link, #socialBtn a:visited {
     opacity: 0.8;
@@ -259,7 +253,6 @@ a:visited, a:active {
     height: 20px;
     text-align: center;
     text-decoration: none;
-    border: none;
     color: #fff;
     -moz-border-radius-topleft: 10px;
     border-top-left-radius: 10px;
@@ -340,7 +333,7 @@ grid article {
     background: rgb(88,36,112);
     background: rgba(139,0,139,0.4);
 }
-table.music-chart {
+table.musicChart {
     font-size: 13px;
     width: 100%;
 }
@@ -353,17 +346,17 @@ table.music-chart {
     background: rgb(45,93,159);
     background: rgba(30,144,255,0.4);
 }
-#podcast .pod-title {
+#podcast .podTitle {
     clear: both;
     padding-top: 5px;
 }
-#podcast .pod-img {
+#podcast .podImg {
     float: left;
     width: 65px;
     height: 65px;
     margin: 0 5px 0 0;
 }
-#podcast .pod-img img {
+#podcast .podImg img {
     width: 65px;
     height: 65px;
 }
