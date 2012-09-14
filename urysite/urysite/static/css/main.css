@@ -113,7 +113,7 @@ body {
 a {
     color: #feb93a;
 }
-a.link
+a
 {
 	font-weight:600;
 	font-size:95%;
@@ -150,9 +150,6 @@ a:visited, a:active {
 }
 #pageHeader div {
     float: left;
-}
-#pageHeader a, #pageHeader a:visited {
-    color: #fff;
 }
 #pageHeader #showOnUp {
     padding: 30px 20px 0;
