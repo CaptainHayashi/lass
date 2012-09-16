@@ -381,11 +381,11 @@ table.musicChart {
 #pageFooter h4 {
     margin: 0;
 }
-#pageFooter .footerNav {
+#pageFooter ul {
     list-style: none;
     margin: 0;
 }
-#pageFooter .footerNav li {
+#pageFooter ul li {
     display: inline-block;
 }
 #pageFooter #copyright {

@@ -79,18 +79,7 @@
         
         <footer id="pageFooter">
             <h4>On This Site</h4>
-            <ul class="footerNav">
-                <li class="current"><a href="#">Home</a></li>
-                <li><a href="#">Listen</a></li>
-                <li><a href="#">Schedule</a></li>
-                <li><a href="#">URY Player</a></li>
-                <li><a href="#">News</a></li>
-                <li><a href="#">Speech</a></li>
-                <li><a href="#">Music</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
-                <li><a href="#">Get Involved</a></li>
-            </ul>
+            {% sitetree_menu from "main" include "trunk, this-children" %}
             <div id="copyright">&copy; 1967-2012 University Radio York<br>Maintaned by <a href="mailto:webmaster@ury.york.ac.uk">URY Computing Team</a></div>
             <ul id="footerLinks" class="footerNav">
                 <li><a href="#">Disclaimer</a></li>
