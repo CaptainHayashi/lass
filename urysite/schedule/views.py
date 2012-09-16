@@ -1,12 +1,27 @@
 from django.shortcuts import render
-from datetime import time, datetime, timedelta
+from datetime import date, time, datetime, timedelta
 from schedule.models import Timeslot
 from django.utils import timezone
 
 
 # Changing this will change the starting time of the schedule
 # views.
-URY_START = time(hour=7, minute=0, second=0)
+# NOTE: This time is taken to be in local time, NOT UTC!
+URY_START = time(
+    hour=7,
+    minute=0,
+    second=0)
+
+
+def ury_start_on_date(date):
+    """Returns a new datetime representing the nominal start of URY
+    programming on the given date (timezone-aware).
+
+    """
+    return timezone.make_aware(
+        datetime.combine(date, URY_START),
+        timezone.get_current_timezone())
+
 
 class ScheduleTable(object):
     """A weekly schedule, in tabular form and ready to be outputted
@@ -284,33 +299,39 @@ class ScheduleTable(object):
             range_list[0].start)
 
 
-def get_week_day(year, week, day, start_time=URY_START):
+## These next two functions were purloined from
+## http://stackoverflow.com/q/304256
+
+def iso_year_start(iso_year):
+    """The gregorian calendar date of the first day of the given ISO
+    year.
+    
+    """
+    fourth_jan = date(iso_year, 1, 4)
+    delta = timedelta(fourth_jan.isoweekday()-1)
+    return fourth_jan - delta 
+
+
+def iso_to_gregorian(iso_year, iso_week, iso_day):
+    """Gregorian calendar date for the given ISO year, week
+    and day.
+    
+    """
+    year_start = iso_year_start(iso_year)
+    return year_start + timedelta(
+        days=iso_day-1,
+        weeks=iso_week-1)
+
+## End unoriginal code
+
+
+def get_week_day(year, week, day):
     """Given a year, a week number inside that year and a day number
     inside that day (from 1 to 7), finds the corresponding time
     period that represents the start of that URY day.
 
-    See the C89 definition of strptime formats for details on how
-    this function works.
-
     """
-    # Note: the modulo 7 is to convert a day in the form 1-7 where
-    # 1=Monday, 7=Sunday to the form 0-6 where 0=Sunday, 6=Saturday.
-    # Why?  This is how strptime wants it, for some daft reason.
-    day = int(day) % 7
-
-    # If anyone can find an easier way of converting year/week to a
-    # datetime, replace the following:
-    week_start_str = '{0} {1} {2} {3} {4} {5} {6}'.format(
-        year,
-        week,
-        day,
-        start_time.hour,
-        start_time.minute,
-        start_time.second,
-        start_time.microsecond)
-    return timezone.make_aware(
-        datetime.strptime(week_start_str, '%Y %W %w %H %M %S %f'),
-        timezone.get_current_timezone())
+    return ury_start_on_date(iso_to_gregorian(year, week, day))
 
 
 def get_week_start(year, week):
@@ -370,11 +391,7 @@ def index(request):
     """
     return schedule_week_from_date(
         request,
-        to_monday(datetime.today()).replace(
-            hour=URY_START.hour,
-            minute=URY_START.minute,
-            second=URY_START.second,
-            microsecond=URY_START.microsecond))
+        ury_start_on_date(to_monday(datetime.utcnow())))
 
 
 def schedule_week(request, year, week):
@@ -384,11 +401,14 @@ def schedule_week(request, year, week):
     # WEEK STARTS
     return schedule_week_from_date(
         request, 
-        get_week_start(year, week))
+        get_week_start(int(year), int(week)))
+
+
+# DAY SCHEDULES 
 
 def schedule_day_from_date(request, day_start):
-    """The week-at-a-glance schedule view, with the week specified
-    by a date object denoting its starting day.
+    """The day-at-a-glance schedule view, with the day specfied by
+    a date object (including the start time of the schedule).
 
     """
     next_start = day_start + timedelta(days=1)
@@ -417,10 +437,32 @@ def schedule_day_from_date(request, day_start):
                 with_jukebox_entries=True).data})
 
 
-def schedule_day(request, year, week, day):
-    """The day-in-detail schedule view.
+def schedule_weekday(request, year, week, weekday):
+    """The day-in-detail schedule view, with the day provided in
+    Year/Week/Day format.
 
     """
     return schedule_day_from_date(
         request,
-        get_week_day(year, week, day))
+        get_week_day(int(year), int(week), int(weekday)))
+
+
+def schedule_day(request, year, month, day):
+    """The day-in-detail schedule view, with the day provided in
+    Year/Month/Day format.
+
+    """
+    return schedule_day_from_date(
+        request,
+        ury_start_on_date(date(
+            year=int(year),
+            month=int(month),
+            day=int(day))))
+
+
+def today(request): 
+    """A view that shows the day schedule for today."""
+    return schedule_day_from_date(
+        request,
+        ury_start_on_date(timezone.now()))
+

@@ -9,11 +9,11 @@
         <div class="schedule-header">
             <h2>Schedule for {{ day_start|date:"l, jS F Y" }}</h2>
             <nav>
-                <a href="{% url 'schedule_day' year=prev_year week=prev_week day=prev_day %}"
+                <a href="{% url 'schedule_weekday' year=prev_year week=prev_week weekday=prev_day %}"
                    class="schedule-header-prev">
                     Previous Day 
                 </a>
-                <a href="{% url 'schedule_day' year=next_year week=next_week day=next_day %}"
+                <a href="{% url 'schedule_weekday' year=next_year week=next_week weekday=next_day %}"
                    class="schedule-header-next">
                     Next Day
                 </a>
