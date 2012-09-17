@@ -13,7 +13,10 @@ middleware here, or combine a Django application with an application of another
 framework.
 
 """
-import os
+import os, sys
+
+sys.path.append('/usr/local/www/django')
+sys.path.append('/usr/local/www/django/urysite')
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "urysite.settings")
 

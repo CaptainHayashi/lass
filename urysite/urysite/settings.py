@@ -23,7 +23,7 @@ MANAGERS = ADMINS
 # get the Django password out of:
 
 dbstanza = subprocess.check_output(
-    'echo "django" | dbpassget-django', shell=True
+    'echo "django" | /usr/local/bin/dbpassget-django', shell=True
 )
 
 # Output should be "OK <json encoding of Python dictionary>".
