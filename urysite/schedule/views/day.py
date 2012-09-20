@@ -3,10 +3,11 @@ services.
 
 """
 
-from datetime import date, time, datetime, timedelta
+from datetime import date, timedelta
 from schedule.models import Timeslot
-from schedule.views.common import ury_start_on_date
-from schedule.views.week_table import WeekTable
+from schedule.views.common import ury_start_on_date, get_week_day
+from django.shortcuts import render
+from django.utils import timezone
 
 
 ## SUPPORTING FUNCTIONS
@@ -73,9 +74,8 @@ def schedule_day(request, year, month, day):
             day=int(day))))
 
 
-def today(request): 
+def today(request):
     """A view that shows the day schedule for today."""
     return schedule_day_from_date(
         request,
         ury_start_on_date(timezone.now()))
-
