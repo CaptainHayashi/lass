@@ -1,29 +1,17 @@
-from django.shortcuts import render
-from datetime import date, time, datetime, timedelta
-from schedule.models import Timeslot
-from django.utils import timezone
+"""Classes representing a weekly schedule table.
+
+The weekly schedule table is complicated to construct from the
+timeslot ranges it is built up from, and as such these classes and
+their constituent functions are quite voluminous.  Any intrepid
+coder who can cut away swathes of this module without sacrificing its
+functionality is a true hero.
+
+"""
+
+from datetime import timedelta
 
 
-# Changing this will change the starting time of the schedule
-# views.
-# NOTE: This time is taken to be in local time, NOT UTC!
-URY_START = time(
-    hour=7,
-    minute=0,
-    second=0)
-
-
-def ury_start_on_date(date):
-    """Returns a new datetime representing the nominal start of URY
-    programming on the given date (timezone-aware).
-
-    """
-    return timezone.make_aware(
-        datetime.combine(date, URY_START),
-        timezone.get_current_timezone())
-
-
-class ScheduleTable(object):
+class WeekTable(object):
     """A weekly schedule, in tabular form and ready to be outputted
     in a template.
 
@@ -69,7 +57,7 @@ class ScheduleTable(object):
                 raise IncorrectlySizedRowException
             else:
                 self.entries.append(
-                    ScheduleTable.Row.Entry(
+                    WeekTable.Row.Entry(
                         timeslot))
 
         def real_column(self, column):
@@ -119,7 +107,7 @@ class ScheduleTable(object):
         and the row span of the other entry is incremented.
 
         """
-        if type(row) == ScheduleTable.Row:
+        if type(row) == WeekTable.Row:
             entries = row.entries
             # Compress row by merging where possible with above
             # row
@@ -165,7 +153,7 @@ class ScheduleTable(object):
 
         row_date = start_date
         time_remaining_on_shows = [day[0].duration for day in week]
-        table = ScheduleTable()
+        table = WeekTable()
 
         # Assuming that either all weeks are populated or none are
         while True in [len(day) > 0 for day in week]:
@@ -209,7 +197,7 @@ class ScheduleTable(object):
             else:
                 row_duration = shortest_duration
 
-            row = ScheduleTable.Row(row_date, row_duration)
+            row = WeekTable.Row(row_date, row_duration)
             # Now shove shows into the row
             for day_index, day in enumerate(week):
                 # Decide whether this row entry contains the start
@@ -297,172 +285,4 @@ class ScheduleTable(object):
         return cls.tabulate_week_lists(
             range_list_pure,
             range_list[0].start)
-
-
-## These next two functions were purloined from
-## http://stackoverflow.com/q/304256
-
-def iso_year_start(iso_year):
-    """The gregorian calendar date of the first day of the given ISO
-    year.
-    
-    """
-    fourth_jan = date(iso_year, 1, 4)
-    delta = timedelta(fourth_jan.isoweekday()-1)
-    return fourth_jan - delta 
-
-
-def iso_to_gregorian(iso_year, iso_week, iso_day):
-    """Gregorian calendar date for the given ISO year, week
-    and day.
-    
-    """
-    year_start = iso_year_start(iso_year)
-    return year_start + timedelta(
-        days=iso_day-1,
-        weeks=iso_week-1)
-
-## End unoriginal code
-
-
-def get_week_day(year, week, day):
-    """Given a year, a week number inside that year and a day number
-    inside that day (from 1 to 7), finds the corresponding time
-    period that represents the start of that URY day.
-
-    """
-    return ury_start_on_date(iso_to_gregorian(year, week, day))
-
-
-def get_week_start(year, week):
-    """Given a year and a week number inside that year, finds the
-    date of the Monday of that week.
-
-    See get_week_day for details on how this function works.
-
-    """
-    return get_week_day(year, week, 1)
-
-
-def schedule_week_from_date(request, week_start):
-    """The week-at-a-glance schedule view, with the week specified
-    by a date object denoting its starting day.
-
-    """
-    next_start = week_start + timedelta(weeks=1)
-    next_year, next_week, next_day = next_start.isocalendar()
-
-    prev_start = week_start - timedelta(weeks=1)
-    prev_year, prev_week, prev_day = prev_start.isocalendar()
-
-    schedule = ScheduleTable.tabulate(
-        Timeslot.timeslots_in_week(
-            week_start,
-            split_days=True,
-            exclude_before_start=False,
-            exclude_after_end=False,
-            exclude_subsuming=False,
-            with_jukebox_entries=True))
-
-    return render(
-        request,
-        'schedule/schedule-week.html',
-        {'week_start': week_start,
-            'next_start': next_start,
-            'next_year': next_year,
-            'next_week': next_week,
-            'prev_start': prev_start,
-            'prev_year': prev_year,
-            'prev_week': prev_week,
-            'schedule': schedule})
-
-
-def to_monday(date):
-    """Given a date, find the date of the Monday of its week."""
-    days_after_monday = date.weekday()
-    return date - timedelta(days=days_after_monday)
-
-
-def index(request):
-    """The view that gets brought up if you navigate to 'schedule'.
-
-    Currently this just gets the weekly schedule for the current
-    week.
-    """
-    return schedule_week_from_date(
-        request,
-        ury_start_on_date(to_monday(datetime.utcnow())))
-
-
-def schedule_week(request, year, week):
-    """The week-at-a-glance schedule view.
-
-    """
-    # WEEK STARTS
-    return schedule_week_from_date(
-        request, 
-        get_week_start(int(year), int(week)))
-
-
-# DAY SCHEDULES 
-
-def schedule_day_from_date(request, day_start):
-    """The day-at-a-glance schedule view, with the day specfied by
-    a date object (including the start time of the schedule).
-
-    """
-    next_start = day_start + timedelta(days=1)
-    next_year, next_week, next_day = next_start.isocalendar()
-
-    prev_start = day_start - timedelta(days=1)
-    prev_year, prev_week, prev_day = prev_start.isocalendar()
-
-    return render(
-        request,
-        'schedule/schedule-day.html',
-        {'day_start': day_start,
-            'next_start': next_start,
-            'next_year': next_year,
-            'next_week': next_week,
-            'next_day': next_day,
-            'prev_start': prev_start,
-            'prev_year': prev_year,
-            'prev_week': prev_week,
-            'prev_day': prev_day,
-            'schedule': Timeslot.timeslots_in_day(
-                day_start,
-                exclude_before_start=False,
-                exclude_after_end=False,
-                exclude_subsuming=False,
-                with_jukebox_entries=True).data})
-
-
-def schedule_weekday(request, year, week, weekday):
-    """The day-in-detail schedule view, with the day provided in
-    Year/Week/Day format.
-
-    """
-    return schedule_day_from_date(
-        request,
-        get_week_day(int(year), int(week), int(weekday)))
-
-
-def schedule_day(request, year, month, day):
-    """The day-in-detail schedule view, with the day provided in
-    Year/Month/Day format.
-
-    """
-    return schedule_day_from_date(
-        request,
-        ury_start_on_date(date(
-            year=int(year),
-            month=int(month),
-            day=int(day))))
-
-
-def today(request): 
-    """A view that shows the day schedule for today."""
-    return schedule_day_from_date(
-        request,
-        ury_start_on_date(timezone.now()))
 
