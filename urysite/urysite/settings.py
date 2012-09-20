@@ -114,7 +114,11 @@ TEMPLATE_LOADERS = (
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
-    'django.contrib.auth.context_processors.auth'
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'zinnia.context_processors.version'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -149,10 +153,14 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.flatpages',
     'django.contrib.admindocs',
+    'django.contrib.comments',
     ## THIRD PARTY EXTENSIONS ##
     'sitetree',
     'endless_pagination',
     'haystack',
+    'tagging',
+    'mptt',
+    'zinnia',
     ## URY APPS ##
     'website',
     'people',
