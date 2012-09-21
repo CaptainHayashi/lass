@@ -162,11 +162,11 @@ INSTALLED_APPS = (
     'mptt',
     'zinnia',
     ## URY APPS ##
-    'urysite.website',
-    'urysite.people',
-    'urysite.uryplayer',
-    'urysite.schedule',
-    'urysite.search'
+    'website',
+    'people',
+    'uryplayer',
+    'schedule',
+    'search',
 )
 
 #AUTHENTICATION_BACKENDS = (
