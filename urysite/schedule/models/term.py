@@ -34,9 +34,17 @@ class Term(models.Model):
         db_column='descr')
 
     @classmethod
-    def jukebox_term(cls):
-        """Returns a fake term usable by Jukebox seasons."""
-        return cls(
-            start=datetime.fromtimestamp(0),
-            end=datetime.fromtimestamp(0),
-            name="Jukebox")
+    def of(cls, date):
+        """Returns the term of the given date, or None if the date
+        does not lie in any known term.
+
+        """
+        query = cls.objects.filter(
+            start__gte=date,
+            end__lt=date)
+        if query.exists():
+            term_of_date = query[0]
+        else:
+            term_of_date = None
+        return term_of_date
+

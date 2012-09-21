@@ -3,11 +3,12 @@ services.
 
 """
 
-from datetime import date, time, datetime, timedelta
-from schedule.models import Timeslot
+from datetime import datetime, timedelta
+from schedule.utils.range import ScheduleRange
 from schedule.views.common import ury_start_on_date, get_week_start
 from schedule.views.week_table import WeekTable
 from django.shortcuts import render
+from schedule.models import Term
 
 
 ## SUPPORTING FUNCTIONS
@@ -27,14 +28,15 @@ def schedule_week_from_date(request, week_start):
     prev_start = week_start - timedelta(weeks=1)
     prev_year, prev_week, prev_day = prev_start.isocalendar()
 
-    schedule = WeekTable.tabulate(
-        Timeslot.timeslots_in_week(
+    term = Term.of(week_start)
+    schedule = None if not term else WeekTable.tabulate(
+        ScheduleRange.week(
             week_start,
             split_days=True,
             exclude_before_start=False,
             exclude_after_end=False,
             exclude_subsuming=False,
-            with_jukebox_entries=True))
+            with_filler_timeslots=True))
 
     return render(
         request,
@@ -76,5 +78,5 @@ def schedule_week(request, year, week):
     """
     # WEEK STARTS
     return schedule_week_from_date(
-        request, 
+        request,
         get_week_start(int(year), int(week)))

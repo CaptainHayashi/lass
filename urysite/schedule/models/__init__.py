@@ -9,7 +9,7 @@ from schedule.models.block import Block, BlockRangeRule
 
 from schedule.models.show import Show, ShowType, ShowMetadata
 from schedule.models.season import Season, SeasonMetadata
-from schedule.models.timeslot import Timeslot, TimeslotMetadata, Range
+from schedule.models.timeslot import Timeslot, TimeslotMetadata
 
 # This must go after the schedule entities, even though block must go
 # before.  Confusing, eh?

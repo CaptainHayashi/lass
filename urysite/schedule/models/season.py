@@ -86,14 +86,6 @@ class Season(models.Model, MetadataSubjectMixin):
         db_column='submitted',
         help_text='The date the season was submitted, if any.')
 
-    @classmethod
-    def jukebox_season(cls):
-        """Returns the pseudo-season associated with URY Jukebox."""
-        return cls(
-            show=Show.objects.get(pk=-1),
-            term=Term.jukebox_term(),
-            date_submitted=datetime.fromtimestamp(0))
-
     @staticmethod
     def make_foreign_key(src_meta, db_column='show_season_id'):
         """Shortcut for creating a field that links to a season,
