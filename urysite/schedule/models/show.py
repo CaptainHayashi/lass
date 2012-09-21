@@ -4,7 +4,7 @@
 # __init__.py
 
 from django.db import models
-from schedule.models.metadata import Metadata, MetadataSubjectMixin
+from urysite.models.metadata import Metadata, MetadataSubjectMixin
 from urysite import model_extensions as exts
 from people.models import Person
 

@@ -7,7 +7,7 @@ from django.db import models
 from urysite import model_extensions as exts
 from schedule.models import BlockRangeRule
 from schedule.models.season import Season
-from schedule.models.metadata import Metadata, MetadataSubjectMixin
+from urysite.models.metadata import Metadata, MetadataSubjectMixin
 from django.utils import timezone
 from datetime import timedelta as td
 from django.db.models import Q
