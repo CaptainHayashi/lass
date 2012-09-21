@@ -1,5 +1,6 @@
 {% extends "urysite/master.html" %}
 {% load url from future %}
+{% load flatblock_tags %}
 {% block title %}URY - {{ day_start|date }}{% endblock title %}
 {% block body %}
 
@@ -23,9 +24,7 @@
 
     <div class="article-body pageAside">
         {% if not term and not disable_holiday_message %}
-            <p>
-                Sorry, but URY do not broadcast out of term time.
-            </p>
+            {% flatblock "schedule.holiday_message" %}
         {% else %}
             <ol id="schedule-day">
                 {% for slot in schedule %}

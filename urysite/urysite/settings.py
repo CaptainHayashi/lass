@@ -161,6 +161,7 @@ INSTALLED_APPS = (
     'tagging',
     'mptt',
     'zinnia',
+    'flatblocks',
     ## URY APPS ##
     'website',
     'people',

@@ -1,0 +1,39 @@
+<table id="schedule-week-table">
+    <thead>
+        <tr>
+            <th>Time</th>
+
+            <th><a href="1">Monday</a></th>
+            <th><a href="2">Tuesday</a></th>
+            <th><a href="3">Wednesday</a></th>
+            <th><a href="4">Thursday</a></th>
+            <th><a href="5">Friday</a></th>
+            <th><a href="6">Saturday</a></th>
+            <th><a href="7">Sunday</a></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in schedule.rows %}
+            <tr>
+                {% if row.start_time.minute == 0 and row.start_time.second == 0 %}
+                    <th class="schedule-week-time
+                               schedule-week-hour"
+                        style="height: {{ row.duration }}px;">
+
+                        {{ row.start_time|date:"H:i" }}
+                    </th>
+                {% else %}
+                    <th class="schedule-week-time
+                               schedule-week-non-hour"
+                        style="height: {{ row.duration }}px;">
+                        {{ row.start_time|date:"H:i" }}
+                    </th>
+                {% endif %}                 
+
+                {% for entry in row.entries %}
+                    {% include "schedule/schedule-week-row.html" %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
