@@ -22,6 +22,8 @@ def schedule_week_from_date(request, week_start):
     by a date object denoting its starting day.
 
     """
+    this_year, this_week, this_day = week_start.isocalendar()
+
     next_start = week_start + timedelta(weeks=1)
     next_year, next_week, next_day = next_start.isocalendar()
 
@@ -42,12 +44,15 @@ def schedule_week_from_date(request, week_start):
         request,
         'schedule/schedule-week.html',
         {'week_start': week_start,
+            'this_year': this_year,
+            'this_week': this_week,
             'next_start': next_start,
             'next_year': next_year,
             'next_week': next_week,
             'prev_start': prev_start,
             'prev_year': prev_year,
             'prev_week': prev_week,
+            'term': term,
             'schedule': schedule})
 
 

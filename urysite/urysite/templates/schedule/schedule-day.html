@@ -10,11 +10,11 @@
         <div class="schedule-header">
             <h2>Schedule for {{ day_start|date:"l, jS F Y" }}</h2>
             <nav>
-                <a href="{% url 'schedule_weekday' year=prev_year week=prev_week weekday=prev_day %}"
+                <a href="{% url 'schedule_weekday' prev_year prev_week prev_day %}"
                    class="schedule-header-prev">
                     Previous Day 
                 </a>
-                <a href="{% url 'schedule_weekday' year=next_year week=next_week weekday=next_day %}"
+                <a href="{% url 'schedule_weekday' next_year next_week next_day %}"
                    class="schedule-header-next">
                     Next Day
                 </a>
@@ -26,40 +26,15 @@
         {% if not term and not disable_holiday_message %}
             {% flatblock "schedule.holiday_message" %}
         {% else %}
-            <ol id="schedule-day">
-                {% for slot in schedule %}
-                    <li class="schedule-item
-                              block-{{ slot.block.tag|default:"default" }}">
-                        <hgroup>
-                            <h1 class="schedule-day-show-time">
-                                {{ slot.start_time|date:"H:i" }}
-                            </h1>
-                            <h2 class="schedule-day-show-title">
-                                {{ slot.title }}
-                            </h2>
-                            {% if slot.by_line %}
-                            <h3 class="schedule-day-show-by-line">
-                                with {{slot.by_line}}
-                            </h3> 
-                            {% endif %}
-                        </hgroup>
-            
-                        {% if slot.block %}
-                            <span class="schedule-day-block-name">
-                                {{ slot.block.name }}
-                            </span>
-                        {% endif %}
-
-                        <p>
-                            {{slot.description}}
-                        </p>
-                    </li>
-                {% endfor %}
-            </ol>
+            {% include "schedule/schedule-day-list.html" %}
         {% endif %}
     </div>
     <aside class="rightAside">
-        <p>Something here</p>
+        <nav>
+            <a href="{% url 'schedule_week' this_year this_week %}">
+                Week at a glance
+            </a>
+        </nav>
     </aside>
 </article>
 {% endblock body %}

@@ -22,6 +22,8 @@ def schedule_day_from_date(request, day_start):
     a date object (including the start time of the schedule).
 
     """
+    this_year, this_week, this_day = day_start.isocalendar()
+
     next_start = day_start + timedelta(days=1)
     next_year, next_week, next_day = next_start.isocalendar()
 
@@ -40,6 +42,8 @@ def schedule_day_from_date(request, day_start):
         request,
         'schedule/schedule-day.html',
         {'day_start': day_start,
+            'this_year': this_year,
+            'this_week': this_week,
             'next_start': next_start,
             'next_year': next_year,
             'next_week': next_week,
