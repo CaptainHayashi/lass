@@ -159,7 +159,7 @@ class MetadataSubjectMixin(object):
         try:
             result = self.metadata_set().filter(
                 metadata_key__pk=key_id,
-                approver_isnull=False,
+                approver__isnull=False,
                 effective_from__lte=date).order_by(
                     '-effective_from').latest().metadata_value
         except ObjectDoesNotExist:
