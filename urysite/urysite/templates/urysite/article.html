@@ -1,0 +1,22 @@
+{% extends "urysite/master.html" %}
+
+{% comment %}
+    This template should be used for articles (pages that constitute
+    one coherent, independently distributable document of
+    information).  Examples include schedule pages and show detail
+    pages.
+{% endcomment %}
+
+{% block body %}
+    <article class="{% block article-class %}{% endblock article-class %}">
+        <header>
+            <h1>
+                {% block article-title %}Squiddles!{% endblock article-title %}
+            </h1>
+            {% block article-header-extra %}
+            {% endblock article-header-extra %}
+        </header>
+        {% block article %}
+        {% endblock article %}
+    </article>
+{% endblock body %}

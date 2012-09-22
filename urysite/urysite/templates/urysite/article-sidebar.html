@@ -1,19 +1,11 @@
-{% extends "urysite/master.html" %}
+{% extends "urysite/article.html" %}
 
 {% comment %}
     This template should be used for articles that contain an aside,
     which is to be laid out as a sidebar.
 {% endcomment %}
 
-{% block body %}
-<article class="{% block article-class %}{% endblock article-class %}">
-    <header>
-        <h1>
-            {% block article-title %}Squiddles!{% endblock article-title %}
-        </h1>
-        {% block article-header-extra %}
-        {% endblock article-header-extra %}
-    </header>
+{% block article %}
     <div class="article-body pageAside">
         {% block article-body %}
         {% endblock article-body %}
@@ -22,5 +14,4 @@
         {% block article-aside %}
         {% endblock article-aside %}
     </aside>
-</article>
-{% endblock body %}
+{% endblock article %}
