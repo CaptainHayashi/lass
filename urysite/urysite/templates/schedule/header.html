@@ -1,0 +1,46 @@
+{% comment %}
+    Snap-in for the sitewide header that shows schedule information.
+{% endcomment %}
+
+<div id="showOnUp">
+    <div id="showLive">
+        <h2>On Air:</h2>
+        <dl>
+            <dt class="showName hidden">Show:</dt>
+            <dd class="showName">
+                <a href="#">
+                    {{ on_air.title }}
+                </a>
+            </dd>
+            {% if on_air.by_line %}
+                <dt class="showPeople hidden">With:</dt>
+                <dd class="showPerson">
+                    {{ on_air.by_line }}
+                </dd>
+            {% endif %}
+        </dl>
+    </div>
+    {% if up_next %}
+        <div id="showNext">
+            <h2>Up Next:</h2>
+            <dl>
+                <dt class="showName hidden">Show:</dt>
+                <dd class="showName">
+                    <a href="#">
+                        {{ up_next.title }} 
+                    </a>
+                </dd>
+                <dt class="showTime hidden">At:</dt>
+                <dd class="showTime">
+                    {{ up_next.start_time|date:"H:i" }}
+                </dd>
+                {% if up_next.by_line %}
+                    <dt class="showPeople hidden">With:</dt>
+                    <dd class="showPerson">
+                        {{ up_next.by_line }}
+                    </dd>
+                {% endif %}
+            </dl>
+        </div>
+    {% endif %}
+</div>

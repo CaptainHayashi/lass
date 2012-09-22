@@ -1,5 +1,6 @@
 {% load static %}
 {% load sitetree %}
+{% load embedded_views %}
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -28,32 +29,11 @@
                 <img id="logo-img" alt"((URY))" src="{% static "img/ury-logo.png" %}">
                 <h1>University Radio York</h1>
             </a>
-            <div id="showOnUp">
-                <div id="showLive">
-                    <h2>On Air:</h2>
-                    <dl>
-                        <dt class="showName hidden">Show:</dt>
-                        <dd class="showName"><a href="#">Show Name</a></dd>
-                        <dt class="showPeople hidden">People:</dt>
-                        <dd class="showPerson">Person</dd>
-                        <dd class="showPerson">Person 2</dd>
-                    </dl>
-                </div>
-                <div id="showNext">
-                    <h2>Up Next:</h2>
-                    <dl>
-                        <dt class="showName hidden">Show:</dt>
-                        <dd class="showName"><a href="#">Show Name</a></dd>
-                        <dt class="showPeople hidden">People:</dt>
-                        <dd class="showPerson">Person</dd>
-                        <dd class="showPerson">Person 2</dd>
-                    </dl>
-                </div>
-            </div>
-                <a id="webcam" class="transHovBG roundy" href="#">
-                    <img id="webcamImg" alt="Live Webcam Image" src="{% static "img/webcam.jpg" %}" width="150px" height="113px">
-                    <span>Listen Live</span>
-                </a>
+            {% view 'schedule.views.header' %}
+            <a id="webcam" class="transHovBG roundy" href="#">
+                <img id="webcamImg" alt="Live Webcam Image" src="{% static "img/webcam.jpg" %}" width="150px" height="113px">
+                <span>Listen Live</span>
+            </a>
         </header>
         
         <nav id="menu" class="transBG">
