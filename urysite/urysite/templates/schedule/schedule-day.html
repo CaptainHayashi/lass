@@ -1,40 +1,39 @@
-{% extends "urysite/master.html" %}
+{% extends "urysite/article-sidebar.html" %}
 {% load url from future %}
 {% load flatblock_tags %}
+
 {% block title %}URY - {{ day_start|date }}{% endblock title %}
-{% block body %}
+{% block article-class %}schedule-page{% endblock article-class %}
+{% block article-title %}URY Schedule{% endblock article-title %}
 
-<article class="schedule-page">
-    <header>
-        <h1>URY Schedule</h1>
-        <div class="schedule-header">
-            <h2>Schedule for {{ day_start|date:"l, jS F Y" }}</h2>
-            <nav>
-                <a href="{% url 'schedule_weekday' prev_year prev_week prev_day %}"
-                   class="schedule-header-prev">
-                    Previous Day 
-                </a>
-                <a href="{% url 'schedule_weekday' next_year next_week next_day %}"
-                   class="schedule-header-next">
-                    Next Day
-                </a>
-            </nav>
-        </div>
-    </header>
-
-    <div class="article-body pageAside">
-        {% if not term and not disable_holiday_message %}
-            {% flatblock "schedule.holiday_message" %}
-        {% else %}
-            {% include "schedule/schedule-day-list.html" %}
-        {% endif %}
-    </div>
-    <aside class="rightAside">
+{% block article-header-extra %}
+    <div class="schedule-header">
+        <h2>Schedule for {{ day_start|date:"l, jS F Y" }}</h2>
         <nav>
-            <a href="{% url 'schedule_week' this_year this_week %}">
-                Week at a glance
+            <a href="{% url 'schedule_weekday' prev_year prev_week prev_day %}"
+               class="schedule-header-prev">
+                Previous Day 
+            </a>
+            <a href="{% url 'schedule_weekday' next_year next_week next_day %}"
+               class="schedule-header-next">
+                Next Day
             </a>
         </nav>
-    </aside>
-</article>
-{% endblock body %}
+    </div>
+{% endblock article-header-extra %}
+
+{% block article-body %}
+    {% if not term and not disable_holiday_message %}
+        {% flatblock "schedule.holiday_message" %}
+    {% else %}
+        {% include "schedule/schedule-day-list.html" %}
+    {% endif %}
+{% endblock article-body %}
+
+{% block article-aside %}
+    <nav>
+        <a href="{% url 'schedule_week' this_year this_week %}">
+            Week at a glance
+        </a>
+    </nav>
+{% endblock article-aside %}
