@@ -1,0 +1,18 @@
+{% extends "urysite/master.html" %}
+
+{% comment %}
+    This template is designed for pages that include a lot of
+    disparate information, especially if it neatly splits into two
+    separate strands.  There is no semantic information in this
+    template, so it should not be used for pages that contain closely
+    bound information (like articles).
+{% endcomment %}
+
+{% block body %}
+    <div class="left">
+        {% block left %}
+    </div>
+    <div class="right">
+        {% block right %}
+    </div>
+{% endblock body %}
