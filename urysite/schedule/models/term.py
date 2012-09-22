@@ -15,6 +15,7 @@ class Term(models.Model):
         db_table = 'terms'  # In public schema
         managed = False
         app_label = 'schedule'
+        get_latest_by = 'start'
 
     def __unicode__(self):
         return '{0} Term ({1} -> {2})'.format(
@@ -40,10 +41,10 @@ class Term(models.Model):
 
         """
         query = cls.objects.filter(
-            start__gte=date,
-            end__lt=date)
+            start__lte=date,
+            end__gte=date)
         if query.exists():
-            term_of_date = query[0]
+            term_of_date = query.latest()
         else:
             term_of_date = None
         return term_of_date
