@@ -40,7 +40,12 @@ def term(start_time, duration):
     duration -- the duration of the filler timeslot being
         created, as a timedelta
     """
-    return Term.of(start_time)
+    term = Term.of(start_time)
+    if not term:
+        # It's better to return a term that only slightly makes
+        # sense over not returning a term at all
+        term = Term.before(start_time)
+    return term
 
 
 def season(start_time, duration):

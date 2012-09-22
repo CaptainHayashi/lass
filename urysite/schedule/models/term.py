@@ -42,10 +42,19 @@ class Term(models.Model):
         """
         query = cls.objects.filter(
             start__lte=date,
-            end__gte=date)
-        if query.exists():
-            term_of_date = query.latest()
-        else:
-            term_of_date = None
-        return term_of_date
+            end__gt=date)
+        return query.latest() if query.exists() else None
 
+    @classmethod
+    def before(cls, date):
+        """Assuming the given date does not belong in a term, returns
+        the last term to occur before the date.
+
+        This can be used to find out which holiday the date is in,
+        if any.
+
+        """
+        query = cls.objects.filter(
+            start__lte=date,
+            end__lte=date)
+        return query.latest() if query.exists() else None
