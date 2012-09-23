@@ -30,7 +30,7 @@ class ViewNode(Node):
         try:
             if callable(view):
                 return view(context['request'], *args, **kwargs).content
-            raise Exception, "%r is not callable" % view
+            raise Exception, "view is not callable"
         except:
             if settings.TEMPLATE_DEBUG:
                 raise
