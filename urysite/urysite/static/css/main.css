@@ -529,6 +529,12 @@ table#schedule-week-table {
     padding-bottom: 5px;
 }
 
+table#schedule-week-table {
+	position: relative;
+	left: -9px;
+	width: 102%;
+}
+
 table#schedule-week-table thead tr th {
     padding: 5px;
 }
