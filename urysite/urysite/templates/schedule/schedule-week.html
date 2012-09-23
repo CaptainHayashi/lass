@@ -1,64 +1,29 @@
-{% extends "urysite/master.html" %}
+{% extends "urysite/article.html" %}
 {% load url from future %}
+{% load flatblock_tags %}
 {% block title %}URY - Week Commencing {{ week_start|date }}{% endblock title %}
-{% block body %}
+{% block article-title %}URY Schedule{% endblock article-title %}
 
-<article class="schedule-page">
-    <header>
-        <h1>URY Schedule</h1>
-        <div class="schedule-header">
-            <h2>Week Commencing {{ week_start|date }}</h2>
-            <nav>
-                <a href="{% url 'schedule_week' year=prev_year week=prev_week %}"
-                   class="schedule-header-prev">
-                    Previous Week
-                </a>
-                <a href="{% url 'schedule_week' year=next_year week=next_week %}"
-                   class="schedule-header-next">
-                    Next Week
-                </a>
-            </nav>
-        </div>
-    </header>
+{% block article-header-extra %}
+    <div class="schedule-header">
+        <h2>Week Commencing {{ week_start|date }}</h2>
+        <nav>
+            <a href="{% url 'schedule_week' prev_year prev_week %}"
+               class="schedule-header-prev">
+                Previous Week
+            </a>
+            <a href="{% url 'schedule_week' next_year next_week %}"
+               class="schedule-header-next">
+                Next Week
+            </a>
+        </nav>
+    </div>
+{% endblock article-header-extra %}
 
-    <table id="schedule-week-table">
-        <thead>
-            <tr>
-                <th>Time</th>
-
-                <th><a href="1">Monday</a></th>
-                <th><a href="2">Tuesday</a></th>
-                <th><a href="3">Wednesday</a></th>
-                <th><a href="4">Thursday</a></th>
-                <th><a href="5">Friday</a></th>
-                <th><a href="6">Saturday</a></th>
-                <th><a href="7">Sunday</a></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for row in schedule.rows %}
-                <tr>
-                    {% if row.start_time.minute == 0 and row.start_time.second == 0 %}
-                        <th class="schedule-week-time
-                                   schedule-week-hour"
-                            style="height: {{ row.duration }}px;">
-
-                            {{ row.start_time|date:"H:i" }}
-                        </th>
-                    {% else %}
-                        <th class="schedule-week-time
-                                   schedule-week-non-hour"
-                            style="height: {{ row.duration }}px;">
-                            {{ row.start_time|date:"H:i" }}
-                        </th>
-                    {% endif %}                 
-
-                    {% for entry in row.entries %}
-                        {% include "schedule/schedule-week-row.html" %}
-                    {% endfor %}
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</article>
-{% endblock body %}
+{% block article %}
+    {% if not term and not disable_holiday_message %}
+        {% flatblock "schedule.holiday_message" %}
+    {% else %}
+        {% include "schedule/schedule-week-table.html" %}
+    {% endif %}
+{% endblock article %}

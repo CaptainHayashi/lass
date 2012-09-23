@@ -11,9 +11,9 @@ the methods identified in those two classes.
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
+from django.utils import timezone
 from people.models import Creator, Approver
 from urysite import model_extensions as exts
-from datetime import datetime
 
 
 class MetadataKey(models.Model):
@@ -122,7 +122,7 @@ class MetadataSubjectMixin(object):
     def metadata_parent(self):
         """Returns an object that metadata should be inherited from
         if not assigned for this object.
-        
+
         This can return None if no inheriting should be done.
 
         """
@@ -143,6 +143,34 @@ class MetadataSubjectMixin(object):
         """
         return self.current_metadatum('description')
 
+    def metadatum_at_date(self, date, key, inherit=True):
+        """Returns the value of the given metadata key that was
+        in effect at the given date.
+
+        The value returned is the most recently effected value
+        that is approved and not made effective after the given
+        date.
+
+        If no such item exists, and inherit is True, the metadatum
+        request will propagate up to the parent if it exists.
+
+        """
+        key_id = MetadataKey.objects.get(name=key).id
+        try:
+            result = self.metadata_set().filter(
+                metadata_key__pk=key_id,
+                approver__isnull=False,
+                effective_from__lte=date).order_by(
+                    '-effective_from').latest().metadata_value
+        except ObjectDoesNotExist:
+            if inherit is True and self.metadata_parent() is not None:
+                result = self.metadata_parent().current_metadatum(
+                    key,
+                    inherit)
+            else:
+                result = None
+        return result
+
     def current_metadatum(self, key, inherit=True):
         """Retrieves the current value of the given metadata key.
 
@@ -153,17 +181,4 @@ class MetadataSubjectMixin(object):
         request will propagate up to the parent if it exists.
 
         """
-        key_id = MetadataKey.objects.get(name=key).id
-        try:
-            result = self.metadata_set().filter(
-                metadata_key__pk=key_id).exclude(
-                    effective_from__gte=datetime.now()).order_by(
-                        '-effective_from').latest().metadata_value
-        except ObjectDoesNotExist:
-            if inherit is True and self.metadata_parent() is not None:
-                result = self.metadata_parent().current_metadatum(
-                    key,
-                    inherit)
-            else:
-                result = None
-        return result
+        return self.metadatum_at_date(timezone.now(), key, inherit)
