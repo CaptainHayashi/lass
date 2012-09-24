@@ -12,7 +12,6 @@ the methods identified in those two classes.
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils import timezone
-from people.models import Creator, Approver
 from urysite import model_extensions as exts
 
 
@@ -42,6 +41,13 @@ class MetadataKey(models.Model):
             can be active at the same time (e.g. arbitrary tags).
 
             """)
+
+    description = models.TextField(
+        blank=True,
+        help_text="""A human-readable description of the semantics
+        (meaning) of this key, and where it is applicable.
+
+        """)
 
 
 class Metadata(models.Model):
@@ -87,14 +93,17 @@ class Metadata(models.Model):
     effective_from = models.DateTimeField(
         auto_now_add=True)
 
+    # These two foreign keys have to have their models deferred
+    # because otherwise there would be a cyclic dependency between
+    # people and urysite over metadata.
     creator = models.ForeignKey(
-        Creator,
+        'people.Creator',
         help_text="""The person who created this metadata entry.""",
         db_column='memberid',
         related_name='%(app_label)s_%(class)s_created_set')
 
     approver = models.ForeignKey(
-        Approver,
+        'people.Approver',
         help_text="""The person who approved this metadata entry,
             if it has indeed been approved.
 
@@ -126,6 +135,7 @@ class MetadataSubjectMixin(object):
         This can return None if no inheriting should be done.
 
         """
+        return None
 
     def title(self):
         """Provides the current title of the show.
