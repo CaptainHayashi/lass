@@ -4,7 +4,7 @@
 # __init__.py
 
 from django.db import models
-from urysite.models.metadata import Metadata, MetadataSubjectMixin
+from metadata.models import Metadata, MetadataSubjectMixin
 from urysite import model_extensions as exts
 from people.models import Person
 
@@ -165,8 +165,8 @@ class ShowMetadata(Metadata):
         verbose_name_plural = 'show metadata'
         app_label = 'schedule'
 
-    def attached_element():
-        return show
+    def attached_element(self):
+        return self.show
 
     id = exts.primary_key_from_meta(Meta)
 

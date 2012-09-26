@@ -168,6 +168,8 @@ INSTALLED_APPS = (
     'uryplayer',
     'schedule',
     'search',
+    'getinvolved',
+    'metadata',
 )
 
 #AUTHENTICATION_BACKENDS = (

@@ -7,7 +7,7 @@ from django.db import models
 from urysite import model_extensions as exts
 from schedule.models.term import Term
 from schedule.models.show import Show
-from urysite.models.metadata import Metadata, MetadataSubjectMixin
+from metadata.models import Metadata, MetadataSubjectMixin
 from datetime import datetime
 
 

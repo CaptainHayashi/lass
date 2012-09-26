@@ -137,18 +137,30 @@ class MetadataSubjectMixin(object):
         """
         return None
 
-    def title(self):
-        """Provides the current title of the show.
+    ## COMMON METADATA KEYS ##
 
-        The show title is extracted from the show metadata.
+    def title(self):
+        """Provides the current title of the item.
+
+        The title is extracted from the item metadata.
 
         """
         return self.current_metadatum('title')
 
-    def description(self):
-        """Provides the current description of the show.
+    def title_image(self):
+        """Provides the path (within the image directory) of an
+        image that can be used in place of this item's 'title'
+        metadatum in headings, if such an image exists.
 
-        The show description is extracted from the show metadata.
+        This is extracted from the item metadata.
+
+        """
+        return self.current_metadatum('title_image')
+
+    def description(self):
+        """Provides the current description of the item.
+
+        The description is extracted from the item metadata.
 
         """
         return self.current_metadatum('description')

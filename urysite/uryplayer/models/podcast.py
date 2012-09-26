@@ -2,7 +2,7 @@
 # __init__.py
 
 from django.db import models
-from urysite.models import Metadata, MetadataSubjectMixin
+from metadata.models import Metadata, MetadataSubjectMixin
 from urysite import model_extensions as exts
 from people.models import Person
 
