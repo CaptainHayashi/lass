@@ -18,12 +18,14 @@
             {% endblock content-header-extra %}
         {% endblock content-header %}
     </header>
-    <div class="left">
-        {% block left %}
-        {% endblock left %}
-    </div>
-    <div class="right">
-        {% block right %}
-        {% endblock right %}
+    <div id="content-body">
+        <div id="left">
+            {% block left %}
+            {% endblock left %}
+        </div>
+        <div id="right">
+            {% block right %}
+            {% endblock right %}
+        </div>
     </div>
 {% endblock body %}
