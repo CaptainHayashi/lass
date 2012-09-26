@@ -9,10 +9,21 @@
 {% endcomment %}
 
 {% block body %}
+    <header>
+        {% block content-header %}
+            <h1>
+                {% block content-title %}Red Miles{% endblock content-title %}
+            </h1>
+            {% block content-header-extra %}
+            {% endblock content-header-extra %}
+        {% endblock content-header %}
+    </header>
     <div class="left">
         {% block left %}
+        {% endblock left %}
     </div>
     <div class="right">
         {% block right %}
+        {% endblock right %}
     </div>
 {% endblock body %}

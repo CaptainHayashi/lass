@@ -1,4 +1,4 @@
-from urysite.models import MetadataKey
+from metadata.models import MetadataKey
 from django.contrib import admin
 
 
