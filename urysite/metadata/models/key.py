@@ -15,7 +15,7 @@ class MetadataKey(models.Model):
     class Meta:
         db_table = 'metadata_key'  # in schema 'schedule'
         managed = False
-        app_label = 'schedule'
+        app_label = 'metadata'
 
     def __unicode__(self):
         return self.name

@@ -230,7 +230,7 @@ a:visited, a:active {
 
 
 #grid {
-    padding: 15px 0 15px 12px;
+    padding: 15px 15px 15px 15px;
 }
 #grid section {
     position: relative;
@@ -603,6 +603,20 @@ aside.rightAside {
 	float: right;
 	width: 200px;
 }
+div.left, div.right {
+    display: table-cell;
+    width: 500px;
+}
+div.left {
+    margin-left: 0;
+    margin-right: auto;
+    padding-right: 10px;
+}
+div.right {
+    margin-left: auto;
+    margin-right: 0;
+    padding-left: 10px;
+}
 
 /* ==========================================================================
    URY style classes
@@ -623,6 +637,9 @@ a.transHovBG:hover {
 .roundy {
     -moz-border-radius: 5px;
     border-radius: 5px;
+}
+.image-heading {
+    margin: 0;
 }
 
 

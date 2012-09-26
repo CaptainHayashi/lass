@@ -1,0 +1,21 @@
+{% load static %}
+{% load flatblock_tags %}
+<section>
+    <h1 class="image-heading"
+        style="text-align: left;">
+        <img src="{% get_static_prefix %}img/{{ team.title_image }}"
+             alt="{{ team.title }}" />
+    </h1>
+    <div class="getinvolved-infobox-content" style="padding: 5px;">
+        {% with "getinvolved.teams."|add:team.alias as block %}
+            {% flatblock block %}
+        {% endwith %}
+        {% if team.group_leader.email %}
+            <p>
+                Any enquiries should be directed towards
+                <a href="mailto:{{ team.group_leader.email }}">
+                    {{ team.group_leader.email }}</a>.
+            </p>
+        {% endif %}
+    </div>
+</section>

@@ -25,6 +25,7 @@ urlpatterns += patterns(
     url(r'^schedule/', include('schedule.urls')),
     url(r'^uryplayer/', include('uryplayer.urls')),
     url(r'^search/', include('search.urls')),
+    url(r'^getinvolved/', include('getinvolved.urls')),
 
     # Django apps
     url(r'^admin/', include(admin.site.urls)),

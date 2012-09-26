@@ -1,0 +1,29 @@
+{% extends 'urysite/vertical-split.html' %}
+{% load static %}
+
+{% block title %}URY - Get Involved!{% endblock title %}
+
+{% block content-header %}
+  <h1>
+      <img src="{% static "img/getinvolved/header.png" %}"
+           style="width : 100%;"
+           alt="{{ page_title }}" />
+  </h1>
+{% endblock content-header %}
+
+
+{% block left %}
+<section id="getinvolved-support">
+    {% for team in support_teams %}
+        {% include 'getinvolved/team-block.html' with team=team %}
+    {% endfor %}
+</section>
+{% endblock left %}
+
+{% block right %}
+<section id="getinvolved-on-air">
+    {% for team in on_air_teams %}
+        {% include 'getinvolved/team-block.html' with team=team %}
+    {% endfor %}
+</section>
+{% endblock right %}
