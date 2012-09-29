@@ -591,6 +591,15 @@ table#schedule-week-table td {
 }
 
 
+/* SHOWDB */
+
+.schedule-showdb-hgroup>h2 {
+    margin: 0 0 0 0;
+}
+.schedule-showdb-hgroup>h3 {
+    margin: 0 0 0 20px;
+}
+
 /* ==========================================================================
    URY layout classes
    ========================================================================== */

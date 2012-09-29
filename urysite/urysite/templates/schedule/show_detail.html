@@ -1,57 +1,55 @@
-{% extends "urysite/master.html" %}
+{% extends "urysite/article-sidebar.html" %}
+{% load url from future %}
 {% block title %}URY Shows - {{ show.title }}{% endblock title %}
-{% block body %}
-<article class="show-page">
-    <header>
-        <div class="show-header">
-            <h1>{{ show.title }}</h1>
-            <p>
-                {{ show.description|default:"A URY show." }}
-            </p>
-        </div>
-    </header>
-    <div class="article-body">
-        <section>
-            <h1>Show stuff</h1>
-            <p>
-                Will go here eventually
-            </p>
-        </section>
-    </div>
-    <aside>
-        <section class="show-credits">
-            <h1>Credits</h1>
 
-            {% regroup show.showcredit_set.all by credit_type.plural as c %}
-            <ul>
-                {% for credit_group in c %}
-                <li>
-                    {{ credit_group.grouper }} 
-                    <ul>
-                        {{ credit_group.list|unordered_list }}
-                    </ul>
-                </li>
-                {% endfor %}
-            </ul>
-        </section>
-        <section class="show-times">
-            <h1>Schedule</h1>
-            <ol>
+{% block article-class %}show-page{% endblock article-class %}
+{% block article-title %}{{ show.title }}{% endblock article-title %}
+
+{% block article-header-extra %}
+    <p>
+        {{ show.description|default:"A URY show." }}
+    </p>
+{% endblock article-header-extra %}
+
+{% block article-body %}
+    <section>
+        <h1>Seasons</h1>
+        <ol>
             {% for season in show.season_set.all %}
                 <li>
-                    {{ season.title }}
-                    <ul>
-                    {% for timeslot in season.timeslot_set.all %}
-                        <li>
-                            {{ timeslot.start_time }}
-                            to
-                            {{ timeslot.end_time }}
-                        </li>
-                    {% endfor %}
-                    </ul>
+                    <a href="{{ season.get_absolute_url }}">
+                        {{ season.title }}
+                        ({{ season.term }})
+                    </a>
                 </li>
             {% endfor %}
-        </section>
-    </aside>
-</article>
-{% endblock body %}
+        </ol>
+    </section>
+    <section class="show-credits">
+        <h1>Credits</h1>
+
+        {% regroup show.showcredit_set.all by credit_type.plural as c %}
+        <ul>
+            {% for credit_group in c %}
+            <li>
+                {{ credit_group.grouper }} 
+                <ul>
+                    {{ credit_group.list|unordered_list }}
+                </ul>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+{% endblock article-body %}
+
+{% block article-aside %}
+    <nav class='article-navigation'>
+        <ul>
+            <li>
+                <a href="{% url 'show_list' %}">
+                    Back to Show List
+                </a>
+            </li>
+        </ul>
+    </nav>
+{% endblock article-aside %}

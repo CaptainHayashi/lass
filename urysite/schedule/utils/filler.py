@@ -64,7 +64,7 @@ def season(start_time, duration):
     return Season(
         show=show(start_time, duration),
         term=this_term,
-        date_submitted=this_term.start)
+        date_submitted=this_term.start_date)
 
 
 def timeslot(start_time, end_time=None, duration=None):

@@ -8,10 +8,10 @@ from urysite import model_extensions as exts
 from schedule.models.term import Term
 from schedule.models.show import Show
 from metadata.models import Metadata, MetadataSubjectMixin
-from datetime import datetime
+from metadata.models import CreditableMixin
 
 
-class Season(models.Model, MetadataSubjectMixin):
+class Season(models.Model, MetadataSubjectMixin, CreditableMixin):
     """A season of a URY show.
 
     Seasons map onto terms of scheduled timeslots for a show.
@@ -24,8 +24,29 @@ class Season(models.Model, MetadataSubjectMixin):
         verbose_name = 'show season'
         app_label = 'schedule'
 
+    id = exts.primary_key_from_meta(Meta)
+
+    show = models.ForeignKey(
+        Show,
+        db_column='show_id',
+        help_text='The show associated with this season.')
+
+    term = models.ForeignKey(
+        Term,
+        db_column='termid',
+        help_text='The term this season is scheduled for.')
+
+    date_submitted = models.DateTimeField(
+        null=True,
+        db_column='submitted',
+        help_text='The date the season was submitted, if any.')
+
+    ## MAGIC METHODS ##
+
     def __unicode__(self):
-        return '[%s] -> %s' % (self.show, self.term)
+        return '[{0}] -> {1}'.format(self.show, self.term)
+
+    ## OVERRIDES ##
 
     def metadata_set(self):
         return self.seasonmetadata_set
@@ -33,15 +54,34 @@ class Season(models.Model, MetadataSubjectMixin):
     def metadata_parent(self):
         return self.show
 
-    def is_real_show(self):
-        """Returns True if the season references a real show.
+    def credits_set(self):
+        """Provides the set of this season's credits."""
+        return self.show.credits_set()
 
-        For example, this will return False if the season references
-        a show marked as being URY Jukebox, which is obviously not a
-        real show.
+    @models.permalink
+    def get_absolute_url(self):
+        """Retrieves the absolute URL through which a timeslot can be
+        found on the website.
 
         """
-        return self.show.is_real_show()
+        return ('season_detail', (), {
+            'pk': self.show.id,
+            'season_num': self.number()})
+
+    ## ADDITIONAL METHODS ##
+
+    def number(self):
+        """Returns the relative number of this season, with the first
+        season of the attached show returning a number of 1.
+
+        """
+        number = None
+        for index, season in enumerate(self.show.season_set.all()):
+            if season.id == self.id:
+                number = index + 1  # Note that this can never be 0
+                break
+        assert number, "Season not in its show's season set."
+        return number
 
     def block(self):
         """Returns the block that the season is in, if any.
@@ -69,23 +109,6 @@ class Season(models.Model, MetadataSubjectMixin):
             block = show_block
         return block
 
-    id = exts.primary_key_from_meta(Meta)
-
-    show = models.ForeignKey(
-        Show,
-        db_column='show_id',
-        help_text='The show associated with this season.')
-
-    term = models.ForeignKey(
-        Term,
-        db_column='termid',
-        help_text='The term this season is scheduled for.')
-
-    date_submitted = models.DateTimeField(
-        null=True,
-        db_column='submitted',
-        help_text='The date the season was submitted, if any.')
-
     @staticmethod
     def make_foreign_key(src_meta, db_column='show_season_id'):
         """Shortcut for creating a field that links to a season,
@@ -110,9 +133,11 @@ class SeasonMetadata(Metadata):
         verbose_name_plural = 'season metadata'
         app_label = 'schedule'
 
-    def attached_element():
-        return season
-
     id = exts.primary_key_from_meta(Meta)
 
     season = Season.make_foreign_key(Meta)
+
+    ## OVERRIDES ##
+
+    def attached_element(self):
+        return self.season

@@ -8,13 +8,14 @@ from urysite import model_extensions as exts
 from schedule.models import BlockRangeRule
 from schedule.models.season import Season
 from metadata.models import Metadata, MetadataSubjectMixin
+from metadata.models import CreditableMixin
 from django.utils import timezone
 from datetime import timedelta as td
 from django.db.models import Q
 import timedelta
 
 
-class Timeslot(models.Model, MetadataSubjectMixin):
+class Timeslot(models.Model, MetadataSubjectMixin, CreditableMixin):
     """A slot in the URY schedule allocated to a show.
 
     URY timeslots can overlap, because not all timeslots represent
@@ -31,6 +32,29 @@ class Timeslot(models.Model, MetadataSubjectMixin):
         get_latest_by = 'start_time'
         app_label = 'schedule'
 
+    id = exts.primary_key_from_meta(Meta)
+
+    season = Season.make_foreign_key(Meta)
+
+    start_time = models.DateTimeField(
+        db_column='start_time',
+        help_text='The date and time of the start of this timeslot.')
+
+    duration = timedelta.TimedeltaField(
+        db_column='duration',
+        help_text='The duration of the timeslot.')
+
+    ## MAGIC METHODS ##
+
+    def __unicode__(self):
+        """Provides a Unicode representation of this timeslot."""
+        return "{0} ({1} to {2})".format(
+            self.season,
+            self.start_time,
+            self.end_time())
+
+    ## OVERRIDES ##
+
     def metadata_set(self):
         """Provides the set of this timeslot's metadata."""
         return self.timeslotmetadata_set
@@ -40,6 +64,27 @@ class Timeslot(models.Model, MetadataSubjectMixin):
 
         """
         return self.season
+
+    def credits_set(self):
+        """Provides the set of this timeslot's credits."""
+        return self.season.credits_set()
+
+    def date_range(self):
+        """Retrieves the start and end dates of this timeslot."""
+        return self.start_time, self.end_time()
+
+    @models.permalink
+    def get_absolute_url(self):
+        """Retrieves the absolute URL through which a timeslot can be
+        found on the website.
+
+        """
+        return ('timeslot_detail', (), {
+            'pk': self.season.show.id,
+            'season_num': self.season.number(),
+            'timeslot_num': self.number()})
+
+    ## ADDITIONAL METHODS ##
 
     def block(self):
         """Returns the block that the timeslot is in, if any.
@@ -97,44 +142,22 @@ class Timeslot(models.Model, MetadataSubjectMixin):
             block = season_block
         return block
 
-    def __unicode__(self):
-        """Provides a Unicode representation of this timeslot."""
-        return "%s (%s to %s)" % (
-            self.season,
-            self.start_time,
-            self.end_time())
-
-    id = exts.primary_key_from_meta(Meta)
-
-    season = Season.make_foreign_key(Meta)
-
-    start_time = models.DateTimeField(
-        db_column='start_time',
-        help_text='The date and time of the start of this timeslot.')
-
-    duration = timedelta.TimedeltaField(
-        db_column='duration',
-        help_text='The duration of the timeslot.')
-
     def end_time(self):
         """Calculates the end time of this timeslot."""
         return self.start_time + self.duration
 
-    def by_line(self):
-        """Returns a by-line for the timeslot (see Show.by_line for
-        details).
+    def number(self):
+        """Returns the relative number of this timeslot, with the
+        first timeslot of the attached season returning a number of 1.
 
         """
-        return self.season.show.by_line(self.start_time)
-
-    def is_real_show(self):
-        """Returns True if the timeslot references a real show.
-
-        For example, this will return False if the timeslot is for
-        the Jukebox.
-
-        """
-        return self.season.is_real_show()
+        number = None
+        for index, timeslot in enumerate(self.season.timeslot_set.all()):
+            if timeslot.id == self.id:
+                number = index + 1  # Note that this can never be 0
+                break
+        assert number, "Timeslot not in its season's timeslot set."
+        return number
 
     @staticmethod
     def make_foreign_key(src_meta,

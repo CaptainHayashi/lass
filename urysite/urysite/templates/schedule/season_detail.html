@@ -1,0 +1,56 @@
+{% extends "urysite/article-sidebar.html" %}
+{% load flatblock_tags %}
+{% block title %}URY Shows - {{ season.title }}{% endblock title %}
+
+{% block article-class %}season-page{% endblock article-class %}
+{% block article-title %}{{ season.show.title }}{% endblock article-title %}
+
+{% block article-header-extra %}
+    <hgroup>
+        <h2 class="schedule-showdb-item-subtitle">
+            Season {{ season.number }}: {{ season.title }}
+        </h2>
+        <h3 class="schedule-showdb-item-subsubtitle"
+            >{{ season.term }}
+        </h3>
+    </hgroup>
+    <p>
+        {{ season.description|default:"A URY season." }}
+    </p>
+{% endblock article-header-extra %}
+
+{% block article-body %}
+    <section>
+        <h1>Episodes</h1>
+        {% if season.timeslot_set.all %}
+            <ol>
+                {% for timeslot in season.timeslot_set.all %}
+                    <li>
+                        <a href="{{ timeslot.get_absolute_url }}">
+                            {{ timeslot.title }}
+                            ({{ timeslot.start_time }})
+                        </a>
+                    </li>
+                {% endfor %}
+            </ol>
+        {% else %}
+            {% flatblock "schedule.showdb.no_episodes" %}
+        {% endif %}
+    </section>
+    <section class="season-credits">
+        <h1>Credits</h1>
+        {% include "schedule/credits_inset.html" with item=season %}
+    </section>
+{% endblock article-body %}
+
+{% block article-aside %}
+    <nav class='article-navigation'>
+        <ul>
+            <li>
+                <a href="{{ season.show.get_absolute_url }}">
+                    Back to Show
+                </a>
+            </li>
+        </ul>
+    </nav>
+{% endblock article-aside %}

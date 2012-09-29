@@ -5,6 +5,7 @@
 
 from django.db import models
 from metadata.models import Metadata, MetadataSubjectMixin
+from metadata.models import CreditableMixin
 from urysite import model_extensions as exts
 from people.models import Person
 
@@ -32,11 +33,8 @@ class ShowType(models.Model):
         default=True,
         db_column='public')
 
-    is_real_show = models.BooleanField(
-        default=True)
 
-
-class Show(models.Model, MetadataSubjectMixin):
+class Show(models.Model, MetadataSubjectMixin, CreditableMixin):
     """A show in the URY schedule.
 
     URY show objects represent the part of a show that is constant
@@ -50,83 +48,6 @@ class Show(models.Model, MetadataSubjectMixin):
         ordering = ['show_type', '-date_submitted']
         managed = False
         app_label = 'schedule'
-
-    def __unicode__(self):
-        return '%s (%s)' % (self.title(), self.id)
-
-    @models.permalink
-    def get_absolute_url(self):
-        return ('show_detail', [str(self.id)])
-
-    def metadata_set(self):
-        return self.showmetadata_set
-
-    def credits_at(self, time):
-        """Returns a list of all credits for people who worked on this
-        show at the given instant in time.
-
-        """
-        # Why excludes?  Because effective_to might be NULL
-        # and we don't want to throw away results where it is
-        # as this entails indefinite effectiveness.
-        return self.showcredit_set.exclude(
-            effective_from__gt=time).exclude(
-                effective_to__lt=time).exclude(
-                    approver__isnull=True)
-
-    def by_line(self, time):
-        """Returns a by-line for the show- a human-readable summary
-        of all the presenters, co-presenters and other important
-        people who worked on the show at the given instant in time.
-
-        The by-line does not include a 'with' or 'by' prefix.
-        If nobody worked on the show, the empty string is returned.
-
-        """
-        credits = list(self.credits_at(time))
-        if len(credits) == 0:
-            by_line = ''
-        elif len(credits) == 1:
-            by_line = credits[0].person.full_name()
-        else:
-            by_line = u' and '.join((
-                u', '.join(
-                    map(
-                        lambda x: x.person.full_name(),
-                        credits[:-1])),
-                credits[-1].person.full_name()))
-        return by_line
-
-    def is_real_show(self):
-        """Returns True if this show constitutes a "real show".
-
-        A real show is technically any show whose type defines it
-        to be; the flag denotes that the show constitutes an actually
-        scheduled event and not an automatically created filler show
-        such as URY Jukebox.
-
-        """
-        return self.show_type.is_real_show
-
-    def block(self):
-        """Returns the block that the show is in, if any.
-
-        This will return a Block object if a block is matched, or
-        None if there wasn't one (one can associate to Block.default()
-        in this case, if a block is needed).
-
-        For seasons and timeslots, use their block() methods instead
-        so as to pull in season and timeslot specific matching rules.
-
-        """
-        # Show rules take precedence
-        block_matches = self.blockshowrule_set.order_by(
-            '-block__priority')
-        if (len(block_matches)) > 0:
-            block = block_matches[0].block
-        else:
-            block = None
-        return block
 
     id = exts.primary_key_from_meta(Meta)
 
@@ -152,6 +73,41 @@ class Show(models.Model, MetadataSubjectMixin):
 
         """
         return exts.foreign_key(src_meta, 'Show', db_column, 'show')
+
+    ## OVERRIDES ##
+
+    def __unicode__(self):
+        return '{0} ({1})'.format(self.title(), self.id)
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('show_detail', [str(self.id)])
+
+    def metadata_set(self):
+        return self.showmetadata_set
+
+    def credits_set(self):
+        return self.showcredit_set
+
+    def block(self):
+        """Returns the block that the show is in, if any.
+
+        This will return a Block object if a block is matched, or
+        None if there wasn't one (one can associate to Block.default()
+        in this case, if a block is needed).
+
+        For seasons and timeslots, use their block() methods instead
+        so as to pull in season and timeslot specific matching rules.
+
+        """
+        # Show rules take precedence
+        block_matches = self.blockshowrule_set.order_by(
+            '-block__priority')
+        if block_matches.exists():
+            block = block_matches[0].block
+        else:
+            block = None
+        return block
 
 
 class ShowMetadata(Metadata):

@@ -5,7 +5,6 @@
 
 from django.db import models
 from urysite import model_extensions as exts
-from datetime import datetime
 
 
 class Term(models.Model):
@@ -15,19 +14,32 @@ class Term(models.Model):
         db_table = 'terms'  # In public schema
         managed = False
         app_label = 'schedule'
-        get_latest_by = 'start'
+        get_latest_by = 'start_date'
 
     def __unicode__(self):
-        return '{0} Term ({1} -> {2})'.format(
+        year = self.academic_year()
+        return '{0} Term {1}/{2}'.format(
             self.name,
-            datetime.date(self.start),
-            datetime.date(self.end))
+            year,
+            (year + 1) % 100)
+
+    def academic_year(self):
+        """Returns the academic year of this term.
+
+        """
+        # Heuristic: if a term starts before September, then
+        # it'll be the Spring or Summer of the academic year
+        # that started the previous year.
+        return (self.start_date.year
+                if self.start_date.month >= 9
+                else self.start_date.year - 1)
 
     id = exts.primary_key('termid')
 
-    start = models.DateTimeField()
+    start_date = models.DateTimeField(
+        db_column='start')
 
-    end = models.DateTimeField(
+    end_date = models.DateTimeField(
         db_column='finish')
 
     name = models.CharField(
@@ -41,8 +53,8 @@ class Term(models.Model):
 
         """
         query = cls.objects.filter(
-            start__lte=date,
-            end__gt=date)
+            start_date__lte=date,
+            end_date__gt=date)
         return query.latest() if query.exists() else None
 
     @classmethod
@@ -55,6 +67,6 @@ class Term(models.Model):
 
         """
         query = cls.objects.filter(
-            start__lte=date,
-            end__lte=date)
+            start_date__lte=date,
+            end_date__lte=date)
         return query.latest() if query.exists() else None

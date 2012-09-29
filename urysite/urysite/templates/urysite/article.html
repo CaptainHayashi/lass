@@ -10,11 +10,13 @@
 {% block body %}
     <article class="{% block article-class %}{% endblock article-class %}">
         <header>
-            <h1>
-                {% block article-title %}Squiddles!{% endblock article-title %}
-            </h1>
-            {% block article-header-extra %}
-            {% endblock article-header-extra %}
+            {% block article-header %}
+                <h1>
+                    {% block article-title %}Squiddles!{% endblock article-title %}
+                </h1>
+                {% block article-header-extra %}
+                {% endblock article-header-extra %}
+            {% endblock article-header %}
         </header>
         {% block article %}
         {% endblock article %}

@@ -1,0 +1,64 @@
+{% extends "urysite/article-sidebar.html" %}
+{% block title %}URY Shows - {{ timeslot.title }}{% endblock title %}
+
+{% block article-class %}timeslot-page{% endblock article-class %}
+
+{% block article-header %}
+    <hgroup class="schedule-showdb-hgroup
+                   block-{{ timeslot.block.tag }}">
+        <h1>
+            {{ timeslot.season.show.title }}
+        </h1>
+        <h2>
+            Season {{ timeslot.season.number }}
+            Episode {{ timeslot.number }}:
+            {{ timeslot.title }}
+        </h2>
+        <h3>
+            {{ timeslot.start_time }}
+            {% if timeslot.by_line %}
+                with {{ timeslot.by_line }}
+            {% endif %}
+        </h3>
+    </hgroup>
+{% endblock article-header %}
+
+{% block article-body %}
+    <section class="schedule-showdb-description">
+        <p>
+            {{ timeslot.description|default:"A URY timeslot." }}
+        </p>
+    </section>
+    <section class="timeslot-credits">
+        <h1>Credits</h1>
+
+        {% regroup timeslot.season.show.showcredit_set.all by credit_type.plural as c %}
+        <ul>
+            {% for credit_group in c %}
+            <li>
+                {{ credit_group.grouper }} 
+                <ul>
+                    {{ credit_group.list|unordered_list }}
+                </ul>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+{% endblock article-body %}
+
+{% block article-aside %}
+    <nav class='article-navigation'>
+        <ul>
+            <li>
+                <a href="{{ timeslot.season.get_absolute_url }}">
+                    Back to Season {{ timeslot.season.number }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ timeslot.season.show.get_absolute_url }}">
+                    Back to Show
+                </a>
+            </li>
+        </ul>
+    </nav>
+{% endblock article-aside %}

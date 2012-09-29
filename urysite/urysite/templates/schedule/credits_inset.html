@@ -1,0 +1,11 @@
+{% regroup item.credits by credit_type.plural as c %}
+<ul>
+    {% for credit_group in c %}
+        <li>
+            {{ credit_group.grouper }} 
+            <ul>
+                {{ credit_group.list|unordered_list }}
+            </ul>
+        </li>
+    {% endfor %}
+</ul>
