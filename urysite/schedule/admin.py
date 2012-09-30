@@ -11,6 +11,7 @@ from django.contrib import admin
 class BlockShowRuleInline(admin.TabularInline):
     model = BlockShowRule
 
+
 class BlockRangeRuleInline(admin.TabularInline):
     model = BlockRangeRule
 
