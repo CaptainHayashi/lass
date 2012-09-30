@@ -7,11 +7,15 @@ from django.db import models
 from urysite import model_extensions as exts
 from schedule.models.term import Term
 from schedule.models.show import Show
-from metadata.models import Metadata, MetadataSubjectMixin
-from metadata.models import CreditableMixin
+from metadata.models import Metadata
+from metadata.mixins import MetadataSubjectMixin
+from metadata.mixins import SubmittableMixin
+from people.mixins import CreditableMixin
 
 
-class Season(models.Model, MetadataSubjectMixin, CreditableMixin):
+class Season(MetadataSubjectMixin,
+             SubmittableMixin,
+             CreditableMixin):
     """A season of a URY show.
 
     Seasons map onto terms of scheduled timeslots for a show.
@@ -35,11 +39,6 @@ class Season(models.Model, MetadataSubjectMixin, CreditableMixin):
         Term,
         db_column='termid',
         help_text='The term this season is scheduled for.')
-
-    date_submitted = models.DateTimeField(
-        null=True,
-        db_column='submitted',
-        help_text='The date the season was submitted, if any.')
 
     ## MAGIC METHODS ##
 

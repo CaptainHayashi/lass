@@ -4,10 +4,12 @@
 # __init__.py
 
 from django.db import models
-from metadata.models import Metadata, MetadataSubjectMixin
-from metadata.models import CreditableMixin
 from urysite import model_extensions as exts
+from metadata.models import Metadata
 from people.models import Person
+from metadata.mixins import MetadataSubjectMixin
+from metadata.mixins import SubmittableMixin
+from people.mixins import CreditableMixin
 
 
 class ShowType(models.Model):
@@ -17,7 +19,6 @@ class ShowType(models.Model):
 
     class Meta:
         db_table = 'show_type'  # in schema "schedule"
-        managed = False  # Can't manage, in non-public schema
         app_label = 'schedule'
 
     def __unicode__(self):
@@ -34,7 +35,9 @@ class ShowType(models.Model):
         db_column='public')
 
 
-class Show(models.Model, MetadataSubjectMixin, CreditableMixin):
+class Show(MetadataSubjectMixin,
+           SubmittableMixin,
+           CreditableMixin):
     """A show in the URY schedule.
 
     URY show objects represent the part of a show that is constant
@@ -57,10 +60,6 @@ class Show(models.Model, MetadataSubjectMixin, CreditableMixin):
             show appears in the public schedule, amongst other things.
             """,
         db_column='show_type_id')
-
-    date_submitted = models.DateTimeField(
-        auto_now_add=True,
-        db_column='submitted')
 
     people = models.ManyToManyField(
         Person,

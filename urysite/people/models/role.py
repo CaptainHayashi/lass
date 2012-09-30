@@ -1,7 +1,8 @@
 """Models pertaining to LeRouge roles"""
 
 from django.db import models
-from metadata.models import Metadata, MetadataSubjectMixin
+from metadata.models import Metadata
+from metadata.mixins import MetadataSubjectMixin
 from urysite import model_extensions as exts
 
 

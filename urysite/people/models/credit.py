@@ -7,7 +7,10 @@
 
 from django.db import models
 from urysite import model_extensions as exts
-from people.models import Person, Creator, Approver
+from people.models import Person
+from people.mixins import CreatableMixin
+from people.mixins import ApprovableMixin
+from metadata.mixins import EffectiveRangeMixin
 
 
 class CreditType(models.Model):
@@ -20,7 +23,6 @@ class CreditType(models.Model):
 
     class Meta:
         db_table = 'credit_type'  # in schema 'people'
-        managed = False  # have to do this due to schema, probably
         app_label = 'people'
 
     def __unicode__(self):
@@ -41,3 +43,28 @@ class CreditType(models.Model):
         help_text='If true, credits of this type appear in by-lines.')
 
     # More to come here eventually
+
+
+class Credit(ApprovableMixin,
+             CreatableMixin,
+             EffectiveRangeMixin):
+    """Abstract base class for credit models."""
+
+    class Meta(EffectiveRangeMixin.Meta):
+        abstract = True
+
+    credit_type = models.ForeignKey(
+        CreditType,
+        db_column='credit_type_id',
+        help_text='The type of credit the person is assigned.')
+
+    person = models.ForeignKey(
+        Person,
+        db_column='creditid',
+        help_text='The person being credited.',
+        related_name='credited_%(app_label)s_%(class)s_set')
+
+    ## MAGIC METHODS ##
+
+    def __unicode__(self):
+        return self.person.full_name()

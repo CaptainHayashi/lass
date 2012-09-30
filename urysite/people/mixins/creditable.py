@@ -1,10 +1,11 @@
-"""Abstract models and mixins for the URY credits system.
+"""The CreditableMixin, which is used to attach credits to a model.
 
 """
 
 
 class CreditableMixin(object):
     """Mixin granting the ability to access credits."""
+
     ## MANDATORY OVERRIDES ##
 
     def credits_set(self):
@@ -84,6 +85,7 @@ class CreditableMixin(object):
 
         """
         try:
+            # Implementors of DateRangeMixin'll have this method
             item_from, item_to = self.date_range()
         except AttributeError:
             # Nope, we'll just use an infinite range instead

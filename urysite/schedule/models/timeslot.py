@@ -5,17 +5,22 @@
 
 from django.db import models
 from urysite import model_extensions as exts
-from schedule.models import BlockRangeRule
-from schedule.models.season import Season
-from metadata.models import Metadata, MetadataSubjectMixin
-from metadata.models import CreditableMixin
 from django.utils import timezone
 from datetime import timedelta as td
 from django.db.models import Q
 import timedelta
+from schedule.models import BlockRangeRule
+from schedule.models.season import Season
+from metadata.models import Metadata
+from metadata.mixins import MetadataSubjectMixin
+from metadata.mixins import DateRangeMixin
+from people.mixins import CreditableMixin
 
 
-class Timeslot(models.Model, MetadataSubjectMixin, CreditableMixin):
+class Timeslot(models.Model,
+               MetadataSubjectMixin,
+               CreditableMixin,
+               DateRangeMixin):
     """A slot in the URY schedule allocated to a show.
 
     URY timeslots can overlap, because not all timeslots represent
@@ -27,7 +32,6 @@ class Timeslot(models.Model, MetadataSubjectMixin, CreditableMixin):
 
     class Meta:
         db_table = 'show_season_timeslot'
-        managed = False
         verbose_name = 'show timeslot'
         get_latest_by = 'start_time'
         app_label = 'schedule'
@@ -55,6 +59,8 @@ class Timeslot(models.Model, MetadataSubjectMixin, CreditableMixin):
 
     ## OVERRIDES ##
 
+    # MetadataSubjectMixin
+
     def metadata_set(self):
         """Provides the set of this timeslot's metadata."""
         return self.timeslotmetadata_set
@@ -65,13 +71,27 @@ class Timeslot(models.Model, MetadataSubjectMixin, CreditableMixin):
         """
         return self.season
 
+    # CreditableMixin
+
     def credits_set(self):
         """Provides the set of this timeslot's credits."""
         return self.season.credits_set()
 
-    def date_range(self):
-        """Retrieves the start and end dates of this timeslot."""
-        return self.start_time, self.end_time()
+    # DateRangeMixin
+
+    def range_start(self):
+        """Retrieves the start of this timeslot's date range."""
+        return self.start_time
+
+    def range_end(self):
+        """Retrieves the end of this timeslot's date range."""
+        return self.end_time()
+
+    def range_duration(self):
+        """Retrieves the duration of this timeslot's date range."""
+        return self.duration
+
+    # Model
 
     @models.permalink
     def get_absolute_url(self):
