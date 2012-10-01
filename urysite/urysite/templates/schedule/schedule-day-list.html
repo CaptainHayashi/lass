@@ -6,9 +6,17 @@
                 <h1 class="schedule-day-show-time">
                     {{ slot.start_time|date:"H:i" }}
                 </h1>
-                <h2 class="schedule-day-show-title">
-                    {{ slot.title }}
-                </h2>
+                {% if slot.season.show.show_type.has_showdb_entry %}
+                    <a href="{{ slot.get_absolute_url }}">
+                        <h2 class="schedule-day-show-title">
+                            {{ slot.title }}
+                        </h2>
+                    </a>
+                {% else %}
+                    <h2 class="schedule-day-show-title">
+                        {{ slot.title }}
+                    </h2>
+                {% endif %}
                 {% if slot.by_line %}
                 <h3 class="schedule-day-show-by-line">
                     with {{slot.by_line}}

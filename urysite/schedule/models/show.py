@@ -27,12 +27,13 @@ class ShowType(models.Model):
     id = exts.primary_key_from_meta(Meta)
 
     name = models.CharField(
-        max_length=30,
-        db_column='name')
+        max_length=30)
 
     public = models.BooleanField(
-        default=True,
-        db_column='public')
+        default=True)
+
+    has_showdb_entry = models.BooleanField(
+        default=True)
 
 
 class Show(MetadataSubjectMixin,

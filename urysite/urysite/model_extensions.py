@@ -37,16 +37,13 @@ def make_key_name(db_table):
 
 def foreign_key(source_meta,
                 dest,
-                db_column=None,
+                db_column,
                 verbose_name=None):
     """Shortcut for creating a foreign key, given the source model's
     metadata class, the target model's class name and, optionally, the
     source database column and target model verbose name.
 
     """
-    # Auto-infer a database column name if none given.
-    if db_column is None:
-        db_column = make_key_name(dest_meta.db_table)
 
     # Auto-infer a verbose name if none given.
     if verbose_name is None:

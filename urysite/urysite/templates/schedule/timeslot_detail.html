@@ -1,4 +1,6 @@
 {% extends "urysite/article-sidebar.html" %}
+{% load url from future %}
+
 {% block title %}URY Shows - {{ timeslot.title }}{% endblock title %}
 
 {% block article-class %}timeslot-page{% endblock article-class %}
@@ -49,6 +51,12 @@
 {% block article-aside %}
     <nav class='article-navigation'>
         <ul>
+            <li>
+                {% with timeslot.start_time.isocalendar as st %}
+                    <a href="{% url 'schedule_weekday' st.0 st.1 st.2 %}">
+                        To Schedule
+                    </a>
+                {% endwith %}
             <li>
                 <a href="{{ timeslot.season.get_absolute_url }}">
                     Back to Season {{ timeslot.season.number }}

@@ -4,7 +4,11 @@
     title="{{ show.tooltip }}"
     rowspan="{{ entry.row_span }}"
     >
-  <a href="/shows/?entryid={{ timeslot.entryid }}">
-    {{ entry.timeslot.title }}
-  </a>
+    {% if entry.timeslot.season.show.show_type.has_showdb_entry %}
+        <a href="{{ entry.timeslot.get_absolute_url }}">
+            {{ entry.timeslot.title }}
+        </a>
+    {% else %}
+        {{ entry.timeslot.title }}
+    {% endif %}
 </td>
