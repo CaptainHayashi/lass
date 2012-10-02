@@ -1,9 +1,7 @@
 # Django settings for urysite project.
 
 import os
-import json
-import subprocess
-from django.core.exceptions import ImproperlyConfigured
+from urysite import external_programs as ep
 
 # This is where (almost) all the files are stored.
 PROJECT_ROOT = os.path.dirname(__file__)
@@ -19,26 +17,10 @@ ADMINS = (
 MANAGERS = ADMINS
 
 # We don't store the database password in this file, but instead use
-# a central database passwords store, which needs a bit of magick to
-# get the Django password out of:
-
-dbstanza = subprocess.check_output(
-    'echo "django" | /usr/local/bin/dbpassget-django', shell=True
-)
-
-# Output should be "OK <json encoding of Python dictionary>".
-if (dbstanza[:2] == 'OK'):
-    default_db = json.loads(dbstanza[3:])
-else:
-    raise ImproperlyConfigured(
-        "dbpassget isn't working, returned: %s" % dbstanza
-    )
-
-# End magick.  If you didn't understand this, blame Matt Windsor,
-# dbpassget is his abomination.
-
+# a central database passwords store, which is accessed via the
+# dbpassget program family.
 DATABASES = {
-    'default': default_db
+    'default': ep.run_dbpassget('django')
 }
 
 # Local time zone for this installation. Choices can be found here:
@@ -69,18 +51,18 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = '/usr/local/urysite/media/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = ''
+MEDIA_URL = '/media/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = '/usr/local/urysite/static/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"

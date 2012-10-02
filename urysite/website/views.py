@@ -5,5 +5,4 @@ from random import choice
 
 
 def index(request):
-    banner = choice(Banner.objects.all())
     return render(request, 'website/index.html')

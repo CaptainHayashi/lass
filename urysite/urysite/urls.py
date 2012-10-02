@@ -27,6 +27,11 @@ urlpatterns += patterns(
     url(r'^search/', include('search.urls')),
     url(r'^getinvolved/', include('getinvolved.urls')),
 
+    url(r'^admin/orderedmove/(?P<direction>up|down)/'
+        '(?P<model_type_id>\d+)/(?P<model_id>\d+)/$',
+        'urysite.views.admin_move_ordered_model',
+        name="admin-move"),
+
     # Django apps
     url(r'^admin/', include(admin.site.urls)),
     url(r'^blog/', include('zinnia.urls')),

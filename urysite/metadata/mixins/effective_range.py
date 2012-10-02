@@ -19,12 +19,22 @@ class EffectiveRangeMixin(models.Model, DateRangeMixin):
 
     effective_from = models.DateTimeField(
         db_column='effective_from',
-        help_text='The date from which this credit applies.')
+        null=True,
+        blank=True,
+        help_text="""The date from which this item applies.
+            If this is not given, then the item is inert, which
+            is usually the case when it has not been approved.
+
+            """)
 
     effective_to = models.DateTimeField(
         db_column='effective_to',
         null=True,
-        help_text='The date on which this credit ceases to apply, if any.')
+        blank=True,
+        help_text="""The date on which this credit ceases to apply,
+            if any.
+
+            """)
 
     def range_start(self):
         return self.effective_from
