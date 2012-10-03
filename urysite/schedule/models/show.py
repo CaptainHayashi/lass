@@ -50,7 +50,6 @@ class Show(MetadataSubjectMixin,
     class Meta:
         db_table = 'show'  # in schema "schedule"
         ordering = ['show_type', '-date_submitted']
-        managed = False
         app_label = 'schedule'
 
     id = exts.primary_key_from_meta(Meta)

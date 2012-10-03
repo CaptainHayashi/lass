@@ -20,7 +20,6 @@ class Podcast(MetadataSubjectMixin,
     class Meta:
         db_table = 'podcast'  # in schema "uryplayer"
         ordering = ['-date_submitted']
-        managed = False
         app_label = 'uryplayer'
 
     id = exts.primary_key_from_meta(Meta)

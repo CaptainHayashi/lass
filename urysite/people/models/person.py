@@ -19,7 +19,6 @@ class Person(models.Model):
 
     class Meta:
         db_table = 'member'
-        managed = False
         app_label = 'people'
 
     def full_name(self):

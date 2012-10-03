@@ -20,7 +20,6 @@ class PodcastCredit(Credit):
 
     class Meta(Credit.Meta):
         db_table = 'podcast_credit'  # In schema "uryplayer"
-        managed = False  # Can't manage, in non-public schema
         app_label = 'uryplayer'
         ordering = ['credit_type__name']
 

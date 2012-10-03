@@ -1,0 +1,18 @@
+{% for banner in banners %}
+    {% if banner.target %}
+        <a href="{{ banner.target }}">
+            <img class="banner-img"
+                 alt="{{ banner.alt }}"
+                 src="{{ MEDIA_URL }}{{ banner.image }}">
+        </a>
+    {% else %}
+        <img class="banner-img"
+             alt="{{ banner.alt }}"
+             src="{{ MEDIA_URL }}{{ banner.image }}">
+    {% endif %}
+{% empty %}
+    <img class="banner-img"
+         alt="((URY)) Banners"
+         src="{{ STATIC_URL }}banner_placeholder.png">
+{% endfor %}
+ 

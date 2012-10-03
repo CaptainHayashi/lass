@@ -9,7 +9,6 @@ from urysite import model_extensions as exts
 class RoleVisibility(models.Model):
     class Meta:
         db_table = 'role_visibility'
-        managed = False
         app_label = 'people'
 
     def __unicode__(self):
@@ -31,7 +30,6 @@ class Role(models.Model, MetadataSubjectMixin):
     """
     class Meta:
         db_table = 'role'  # in schema 'people'
-        managed = False
         app_label = 'people'
 
     def __unicode__(self):
@@ -156,7 +154,6 @@ class RoleInheritance(models.Model):
     """
     class Meta:
         db_table = 'role_inheritance'  # in schema 'people'
-        managed = False
         verbose_name = 'role inheritance'
         verbose_name_plural = 'role inheritances'
         app_label = 'people'

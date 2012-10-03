@@ -41,7 +41,7 @@ class Banner(models.Model):
 
             """)
 
-    filename = models.ImageField(
+    image = models.ImageField(
         upload_to='banners')
 
     target = models.URLField(
@@ -137,7 +137,7 @@ class BannerTimeslot(OrderedModel,
             (7, 'Sundays')
         ))
 
-    from_time = models.TimeField(
+    start_time = models.TimeField(
         help_text="""The time of day when the banner will start
             rotating.
             """,
@@ -147,7 +147,7 @@ class BannerTimeslot(OrderedModel,
             second=0,
             tzinfo=timezone.get_current_timezone()))
 
-    to_time = models.TimeField(
+    end_time = models.TimeField(
         help_text="""The time of day when the banner will stop
             rotating.
             """,

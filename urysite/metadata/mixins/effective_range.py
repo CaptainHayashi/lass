@@ -41,3 +41,38 @@ class EffectiveRangeMixin(models.Model, DateRangeMixin):
 
     def range_end(self):
         return self.effective_to
+
+    @classmethod
+    def in_range(cls, from_date, to_date, queryset=None):
+        """Retrieves (or filters towards) a QuerySet of items in
+        this model that are effective during the given time
+        range.
+
+        The items must cover the entire range.
+
+        Items with an 'effective_from' of NULL will be discarded;
+        items with an 'effective_to' of NULL will be treated as if
+        their effective_to is infinitely far in the future.
+
+        If queryset is given, it will be filtered with the
+        above condition; else the entire object set will be
+        considered.
+        """
+        if queryset is None:
+            queryset = cls.objects.all()
+        # Note that filter throws out objects with fields set to
+        # NULL whereas exclude does not.
+        return (queryset
+                .filter(effective_from__lte=from_date)
+                .exclude(effective_to__lt=to_date))
+
+    @classmethod
+    def at(cls, date, *args, **kwargs):
+        """Wrapper around 'in_range' that retrieves items effective
+        at the given moment in time.
+
+        See the documentation for 'in_range' for information about
+        which arguments can be provided besides 'date'.
+
+        """
+        return cls.in_range(date, date, *args, **kwargs)

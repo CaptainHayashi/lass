@@ -8,8 +8,8 @@ class BannerTimeslotAdmin(admin.ModelAdmin):
     list_display = (
         'campaign',
         'day',
-        'from_time',
-        'to_time'
+        'start_time',
+        'end_time'
     )
 
 admin.site.register(BannerTimeslot, BannerTimeslotAdmin)
@@ -45,7 +45,7 @@ admin.site.register(BannerLocation, BannerLocationAdmin)
 
 
 class BannerAdmin(admin.ModelAdmin):
-    list_display = ('alt', 'type', 'filename', 'target')
+    list_display = ('alt', 'type', 'image', 'target')
     inlines = [BannerCampaignInline]
 
 

@@ -23,7 +23,6 @@ class Block(models.Model):
 
     class Meta:
         db_table = 'block'  # In schema 'schedule'
-        managed = False  # It's in another schema, so can't manage
         ordering = ('priority',)
         app_label = 'schedule'
 
@@ -70,7 +69,6 @@ class BlockRangeRule(models.Model):
 
     class Meta:
         db_table = 'block_range_rule'  # In schema 'schedule'
-        managed = False  # It's in another schema, so can't manage
         app_label = 'schedule'
 
     def __unicode__(self):

@@ -12,7 +12,6 @@ class Term(models.Model):
 
     class Meta:
         db_table = 'terms'  # In public schema
-        managed = False
         app_label = 'schedule'
         get_latest_by = 'start_date'
 

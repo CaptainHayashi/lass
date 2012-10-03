@@ -24,7 +24,6 @@ class Season(MetadataSubjectMixin,
 
     class Meta:
         db_table = 'show_season'  # In schema 'schedule'
-        managed = False
         verbose_name = 'show season'
         app_label = 'schedule'
 
