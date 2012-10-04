@@ -7,6 +7,12 @@
 	<link rel="pingback" href="/xmlrpc/" />
 	{% endblock %}
 
+	{% block syndicatelinks %}
+		<a href="{% url 'zinnia_entry_latest_feed' %}" title="{% trans "RSS Feed of latest entries" %}" class="feeds">
+			<img alt="{% trans 'RSS Feed' %}" width="20px" height="20px" src="{% static 'img/rss.png' %}">
+		</a>
+	{% endblock %}
+	
   {% block body %}
     <div class="container">
       <header id="header" role="banner">
@@ -15,11 +21,6 @@
             <li>
               <a href="{% url 'zinnia_sitemap' %}" title="{% trans "Sitemap" %}" class="sitemap">
                 {% trans "Sitemap" %}
-              </a>
-            </li>
-            <li>
-              <a href="{% url 'zinnia_entry_latest_feed' %}" title="{% trans "RSS Feed of latest entries" %}" class="feeds">
-                {% trans "RSS Feed" %}
               </a>
             </li>
           </ul>

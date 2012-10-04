@@ -41,15 +41,16 @@
             {% sitetree_menu from "main" include "trunk, this-children" %}
             
             <div id="socialBtn">
+			{% block syndicatelinks %}{% endblock %}
                 <a href="http://www.twitter.com/ury1350">
-		    <img alt="Twitter" width="20px" height="20px" src="{% static 'img/twitter.png' %}">
-		</a>
-		<a href="http://www.facebook.com/pages/University-Radio-York/6168619549">
+					<img alt="Twitter" width="20px" height="20px" src="{% static 'img/twitter.png' %}">
+				</a>
+				<a href="http://www.facebook.com/pages/University-Radio-York/6168619549">
                     <img alt="Facebook" width="20px" height="20px" src="{% static 'img/facebook.png' %}">
-		</a>
-		<a href="https://plus.google.com/104651573423729444340?prsrc=3">
+				</a>
+				<a href="https://plus.google.com/104651573423729444340?prsrc=3">
                     <img alt="Google+" width="20px" height="20px" src="{% static 'img/gplus.png' %}">
-		</a>
+				</a>
             </div>
         </nav>
             
