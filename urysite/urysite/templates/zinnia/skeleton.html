@@ -8,7 +8,7 @@
 	<link rel="pingback" href="/xmlrpc/" />
 	{% endblock %}
 
-	{% block body-class %}blog{% endblock %}
+	{% block bodyClass %}blog {% block body-class %}{% endblock %}{% endblock %}
 	
 	{% block syndicatelinks %}
 		<a href="{% url 'zinnia_entry_latest_feed' %}" title="{% trans "RSS Feed of latest entries" %}" class="feeds">
