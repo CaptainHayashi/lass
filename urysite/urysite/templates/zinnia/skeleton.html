@@ -8,36 +8,28 @@
 	<link rel="pingback" href="/xmlrpc/" />
 	{% endblock %}
 
+	{% block body-class %}blog{% endblock %}
+	
 	{% block syndicatelinks %}
 		<a href="{% url 'zinnia_entry_latest_feed' %}" title="{% trans "RSS Feed of latest entries" %}" class="feeds">
 			<img alt="{% trans 'RSS Feed' %}" width="20px" height="20px" src="{% static 'img/rss.png' %}">
 		</a>
 	{% endblock %}
 	
-  {% block body %}
-    <div class="container">
-      <header id="header" role="banner">
-        <nav>
-          <ul class="top-navigation">
-            <li>
-              <a href="{% url 'zinnia_sitemap' %}" title="{% trans "Sitemap" %}" class="sitemap">
-                {% trans "Sitemap" %}
-              </a>
-            </li>
-          </ul>
-        </nav>
+	{% block body %}
+	  <header>
+		{% block breadcrumbs %}{% endblock %}
         <h1>
-          <a href="{% url 'zinnia_entry_archive_index' %}" title="Zinnia's Blog" rel="home">
-            Zinnia's Blog
+          <a href="{% url 'zinnia_entry_archive_index' %}" title="URY Blog" rel="home">
+            URY Blog
           </a>
         </h1>
         <blockquote>
           <p>Just another Zinnia Weblog.</p>
         </blockquote>
-        {% block breadcrumbs %}{% endblock %}
       </header>
       {% block slider %}{% endblock %}
-      <div id="content" class="hfeed" role="main">
+      <div id="content" class="hfeed box width-2" role="main">
         {% block content %}
         <div class="links">
           <h3>{% trans "Useful links" %}</h3>
@@ -64,7 +56,7 @@
         </div>
         {% endblock %}
       </div>
-      <div id="sidebar" role="complementary">
+      <div id="sidebar" class="box width-1 role="complementary">
         <aside id="widget-welcome" class="widget">
           <h3>Welcome!</h3>
           <p>
