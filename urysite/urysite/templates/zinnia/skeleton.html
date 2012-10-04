@@ -6,7 +6,7 @@
 	<link rel="pingback" href="/xmlrpc/" />
 	{% endblock %}
 
-  <body class="zinnia {% block body-class %}{% endblock %}">
+  {% block body %}
     <div class="container">
       <header id="header" role="banner">
         <nav>
@@ -80,5 +80,4 @@
         <p>Powered by <a href="http://www.djangoproject.com">Django</a> and <a href="https://github.com/Fantomas42/django-blog-zinnia">Zinnia {{ ZINNIA_VERSION }}</a>.</p>
       </footer>
     </div>
-  </body>
-</html>
+  {% endblock %}
