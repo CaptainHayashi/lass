@@ -17,21 +17,22 @@
         </title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
+        {% block meta %}{% endblock %}
         
-        
-        <!-- <link rel="stylesheet" type="text/css" href="{% static "css/site.css" %}"> -->
-        <link rel="stylesheet" href="{% static "css/normalise.css" %}">
-        <link rel="stylesheet" href="{% static "css/main.css" %}">
+        <!-- <link rel="stylesheet" type="text/css" href="{% static 'css/site.css' %}"> -->
+        <link rel="stylesheet" href="{% static 'css/normalise.css' %}">
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
+		{% block link %}{% endblock %}
     </head>
     <body>
         <header id="pageHeader" class="clearfix">
             <a id="logo" href="#">
-                <img id="logo-img" alt"((URY))" src="{% static "img/ury-logo.png" %}">
+                <img id="logo-img" alt"((URY))" src="{% static 'img/ury-logo.png' %}">
                 <h1>University Radio York</h1>
             </a>
             {% view 'schedule.views.header' %}
             <a id="webcam" class="transHovBG roundy" href="#">
-                <img id="webcamImg" alt="Live Webcam Image" src="{% static "img/webcam.jpg" %}" width="150px" height="113px">
+                <img id="webcamImg" alt="Live Webcam Image" src="{% static 'img/webcam.jpg' %}" width="150px" height="113px">
                 <span>Listen Live</span>
             </a>
         </header>
@@ -41,13 +42,13 @@
             
             <div id="socialBtn">
                 <a href="http://www.twitter.com/ury1350">
-		    <img alt="Twitter" width="20px" height="20px" src="{% static "img/twitter.png" %}">
+		    <img alt="Twitter" width="20px" height="20px" src="{% static 'img/twitter.png' %}">
 		</a>
 		<a href="http://www.facebook.com/pages/University-Radio-York/6168619549">
-                    <img alt="Facebook" width="20px" height="20px" src="{% static "img/facebook.png" %}">
+                    <img alt="Facebook" width="20px" height="20px" src="{% static 'img/facebook.png' %}">
 		</a>
 		<a href="https://plus.google.com/104651573423729444340?prsrc=3">
-                    <img alt="Google+" width="20px" height="20px" src="{% static "img/gplus.png" %}">
+                    <img alt="Google+" width="20px" height="20px" src="{% static 'img/gplus.png' %}">
 		</a>
             </div>
         </nav>
@@ -70,8 +71,8 @@
 
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
-        <script src="{% static "js/plugins.js" %}"></script>
-        <script src="{% static "js/main.js" %}"></script>
+        <script src="{% static 'js/plugins.js' %}"></script>
+        <script src="{% static 'js/main.js' %}"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
