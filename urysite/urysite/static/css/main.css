@@ -619,6 +619,15 @@ nav ul.breadcrumbs {
 	margin: 0;
 	padding: 0;
 }
+nav ul.breadcrumbs li {
+display: inline-block;
+}
+nav ul.breadcrumbs li:after {
+    content: "\00BB";
+}
+nav ul.breadcrumbs li:last-of-type:after {
+    content: "";
+}
 
 .blog #sidebar {
 	padding: 0;
