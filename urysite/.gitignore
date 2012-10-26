@@ -1,0 +1,7 @@
+.*.sw*
+*.pyc
+xapian_index
+python.core
+private
+doc/_build
+\#*\#
