@@ -95,7 +95,6 @@ class Person(models.Model):
         db_column='joined')
 
 
-
 ####################
 ## Person proxies ##
 ####################
