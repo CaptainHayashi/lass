@@ -28,7 +28,7 @@ class BlockShowRule(models.Model):
         app_label = 'schedule'
 
     def __unicode__(self):
-        return "%s -> %s" % (self.show, self.block)
+        return u'%s -> %s'.format(self.show, self.block)
 
     id = exts.primary_key_from_meta(Meta)
 
