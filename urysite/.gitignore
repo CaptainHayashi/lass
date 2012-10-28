@@ -2,6 +2,8 @@
 *.pyc
 xapian_index
 python.core
+locale
+templates
 private
 doc/_build
 \#*\#
