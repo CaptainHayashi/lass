@@ -21,7 +21,8 @@ from django.views.decorators.cache import cache_page
 
 @cache_page(60 * 60)  # Cache hourly
 def schedule_week_from_date(request, week_start):
-    """The week-at-a-glance schedule view, with the week specified
+    """
+    The week-at-a-glance schedule view, with the week specified
     by a date object denoting its starting day.
 
     """
@@ -33,6 +34,14 @@ def schedule_week_from_date(request, week_start):
     prev_start = week_start - timedelta(weeks=1)
     prev_year, prev_week, prev_day = prev_start.isocalendar()
 
+    # Check for query string information
+    show_private = (
+        request.GET.get('show_private', 'false').lower() == 'true'
+    )
+    iframe = (
+        request.GET.get('iframe', 'false').lower() == 'true'
+    )
+
     term = Term.of(week_start)
     schedule = None if not term else WeekTable.tabulate(
         ScheduleRange.week(
@@ -41,12 +50,20 @@ def schedule_week_from_date(request, week_start):
             exclude_before_start=False,
             exclude_after_end=False,
             exclude_subsuming=False,
-            with_filler_timeslots=True))
+            with_filler_timeslots=True,
+            exclude_non_public=(not show_private)
+        )
+    )
 
     return render(
         request,
-        'schedule/schedule-week.html',
-        {'week_start': week_start,
+        (
+            'schedule/schedule-week.html'
+            if not iframe
+            else 'schedule/schedule-week-iframe.html'
+        ),
+        {
+            'week_start': week_start,
             'this_year': this_year,
             'this_week': this_week,
             'next_start': next_start,
@@ -56,7 +73,9 @@ def schedule_week_from_date(request, week_start):
             'prev_year': prev_year,
             'prev_week': prev_week,
             'term': term,
-            'schedule': schedule})
+            'schedule': schedule
+        }
+    )
 
 
 def to_monday(date):
@@ -87,4 +106,5 @@ def schedule_week(request, year, week):
     # WEEK STARTS
     return schedule_week_from_date(
         request,
-        get_week_start(int(year), int(week)))
+        get_week_start(int(year), int(week)),
+    )
