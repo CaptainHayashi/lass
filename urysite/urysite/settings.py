@@ -1,4 +1,12 @@
-# Django settings for urysite project.
+"""
+The master Django settings module for LASS.
+
+Most of the settings that could change from site to site are imported
+from an array of modules in the `urysite.private` package, which will
+likely not exist in a fresh copy of LASS.  An example configuration
+is provided in ``(project root)/urysite/examples/private``.
+
+"""
 
 import os
 from urysite import django_apps, contrib_apps
@@ -80,7 +88,6 @@ INSTALLED_APPS = django_apps.INSTALLED_APPS
 INSTALLED_APPS += contrib_apps.INSTALLED_APPS
 
 INSTALLED_APPS += (
-    ## THIRD PARTY EXTENSIONS ##
     ## LASS APPS ##
     'website',
     'people',
