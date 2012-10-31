@@ -2,6 +2,7 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import cache_page
 from website.models import BannerCampaign, BannerTimeslot, SISComm
+from website.models import Grid
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from schedule.utils import list
@@ -10,7 +11,7 @@ from schedule.utils import list
 def front_page_banner(request):
     """
     Renders the current front page banner rotation.
-    
+
     """
     now = timezone.now()
     campaigns = BannerCampaign.at(now)
@@ -31,7 +32,7 @@ def front_page_banner(request):
 def send_message_form(request):
     """
     Renders the front page "send a message" form.
-    
+
     """
     return (render(request, 'website/send_message_form.html')
             if (list.coming_up(quantity=1)[0]
@@ -46,8 +47,8 @@ def send_message_form(request):
 @csrf_exempt
 def send_message(request):
     """
-    Sends a message to the current showvia the website.
-    
+    Sends a message to the current show via the website.
+
     """
     # Current show
     timeslot = list.coming_up(quantity=1)[0]
@@ -125,6 +126,12 @@ def send_message(request):
 def index(request):
     """
     Renders the home page.
-    
+
     """
-    return render(request, 'website/index.html')
+    return render(
+        request,
+        'website/index.html',
+        {
+            'grid': Grid.get('index')
+        }
+    )
