@@ -8,7 +8,10 @@ from django.utils import timezone
 from django.db.models import F
 
 
-def coming_up(date=None, quantity=10, with_filler_timeslots=True):
+def coming_up(date=None,
+              quantity=10,
+              with_filler_timeslots=True,
+              with_private_shows=False):
     """Retrieves the next 'quantity' timeslots, relative to 'date'.
 
     If there are not enough timeslots to make up 'quantity', the
@@ -27,6 +30,9 @@ def coming_up(date=None, quantity=10, with_filler_timeslots=True):
         list will cause the resulting gap to be filled in with a
         filler timeslot; filler timeslots count towards 'quantity'
         (default: True)
+    with_private_shows -- if True, even shows marked as private
+        will be shown (these usually denote non-broadcast events such
+        as demos and recordings).
     """
     if quantity <= 0:
         raise ValueError("'quantity' must be positive.")
@@ -36,6 +42,12 @@ def coming_up(date=None, quantity=10, with_filler_timeslots=True):
     query = Timeslot.objects.filter(
         duration__gte=date - F('start_time')
     ).order_by('start_time')
+
+    if not with_private_shows:
+        query = query.exclude(
+            season__show__show_type__public=False
+        )
+
     coming_up_unfilled = list(query)[:quantity]
 
     if with_filler_timeslots:
