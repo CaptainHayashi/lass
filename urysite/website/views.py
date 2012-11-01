@@ -3,12 +3,13 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import cache_page
 from website.models import BannerCampaign, BannerTimeslot, SISComm
 from website.models import Grid
+from website.models import Blog
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from schedule.utils import list
 
 
-def front_page_banner(request):
+def front_page_banner(request, block_id=None):
     """
     Renders the current front page banner rotation.
 
@@ -29,7 +30,7 @@ def front_page_banner(request):
 
 
 @cache_page(60, key_prefix="front_page_send_message")
-def send_message_form(request):
+def send_message_form(request, block_id=None):
     """
     Renders the front page "send a message" form.
 
@@ -121,6 +122,32 @@ def send_message(request):
 
             result = redirect('index')
     return result
+
+
+@cache_page(600)
+def blog_summary(request, block_id=None):
+    """
+    Outputs a summary of the blog corresponding to the grid block
+    ID this view was called from.
+
+    """
+    return render(
+        request,
+        'website/blog_summary.html',
+        {'blog': Blog.get(block_id)}
+    )
+
+
+@cache_page(60 * 60)
+def static_grid_block(request, block_id):
+    """
+    Outputs a static template as a grid block view.
+
+    """
+    return render(
+        request,
+        'website/boxes/{0}.html'.format(block_id)
+    )
 
 
 def index(request):

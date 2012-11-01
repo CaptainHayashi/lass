@@ -5,6 +5,7 @@ to' pair of fields.
 """
 
 from django.db import models
+from django.utils import timezone
 from metadata.mixins.date_range import DateRangeMixin
 
 
@@ -22,6 +23,7 @@ class EffectiveRangeMixin(models.Model, DateRangeMixin):
         db_column='effective_from',
         null=True,
         blank=True,
+        default=timezone.now(),
         help_text="""The date from which this item applies.
             If this is not given, then the item is inert, which
             is usually the case when it has not been approved.

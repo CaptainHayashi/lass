@@ -6,7 +6,9 @@ Adminstration system hooks for the `website` model set.
 from website.models import Banner, BannerType
 from website.models import BannerCampaign, BannerLocation
 from website.models import Grid, GridBlock, GridBlockInstance
+from website.models import GridBlockMetadata
 from website.models import BannerTimeslot
+from metadata.admin_base import MetadataAdmin, MetadataInline
 from django.contrib import admin
 
 
@@ -33,6 +35,17 @@ class GridBlockInstanceInline(admin.TabularInline):
     model = GridBlockInstance
 
 
+class GridBlockMetadataInline(MetadataInline):
+    """
+    An inline administration snap-in for grid block metadata.
+
+    """
+    model = GridBlockMetadata
+
+
+admin.site.register(GridBlockMetadata, MetadataAdmin)
+
+
 class GridBlockAdmin(admin.ModelAdmin):
     """
     An administration snap-in for grid blocks.
@@ -47,7 +60,10 @@ class GridBlockAdmin(admin.ModelAdmin):
         'width',
         'height'
     )
-    inlines = [GridBlockInstanceInline]
+    inlines = [
+        GridBlockInstanceInline,
+        GridBlockMetadataInline
+    ]
 
 admin.site.register(GridBlock, GridBlockAdmin)
 

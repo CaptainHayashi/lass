@@ -3,12 +3,13 @@ Models for the home page grid system.
 """
 
 from django.db import models
-from metadata.models import Type
+from metadata.models import Type, Metadata
+from metadata.mixins import MetadataSubjectMixin
 from uryplayer.models import PodcastChannel
 from urysite import model_extensions as exts
 
 
-class GridBlock(Type):
+class GridBlock(Type, MetadataSubjectMixin):
     """
     A block in the home page grid.
 
@@ -22,12 +23,12 @@ class GridBlock(Type):
     """
     width = models.IntegerField(
         default=1,
-        help_text='The width of this block, in multiples of one'
+        help_text='The width of this block, in multiples of one '
         'regularly sized block.'
     )
     height = models.IntegerField(
         default=1,
-        help_text='The height of this block, in multiples of one'
+        help_text='The height of this block, in multiples of one '
         'regularly sized block.'
     )
     view_name = models.CharField(
@@ -40,6 +41,11 @@ class GridBlock(Type):
         help_text='If given, the name of a Django URL to link to '
         'in the block footer as a source of more information '
         'on the subject of the contents of this block. '
+    )
+    is_more_url_absolute = models.BooleanField(
+        default=False,
+        help_text='If True, the More URL is interpreted as a raw URL;'
+        'otherwise it is parsed as a Django URL name.'
     )
     podcast_channel = models.ForeignKey(
         PodcastChannel,
@@ -66,11 +72,38 @@ class GridBlock(Type):
         'block.'
     )
 
+    ## OVERRIDES ##
+
+    def metadata_strands(self):
+        """
+        Returns the set of metadata strands available for this grid
+        block.
+
+        """
+        return {
+            'text': self.gridblockmetadata_set
+        }
+
     class Meta(Type.Meta):
         db_table = 'grid_block'
         app_label = 'website'
 
     id = exts.primary_key_from_meta(Meta)
+
+
+class GridBlockMetadata(Metadata):
+    """
+    Textual metadata for grid blocks.
+
+    """
+    element = models.ForeignKey(
+        GridBlock,
+        db_column='grid_block_id'
+    )
+
+    class Meta(Metadata.Meta):
+        db_table = 'grid_block_metadata'
+        app_label = 'website'
 
 
 class Grid(Type):

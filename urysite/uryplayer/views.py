@@ -5,7 +5,7 @@ from django.http import Http404
 from uryplayer.models import Podcast, PodcastChannel
 
 
-def home_podcasts(request, amount=5):
+def home_podcasts(request, amount=5, block_id=None):
     """Snap-in view for the URY Player box on the front page."""
     return render(
         request,

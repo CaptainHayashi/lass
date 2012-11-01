@@ -4,7 +4,7 @@ from django.shortcuts import render
 from music.models import ChartType, ChartRelease
 
 
-def home_chart(request, chart_type, show_position=True):
+def home_chart(request, block_id, show_position=True):
     """Renders a view of the given chart for the home page.
 
     chart_type can be any item that can be used by ChartType.get to
@@ -21,10 +21,19 @@ def home_chart(request, chart_type, show_position=True):
     elif show_position == 'False':
         show_position = False
 
-    real_chart_type = ChartType.get(chart_type)
+    # Quickfix that should be deleted once the
+    # chart types are renamed
+    try:
+        chart_type = ChartType.get(block_id)
+    except ChartType.DoesNotExist:
+        if block_id == 'chart':
+            chart_type = ChartType.get('URY Chart')
+        elif block_id == 'music':
+            chart_type = ChartType.get('Recommended Listening')
+
     try:
         chart = ChartRelease.objects.filter(
-            type__exact=real_chart_type).latest()
+            type__exact=chart_type).latest()
     except ChartRelease.DoesNotExist:
         chart = None
     return render(
@@ -32,6 +41,6 @@ def home_chart(request, chart_type, show_position=True):
         'music/home-chart.html',
         {
             'chart': chart,
-            'chart_type': real_chart_type,
+            'chart_type': chart_type,
             'show_position': show_position
         })
