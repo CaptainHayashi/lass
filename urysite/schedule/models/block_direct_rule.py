@@ -13,8 +13,7 @@ from schedule.models.block import Block
 
 
 class BlockShowRule(models.Model):
-    """A show-based matching rule for blocks.
-
+    """
     A block matching rule that matches the attached show only.
 
     This rule takes precedence over all other rules, except any
@@ -28,7 +27,7 @@ class BlockShowRule(models.Model):
         app_label = 'schedule'
 
     def __unicode__(self):
-        return u'%s -> %s'.format(self.show, self.block)
+        return u'{0} -> {1}'.format(self.show, self.block)
 
     id = exts.primary_key_from_meta(Meta)
 

@@ -16,6 +16,7 @@ Application index
     uryplayer
     metadata
     laconia
+    grid
 
 people - radio station members and contacts
 ===========================================

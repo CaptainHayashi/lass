@@ -2,7 +2,7 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import cache_page
 from website.models import BannerCampaign, BannerTimeslot, SISComm
-from website.models import Grid
+from grid.models import Grid
 from website.models import Blog
 from django.shortcuts import render, redirect
 from django.utils import timezone

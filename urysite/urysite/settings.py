@@ -97,7 +97,8 @@ INSTALLED_APPS += (
     'getinvolved',
     'metadata',
     'music',
-    'laconia'
+    'laconia',
+    'grid'
 )
 
 ##############

@@ -9,8 +9,5 @@ from website.models.banner import BannerTimeslot
 
 from website.models.blog import Blog
 
-from website.models.grid import GridBlock, Grid, GridBlockInstance
-from website.models.grid import GridBlockMetadata
-
 # v-- Temporary
 from website.models.sis_comm import SISComm

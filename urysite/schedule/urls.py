@@ -1,29 +1,9 @@
 from django.conf.urls import patterns, url
 from django.views.generic import ListView, DetailView
+
 from schedule.models import Show
+from urysite import url_regexes as ur
 
-##
-# SCHEDULE VIEWS
-##
-
-# Partial regular expressions
-year_regex = r'(?P<year>\d+)'
-week_regex = r'[wW](eek)?(?P<week>([0-4]?\d|5[0-3]))'
-weekday_regex = r'[dD]?(ay)?(?P<weekday>[1-7])'
-month_regex = r'(?P<month>(0?\d|1[12]))'
-day_regex = r'(?P<day>([0-2]?\d|3[01]))'
-
-# Full URL expressions in terms of the above
-schedule_week_regex, \
-    schedule_weekday_regex, \
-    schedule_day_regex = (
-        r'^{0}/$'.format('/'.join(x))
-        for x in (
-            (year_regex, week_regex),
-            (year_regex, week_regex, weekday_regex),
-            (year_regex, month_regex, day_regex),
-        )
-    )
 
 ##
 # SHOW DATABASE VIEWS
@@ -37,9 +17,8 @@ timeslot_regex = r'(?P<timeslot_num>[1-9]\d*)'
 # Full URL expressions in terms of the above
 showdb_show_regex, \
     showdb_season_regex, \
-    showdb_timeslot_regex = (
-        r'^shows/{0}/$'.format('/'.join(x))
-        for x in (
+    showdb_timeslot_regex = ur.relatives(
+        (
             (show_regex,),
             (show_regex, season_regex),
             (show_regex, season_regex, timeslot_regex),
@@ -54,13 +33,13 @@ urlpatterns = patterns(
     url(r'^today/',
         'today',
         name='today'),
-    url(schedule_week_regex,
+    url(ur.WEEK_REGEX,
         'schedule_week',
         name='schedule_week'),
-    url(schedule_weekday_regex,
+    url(ur.WEEKDAY_REGEX,
         'schedule_weekday',
         name='schedule_weekday'),
-    url(schedule_day_regex,
+    url(ur.DAY_REGEX,
         'schedule_day',
         name='schedule_day'),
     url(r'^shows/$',
