@@ -35,6 +35,11 @@ class GridBlock(Type, MetadataSubjectMixin):
         max_length=255,
         help_text='The name of the view to embed in this block.'
     )
+    cache_duration = models.IntegerField(
+        default=0,
+        help_text='The duration, in seconds, that this block should'
+        'be cached for.'
+    )
     more_url = models.CharField(
         max_length=255,
         blank=True,

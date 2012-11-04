@@ -124,7 +124,6 @@ def send_message(request):
     return result
 
 
-@cache_page(600)
 def blog_summary(request, block_id=None):
     """
     Outputs a summary of the blog corresponding to the grid block
@@ -134,11 +133,12 @@ def blog_summary(request, block_id=None):
     return render(
         request,
         'website/blog_summary.html',
-        {'blog': Blog.get(block_id)}
+        {
+            'blog': Blog.get(block_id)
+        }
     )
 
 
-@cache_page(60 * 60)
 def static_grid_block(request, block_id):
     """
     Outputs a static template as a grid block view.
@@ -146,7 +146,7 @@ def static_grid_block(request, block_id):
     """
     return render(
         request,
-        'website/boxes/{0}.html'.format(block_id)
+        'grid/{0}.html'.format(block_id)
     )
 
 

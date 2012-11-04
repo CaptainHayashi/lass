@@ -9,6 +9,17 @@ class ChartType(Type):
     URY Chart.
 
     """
+    def latest_release(self):
+        """
+        Returns the latest chart release for this type, if one
+        exists.
+
+        Raises `ChartRelease.DoesNotExist` if the given chart has no
+        releases.
+
+        """
+        return self.chartreleases_set.latest()
+
     class Meta(Type.Meta):
         db_table = 'chart_type'
 
@@ -57,7 +68,7 @@ class ChartRow(models.Model):
         Returns None if the item was not on the chart last time.
 
         """
-        prev_charts = Chart.objects.filter(
+        prev_charts = ChartType.objects.filter(
             date_submitted__lt=self.chart.date_submitted
         )
         if prev_charts:
