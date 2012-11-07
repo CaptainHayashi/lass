@@ -16,9 +16,8 @@ class GridBlock(Type, MetadataSubjectMixin):
     Grid blocks are akin to widgets or dashboard items in other
     analogous systems.
 
-    `GridBlock`s do not contain any positioning information; the
-    `GridBlockInstance` and `Grid` models are concerned with
-    this.
+    A `GridBlock` does not contain any positioning information; the
+    `GridBlockInstance` and `Grid` models are concerned with this.
 
     """
     width = models.IntegerField(
@@ -37,7 +36,7 @@ class GridBlock(Type, MetadataSubjectMixin):
     )
     cache_duration = models.IntegerField(
         default=0,
-        help_text='The duration, in seconds, that this block should'
+        help_text='The duration, in seconds, that this block should '
         'be cached for.'
     )
     more_url = models.CharField(
@@ -50,7 +49,7 @@ class GridBlock(Type, MetadataSubjectMixin):
     is_more_url_absolute = models.BooleanField(
         default=False,
         help_text='If True, the More URL is interpreted as a raw URL;'
-        'otherwise it is parsed as a Django URL name.'
+        ' otherwise it is parsed as a Django URL name.'
     )
     podcast_channel = models.ForeignKey(
         PodcastChannel,
@@ -63,18 +62,6 @@ class GridBlock(Type, MetadataSubjectMixin):
         default=0,
         help_text='The number of seconds between each AJAX poll if '
         'an `ajax_url` is provided.  If 0, AJAX is disabled.'
-    )
-    ajax_url = models.CharField(
-        max_length=255,
-        blank=True,
-        help_text='If given, the name of a Django URL to replace the '
-        'block contents with every `ajax_poll_duration` seconds.'
-    )
-    css_class = models.CharField(
-        max_length=255,
-        blank=True,
-        help_text='Any additional CSS classes to apply to this'
-        'block.'
     )
 
     ## OVERRIDES ##

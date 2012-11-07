@@ -9,13 +9,11 @@ Welcome to LASS's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   introduction
-   licence
-   contributors
-   installation
-   lass_modules
+    metadoc
+    installation
+    lass_modules
 
 
 Indices and tables

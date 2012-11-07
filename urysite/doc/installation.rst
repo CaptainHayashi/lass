@@ -1,6 +1,34 @@
+.. _installation:
+
 ========================
 Installation Information
 ========================
+
+.. sectionauthor:: Matt Windsor <matt.windsor@ury.org.uk>
+
+`LASS` is a non-trivial project to install.  Work is constantly being
+carried out to make the project easier to deploy, but at this early
+stage installation requires a large amount of manual intervention.
+
+Prerequisite Modules
+====================
+
+At the time of writing, `LASS` requires a large amount of Django apps
+to be installed manually.  Check the `urysite.contrib_apps` module
+for hints as to what you will need.
+
+Templates and Static Files
+==========================
+
+The `LASS` distribution does *not* include templates; these will
+eventually be available from the same locations as the code
+distribution, or you can roll your own if you choose.
+
+Similarly, static files (CSS, images etc.) are not provided - you will
+almost certainly want to make your own statics as the ones used at URY
+constitute URY's unique station branding.
+
+A "vanilla" set of CSS/LESS stylesheets may be provided in the future.
 
 Required Data
 =============

@@ -29,6 +29,7 @@ urlpatterns += patterns(
     url(r'^search/', include('search.urls')),
     url(r'^getinvolved/', include('getinvolved.urls')),
     url(r'^laconia/', include('laconia.urls')),
+    url(r'^grid/', include('grid.urls')),
 
     url(r'^admin/orderedmove/(?P<direction>up|down)/'
         '(?P<model_type_id>\d+)/(?P<model_id>\d+)/$',

@@ -29,7 +29,6 @@ def front_page_banner(request, block_id=None):
         })
 
 
-@cache_page(60, key_prefix="front_page_send_message")
 def send_message_form(request, block_id=None):
     """
     Renders the front page "send a message" form.
