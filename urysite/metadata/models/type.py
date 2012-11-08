@@ -68,18 +68,18 @@ class Type(models.Model):
             class
         :rtype: an element of the called class
         """
-        cache_key = u'type-{0}-{1}-{2}'.format(
-            cls._meta.app_label,
-            cls._meta.object_name,
-            identifier.replace('-', '--').replace(' ', '-')
-            # ^-- Memcached refuses keys with spaces
-        )
-        cached = cache.get(cache_key)
-        if cached:
-            result = cached
+        if isinstance(identifier, cls):
+            result = identifier
         else:
-            if isinstance(identifier, cls):
-                result = identifier
+            cache_key = u'type-{0}-{1}-{2}'.format(
+                cls._meta.app_label,
+                cls._meta.object_name,
+                identifier.replace('-', '--').replace(' ', '-')
+                # ^-- Memcached refuses keys with spaces
+            )
+            cached = cache.get(cache_key)
+            if cached:
+                result = cached
             elif isinstance(identifier, int):
                 result = cls.objects.get(pk=identifier)
             elif isinstance(identifier, basestring):
