@@ -4,11 +4,13 @@
 
 from schedule.utils import list
 from django.shortcuts import render
-from django.views.decorators.cache import cache_page
 
 
-@cache_page(60, key_prefix="header")  # Cache minutely
-def header(request):
+def header(request, block_id=None):
+    """
+    View for the "On Air/Up Next" header summary of the schedule.
+
+    """
     coming_up_list = list.coming_up(quantity=2)
     length = len(coming_up_list)
     if length == 1:

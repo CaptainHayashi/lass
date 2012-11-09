@@ -89,6 +89,7 @@ INSTALLED_APPS += contrib_apps.INSTALLED_APPS
 
 INSTALLED_APPS += (
     ## LASS APPS ##
+    'grid',
     'website',
     'people',
     'uryplayer',
@@ -98,7 +99,6 @@ INSTALLED_APPS += (
     'metadata',
     'music',
     'laconia',
-    'grid'
 )
 
 ##############
