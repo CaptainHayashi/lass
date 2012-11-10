@@ -26,4 +26,17 @@ Models
     :members:
     :undoc-members:
     :show-inheritance:
+
+Template tags
+=============
+
+The implementation-level side of the `grid` framework is contained in a
+template tag library, `grid_tags`.
+
+.. automodule:: grid.templatetags.grid_tags
+    :deprecated:
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 """
