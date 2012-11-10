@@ -1,6 +1,5 @@
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.cache import cache_page
 from website.models import BannerCampaign, BannerTimeslot, SISComm
 from grid.models import Grid
 from website.models import Blog
@@ -102,6 +101,7 @@ def send_message(request):
                     jukebox or otherwise disrupt your show using a SIS
                     message.
                 </span>
+                </div>
                 """, message))
 
             # Find out where the sender is from
