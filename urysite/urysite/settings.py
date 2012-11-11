@@ -15,7 +15,7 @@ from urysite import django_apps, contrib_apps
 # Place site-specific settings in the modules imported here.
 # They will be ignored by the standard gitignore.
 from urysite.private import admin, debug, locale, content, key, sites
-from urysite.private import database, cache
+from urysite.private import database, cache, auth, middleware
 
 PROJECT_ROOT = os.path.dirname(__file__)
 
@@ -40,6 +40,7 @@ LOCALE_PATHS = content.LOCALE_DIRS
 STATICFILES_DIRS = content.STATICFILES_DIRS
 SEARCH_INDEX_PATH = content.SEARCH_INDEX_PATH
 DATABASES = database.DATABASES
+AUTHENTICATION_BACKENDS = auth.AUTHENTICATION_BACKENDS
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -67,7 +68,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'zinnia.context_processors.version'
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES = middleware.PRE_CLASSES
+MIDDLEWARE_CLASSES += (
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -78,6 +80,7 @@ MIDDLEWARE_CLASSES = (
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+MIDDLEWARE_CLASSES += middleware.POST_CLASSES
 
 ROOT_URLCONF = 'urysite.urls'
 
