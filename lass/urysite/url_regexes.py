@@ -31,7 +31,10 @@ def relatives(partial_sequences):
 # Dates #
 
 ## Partial regexes
-YEAR_PARTIAL = r'(?P<year>\d+)'
+# NB: The year regex is limited to years 1-9999.
+# This is intentional and mirrors the MAX_YEAR Python used at time of
+# writing (thus preventing year overflows).
+YEAR_PARTIAL = r'(?P<year>[1-9]\d?\d?\d?)'
 WEEK_PARTIAL = r'[wW](eek)?(?P<week>([0-4]?\d|5[0-3]))'
 WEEKDAY_PARTIAL = r'[dD]?(ay)?(?P<weekday>[1-7])'
 MONTH_PARTIAL = r'(?P<month>(0?\d|1[12]))'
