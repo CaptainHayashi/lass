@@ -4,8 +4,8 @@ xapian_index
 python.core
 locale
 templates
-private
-lass.egg_info/
+private/
+lass.egg-info/
 src/
-doc/_build/
+_build/
 \#*\#
