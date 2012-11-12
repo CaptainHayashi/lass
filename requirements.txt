@@ -3,8 +3,9 @@ Django>=1.4.2
 django-blog-zinnia>=0.11.2
 django-compressor>=1.2
 django-debug-toolbar>=0.9.4
-django-endless-pagination==1.2.7
+django-endless-pagination>=1.1
 django-flatblocks>=0.6.0
+django-haystack==1.2.7
 django-less>=0.4
 django-mptt>=0.5.4
 django-sitetree>=0.9
