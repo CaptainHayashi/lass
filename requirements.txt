@@ -1,4 +1,4 @@
--e git://github.com/UniversityRadioYork/lass.git#egg=lass
+-e git://github.com/UniversityRadioYork/django-lass-metadata.git#egg=django-lass-metadata
 Django>=1.4.2
 PIL>=1.1.6
 django-blog-zinnia>=0.11.2
