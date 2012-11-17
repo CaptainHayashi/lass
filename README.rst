@@ -31,10 +31,14 @@ How do I install this?
 
 (This section to be filled out better later)
 
+The ``requirements.txt`` file can be used to drag in all of LASS's
+dependencies, including the most recent checkout of the LASS github,
+using ``pip install -r requirements.txt``.
+
 Deploy as a WSGI application; you will need to fill in the Django
-settings that `urysite/urysite/settings.py` attempts to load from
-elsewhere; see the ``INSTALLED_APPS`` lists for hints on which
-dependencies to install.
+settings that `lass/urysite/settings.py` attempts to load from
+elsewhere; example private configuration can be found in
+`lass/examples`.
 
 Where are the templates?
 ========================
