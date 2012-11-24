@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from people.utils import group
+from lass_lerouge.utils import group
 
 
 def index(request):

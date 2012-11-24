@@ -39,7 +39,18 @@ TEMPLATE_DIRS = content.TEMPLATE_DIRS
 LOCALE_PATHS = content.LOCALE_DIRS
 STATICFILES_DIRS = content.STATICFILES_DIRS
 SEARCH_INDEX_PATH = content.SEARCH_INDEX_PATH
+
 DATABASES = database.DATABASES
+
+if hasattr(database, 'CREDIT_TYPE_DB_TABLE'):
+    CREDIT_TYPE_DB_TABLE = database.CREDIT_TYPE_DB_TABLE
+if hasattr(database, 'CREDIT_TYPE_DB_ID_COLUMN'):
+    CREDIT_TYPE_DB_ID_COLUMN = database.CREDIT_TYPE_DB_ID_COLUMN
+if hasattr(database, 'PERSON_DB_TABLE'):
+    PERSON_DB_TABLE = database.PERSON_DB_TABLE
+if hasattr(database, 'PERSON_DB_ID_COLUMN'):
+    PERSON_DB_ID_COLUMN = database.PERSON_DB_ID_COLUMN
+
 AUTHENTICATION_BACKENDS = auth.AUTHENTICATION_BACKENDS
 
 # List of finder classes that know how to find static files in
