@@ -4,8 +4,18 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
+import schedule.admin
+import uryplayer.admin
+import metadata.admin
+import people.admin
+
+
 # This is required for Django Admin to work
 admin.autodiscover()
+schedule.admin.register(admin.site)
+uryplayer.admin.register(admin.site)
+metadata.admin.register(admin.site)
+people.admin.register(admin.site)
 
 
 # General website pages (dynamic ones; static website pages

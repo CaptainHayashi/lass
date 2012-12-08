@@ -6,7 +6,6 @@ INSTALLED_APPS = (
     'haystack',
     'tagging',
     'mptt',
-    'zinnia',
     'flatblocks',
     'compressor',
     'less',
