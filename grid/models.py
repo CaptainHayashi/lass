@@ -3,7 +3,8 @@ Models for the home page grid system.
 """
 
 from django.db import models
-from metadata.models import Type, Metadata
+from lass_utils.models import Type
+from metadata.models.text import TextMetadata
 from metadata.mixins import MetadataSubjectMixin
 from uryplayer.models import PodcastChannel
 from urysite import model_extensions as exts
@@ -73,7 +74,7 @@ class GridBlock(Type, MetadataSubjectMixin):
 
         """
         return {
-            'text': self.gridblockmetadata_set
+            'text': self.gridblocktextmetadata_set
         }
 
     class Meta(Type.Meta):
@@ -82,20 +83,14 @@ class GridBlock(Type, MetadataSubjectMixin):
 
     id = exts.primary_key_from_meta(Meta)
 
-
-class GridBlockMetadata(Metadata):
-    """
-    Textual metadata for grid blocks.
-
-    """
-    element = models.ForeignKey(
-        GridBlock,
-        db_column='grid_block_id'
-    )
-
-    class Meta(Metadata.Meta):
-        db_table = 'grid_block_metadata'
-        app_label = 'website'
+GridBlockTextMetadata = TextMetadata.make_model(
+    GridBlock,
+    'schedule',
+    'GridBlockTextMetadata',
+    'grid_block_metadata',
+    'id',
+    'grid_block_id'
+)
 
 
 class Grid(Type):

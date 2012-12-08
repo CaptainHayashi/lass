@@ -4,11 +4,11 @@
 
 from django.db import models
 from urysite import model_extensions as exts
-from metadata.models import Type
+from lass_utils.models import Type
+from lass_utils.mixins import EffectiveRangeMixin
 from urysite.models import OrderedModel
 from people.mixins import ApprovableMixin
 from people.mixins import CreatableMixin
-from metadata.mixins import EffectiveRangeMixin
 from datetime import time
 from django.utils import timezone
 
@@ -101,10 +101,12 @@ class BannerCampaign(ApprovableMixin,
     ## MAGIC METHODS ##
 
     def __unicode__(self):
-        return "{0} ({1}, {2}->{3})".format(self.banner.alt,
-                                           self.location,
-                                           self.effective_from,
-                                           self.effective_to)
+        return u"{0} ({1}, {2}->{3})".format(
+            self.banner.alt,
+            self.location,
+            self.effective_from,
+            self.effective_to
+        )
 
 
 class BannerTimeslot(OrderedModel,

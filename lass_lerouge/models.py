@@ -1,7 +1,7 @@
 """Models pertaining to LeRouge roles"""
 
 from django.db import models
-from metadata.models import Metadata
+from metadata.models import TextMetadata
 from metadata.mixins import MetadataSubjectMixin
 from urysite import model_extensions as exts
 
@@ -37,7 +37,7 @@ class Role(models.Model, MetadataSubjectMixin):
 
     def metadata_strands(self):
         return {
-            'text': self.rolemetadata_set
+            'text': self.roletextmetadata_set
         }
 
     def email(self):
@@ -62,9 +62,10 @@ class Role(models.Model, MetadataSubjectMixin):
     ordering = models.IntegerField()
 
     parents = models.ManyToManyField(
-            'self',
-            symmetrical=False,
-            through='RoleInheritance')
+        'self',
+        symmetrical=False,
+        through='RoleInheritance'
+    )
 
     @staticmethod
     def make_foreign_key(src_meta, db_column='role_id'):
@@ -125,21 +126,14 @@ class GroupRootRole(Role):
 
             """)
 
-
-class RoleMetadata(Metadata):
-    """An item of textual role metadata.
-
-    """
-
-    class Meta(Metadata.Meta):
-        db_table = 'role_metadata'  # in schema 'people'
-        verbose_name = 'role metadatum'
-        verbose_name_plural = 'role metadata'
-        app_label = 'people'
-
-    id = exts.primary_key_from_meta(Meta)
-
-    element = Role.make_foreign_key(Meta)
+RoleTextMetadata = TextMetadata.make_model(
+    Role,
+    'schedule',
+    'RoleTextMetadata',
+    'role_metadata',
+    'role_metadata_id',
+    'role_id'
+)
 
 
 class RoleInheritance(models.Model):

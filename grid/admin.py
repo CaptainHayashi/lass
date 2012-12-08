@@ -4,7 +4,7 @@ Administration system registrations for the grid system.
 """
 
 from grid.models import Grid, GridBlock, GridBlockInstance
-from grid.models import GridBlockMetadata
+from grid.models import GridBlockTextMetadata
 from metadata.admin_base import MetadataAdmin, MetadataInline
 from django.contrib import admin
 
@@ -32,15 +32,15 @@ class GridBlockInstanceInline(admin.TabularInline):
     model = GridBlockInstance
 
 
-class GridBlockMetadataInline(MetadataInline):
+class GridBlockTextMetadataInline(MetadataInline):
     """
     An inline administration snap-in for grid block metadata.
 
     """
-    model = GridBlockMetadata
+    model = GridBlockTextMetadata
 
 
-admin.site.register(GridBlockMetadata, MetadataAdmin)
+admin.site.register(GridBlockTextMetadata, MetadataAdmin)
 
 
 class GridBlockAdmin(admin.ModelAdmin):
@@ -59,7 +59,7 @@ class GridBlockAdmin(admin.ModelAdmin):
     )
     inlines = [
         GridBlockInstanceInline,
-        GridBlockMetadataInline
+        GridBlockTextMetadataInline
     ]
 
 admin.site.register(GridBlock, GridBlockAdmin)

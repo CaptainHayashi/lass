@@ -1,7 +1,7 @@
 from django.db import models
 from urysite import model_extensions as exts
-from metadata.models import Type
-from metadata.mixins import SubmittableMixin
+from lass_utils.models import Type
+from lass_utils.mixins import SubmittableMixin
 
 
 class ChartType(Type):
