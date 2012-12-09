@@ -48,10 +48,6 @@ urlpatterns += patterns(
 
     # Django apps
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^blog/', include('zinnia.urls')),
-    url(r'^news/', include('zinnia.urls')),
-    url(r'^speech/', include('zinnia.urls')),
-    url(r'^comments/', include('django.contrib.comments.urls')),
 )
 
 if settings.DEBUG:
