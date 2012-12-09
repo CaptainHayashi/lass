@@ -23,6 +23,9 @@ PROJECT_ROOT = os.path.dirname(__file__)
 
 # Defaults for overridable settings
 SITE_ID = 1
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend'
+)
 MIDDLEWARE_PRE_CLASSES = ()
 MIDDLEWARE_POST_CLASSES = ()
 SEARCH_INDEX_PATH = None
@@ -69,6 +72,8 @@ with open(
     globals().update(
         yaml.load(f.read())
     )
+
+AUTHENTICATION_BACKENDS = tuple(AUTHENTICATION_BACKENDS)
 
 # Slightly hacky method of allowing the settings file to specify it
 # wants to get its database configuration programmatically.
