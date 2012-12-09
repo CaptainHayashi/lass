@@ -73,8 +73,6 @@ with open(
         yaml.load(f.read())
     )
 
-AUTHENTICATION_BACKENDS = tuple(AUTHENTICATION_BACKENDS)
-
 # Slightly hacky method of allowing the settings file to specify it
 # wants to get its database configuration programmatically.
 if globals().get('DATABASES', None) == 'use-external':
@@ -110,7 +108,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 MIDDLEWARE_CLASSES = MIDDLEWARE_PRE_CLASSES
 
-MIDDLEWARE_CLASSES += (
+MIDDLEWARE_CLASSES += [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -120,7 +118,7 @@ MIDDLEWARE_CLASSES += (
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
+]
 MIDDLEWARE_CLASSES += MIDDLEWARE_POST_CLASSES
 
 ROOT_URLCONF = 'urysite.urls'
