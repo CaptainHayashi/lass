@@ -10,10 +10,12 @@ is provided in ``(project root)/urysite/examples/private``.
 
 import os
 import yaml
+
+from glob import glob
 from urysite import django_apps, contrib_apps
 
 
-PROJECT_ROOT = os.path.dirname(__file__)
+PROOT = os.path.dirname(__file__)
 
 
 ######################################################################
@@ -66,12 +68,12 @@ LESS_OUTPUT_DIR = 'LESS_CACHE'
 
 
 # Import in private settings
-with open(
-    os.path.join(PROJECT_ROOT, 'private/local_settings.yml')
-) as f:
-    globals().update(
-        yaml.load(f.read())
-    )
+for fname in sorted(glob(os.path.join(PROOT, 'private', '*.yml'))):
+    try:
+        with open(fname) as f:
+            globals().update(yaml.load(f.read()))
+    except IOError:
+        pass
 
 # Slightly hacky method of allowing the settings file to specify it
 # wants to get its database configuration programmatically.
@@ -154,6 +156,6 @@ INSTALLED_APPS += (
 #HAYSTACK_CONNECTIONS = {
 #    'default': {
 #        'ENGINE': 'haystack.backends.xapian_backend.XapianEngine',
-#        'PATH': os.path.join(PROJECT_ROOT, 'xapian_index'),
+#        'PATH': os.path.join(PROOT, 'xapian_index'),
 #    },
 #}
