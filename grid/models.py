@@ -148,5 +148,6 @@ class GridBlockInstance(models.Model):
         db_table = 'grid_block_instance'
         app_label = 'website'
         unique_together = ('grid', 'x', 'y')
+        ordering = ('y', 'x')
 
     id = exts.primary_key_from_meta(Meta)
