@@ -140,9 +140,11 @@ def range_csv(filename, items):
     1) Primary key
     2) Start time as UNIX timestamp
     3) End time as UNIX timestamp
-    4) 'title' from default metadata strand, if metadata exists
-    5) 'description' from default metadata strand, if metadata exists
-    6) By-line, if credits exist
+    4) 'title' from default metadata strand, if metadata exists;
+       else blank
+    5) 'description' from default metadata strand, if metadata exists;
+       else blank
+    6) By-line, if credits exist; else blank
 
     """
     response = HttpResponse(mimetype='text/csv')
@@ -152,26 +154,14 @@ def range_csv(filename, items):
     writer = csv.writer(response)
 
     for item in items:
-        row = [
+        writer.writerow([
             item.pk,
             item.range_start_unix(),
-            item.range_end_unix()
-        ]
-        if hasattr(item, 'metadatum_at_date'):
-            row.append(
-                item.metadatum_at_date(
-                    item.range_start(),
-                    'title')
-            )
-            row.append(
-                item.metadatum_at_date(
-                    item.range_start(),
-                    'description')
-            )
-        if hasattr(item, 'by_line'):
-            row.append(item.by_line())
-
-        writer.writerow(row)
+            item.range_end_unix(),
+            getattr(item, 'title', ''),
+            getattr(item, 'description', ''),
+            getattr(item, 'by_line', lambda x: '')()
+        ])
 
     return response
 
@@ -184,9 +174,7 @@ def range_item_title(item):
     metadata, or the unicode representation of the item.
 
     """
-    return (unicode(item)
-            if not hasattr(item, 'metadatum_at_date')
-            else item.metadatum_at_date(item.range_start(), 'title'))
+    return getattr(item, 'title', unicode(item))
 
 
 def range_item_dict(item):
