@@ -39,7 +39,8 @@ def current_show_location_and_time(request):
         request,
         'laconia/current-show-location-and-time.txt',
         {'timeslot': current_slot[0] if current_slot else None},
-        content_type="text/plain")
+        content_type="text/plain"
+)
 
 
 def range_querystring(request, appname, modelname, format='json'):
@@ -60,7 +61,8 @@ def range_querystring(request, appname, modelname, format='json'):
         modelname,
         request.GET['start'],
         request.GET['end'],
-        format)
+        format
+    )
 
 
 def range(request, appname, modelname, start, end, format='csv'):
@@ -171,10 +173,11 @@ def range_item_title(item):
     Returns the most sensible human-readable title for the item.
 
     This is either the 'text'/'title' metadatum if the item supports
-    metadata, or the unicode representation of the item.
+    metadata, or the empty string (for loggerng compatibility
+    purposes, primarily).
 
     """
-    return getattr(item, 'title', unicode(item))
+    return getattr(item, 'title', '')
 
 
 def range_item_dict(item):
