@@ -40,7 +40,7 @@ def current_show_location_and_time(request):
         'laconia/current-show-location-and-time.txt',
         {'timeslot': current_slot[0] if current_slot else None},
         content_type="text/plain"
-)
+    )
 
 
 def range_querystring(request, appname, modelname, format='json'):
@@ -67,15 +67,15 @@ def range_querystring(request, appname, modelname, format='json'):
 
 def range(request, appname, modelname, start, end, format='csv'):
     """
-    Retrieves a summary about any items in the given model
-    that fall within the given range.
+    Retrieves a summary about any items in the given model that fall
+    within the given range.
 
     Items are returned if any time within their own time range falls
     within the given range.
 
-    If format is 'csv', the result is delivered as a CSV if the
-    given model exists and supports range queries, or a HTTP 404 if
-    not.  The CSV may be empty.
+    If format is 'csv', the result is delivered as a CSV if the given
+    model exists and supports range queries, or a HTTP 404 if not.
+    The CSV may be empty.
 
     If format is 'fullcal', the result is instead a JSON list
     corresponding to the schema at http://arshaw.com/fullcalendar -
