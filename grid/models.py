@@ -2,7 +2,9 @@
 Models for the home page grid system.
 """
 
+from django.conf import settings
 from django.db import models
+
 from lass_utils.models import Type
 from metadata.models.text import TextMetadata
 from metadata.mixins import MetadataSubjectMixin
@@ -21,6 +23,11 @@ class GridBlock(Type, MetadataSubjectMixin):
     `GridBlockInstance` and `Grid` models are concerned with this.
 
     """
+    if hasattr(settings, 'GRID_BLOCK_DB_ID_COLUMN'):
+        id = models.AutoField(
+            primary_key=True,
+            db_column=getattr(settings, 'GRID_BLOCK_DB_ID_COLUMN')
+        )
     width = models.IntegerField(
         default=1,
         help_text='The width of this block, in multiples of one '
@@ -77,19 +84,37 @@ class GridBlock(Type, MetadataSubjectMixin):
             'text': self.gridblocktextmetadata_set
         }
 
-    class Meta(Type.Meta):
-        db_table = 'grid_block'
-        app_label = 'website'
+    ## ADDITIONAL METHODS ##
 
-    id = exts.primary_key_from_meta(Meta)
+    @classmethod
+    def make_foreign_key(cls):
+        """
+        Shortcut for creating a field that links to a grid.
+
+        """
+        _FKEY_KWARGS = {}
+        if hasattr(settings, 'GRID_BLOCK_DB_FKEY_COLUMN'):
+            _FKEY_KWARGS['db_column'] = (
+                settings.GRID_BLOCK_DB_FKEY_COLUMN
+            )
+        return models.ForeignKey(
+            cls,
+            help_text='The grid associated with this item.',
+            **_FKEY_KWARGS
+        )
+
+    class Meta(Type.Meta):
+        if hasattr(settings, 'GRID_BLOCK_DB_TABLE'):
+           db_table = getattr(settings, 'GRID_BLOCK_DB_TABLE')
+        app_label = 'grid'
 
 GridBlockTextMetadata = TextMetadata.make_model(
     GridBlock,
-    'schedule',
+    'grid',
     'GridBlockTextMetadata',
-    'grid_block_metadata',
-    'id',
-    'grid_block_id'
+    getattr(settings, 'GRID_BLOCK_TEXT_METADATA_DB_TABLE', None),
+    getattr(settings, 'GRID_BLOCK_TEXT_METADATA_DB_ID_COLUMN', None),
+    fkey=GridBlock.make_foreign_key()
 )
 
 

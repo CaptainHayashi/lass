@@ -6,6 +6,7 @@ Adminstration system hooks for the `website` model set.
 from website.models import Banner, BannerType
 from website.models import BannerCampaign, BannerLocation
 from website.models import BannerTimeslot
+from website.models import WebsitePackageEntry
 from django.contrib import admin
 
 
@@ -108,3 +109,6 @@ class BannerTypeAdmin(admin.ModelAdmin):
     inlines = [BannerInline]
 
 admin.site.register(BannerType, BannerTypeAdmin)
+
+
+admin.site.register(WebsitePackageEntry, admin.ModelAdmin)
