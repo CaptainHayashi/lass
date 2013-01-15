@@ -105,7 +105,7 @@ class GridBlock(Type, MetadataSubjectMixin):
 
     class Meta(Type.Meta):
         if hasattr(settings, 'GRID_BLOCK_DB_TABLE'):
-           db_table = getattr(settings, 'GRID_BLOCK_DB_TABLE')
+            db_table = getattr(settings, 'GRID_BLOCK_DB_TABLE')
         app_label = 'grid'
 
 GridBlockTextMetadata = TextMetadata.make_model(

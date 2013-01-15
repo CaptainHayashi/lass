@@ -32,4 +32,3 @@ WebsiteImageMetadata = WebsiteImageMetadata
 # v-- Temporary
 from website.models.sis_comm import SISComm
 SISComm = SISComm
-
