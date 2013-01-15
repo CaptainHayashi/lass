@@ -6,21 +6,35 @@ Installation Information
 
 .. sectionauthor:: Matt Windsor <matt.windsor@ury.org.uk>
 
-`LASS` is a non-trivial project to install.  Work is constantly being
+*LASS* is a non-trivial project to install.  Work is constantly being
 carried out to make the project easier to deploy, but at this early
 stage installation requires a large amount of manual intervention.
 
-Prerequisite Modules
-====================
+Requirements
+============
 
-At the time of writing, `LASS` requires a large amount of Django apps
-to be installed manually.  Check the `urysite.contrib_apps` module
-for hints as to what you will need.
+LASS carries a ``pip`` requirements file as ``requirements.txt``;
+you can use this to pull the dependencies and sub-apps in.
+
+Init scripts
+============
+
+Some things that LASS uses are written in languages other than Python,
+but nonetheless must be installed into any virtualenv LASS runs in in
+order for LASS to work.  At time of writing, these include SQLite (for
+running unit tests) and Xapian (search backend).
+
+Generally, scripts to install these into a virtualenv are available in
+the ``init_scripts`` directory as Bourne shell scripts.
+
+These will *not* work outside of a virtualenv; in those cases, you
+will need to use your operating system's native means of installing
+these dependencies.
 
 Templates and Static Files
 ==========================
 
-The `LASS` distribution does *not* include templates; these will
+The LASS distribution does *not* include templates; these will
 eventually be available from the same locations as the code
 distribution, or you can roll your own if you choose.
 
@@ -36,7 +50,6 @@ Required Data
 You will need to populate the database with some initial data. Where
 possible, the data is provided as fixtures to load with Django's
 ``loaddata`` command.
-
 
 Filler show
 -----------

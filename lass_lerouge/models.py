@@ -1,6 +1,8 @@
 """Models pertaining to LeRouge roles"""
 
+from django.conf import settings
 from django.db import models
+
 from metadata.models import TextMetadata
 from metadata.mixins import MetadataSubjectMixin
 from urysite import model_extensions as exts
@@ -29,8 +31,9 @@ class Role(models.Model, MetadataSubjectMixin):
 
     """
     class Meta:
-        db_table = 'role'  # in schema 'people'
-        app_label = 'people'
+        if hasattr(settings, 'ROLE_DB_TABLE'):
+            db_table = settings.ROLE_DB_TABLE
+        app_label = 'lass_lerouge'
 
     def __unicode__(self):
         return self.alias
@@ -48,7 +51,11 @@ class Role(models.Model, MetadataSubjectMixin):
         # TODO: Only publicly emailable roles should return here
         return '@'.join((self.alias, 'ury.org.uk'))
 
-    id = exts.primary_key_from_meta(Meta)
+    if hasattr(settings, 'ROLE_DB_ID_COLUMN'):
+        id = models.AutoField(
+            primary_key=True,
+            db_column=settings.ROLE_DB_ID_COLUMN
+        )
 
     alias = models.CharField(max_length=100)
 
@@ -67,13 +74,20 @@ class Role(models.Model, MetadataSubjectMixin):
         through='RoleInheritance'
     )
 
-    @staticmethod
-    def make_foreign_key(src_meta, db_column='role_id'):
-        """Shortcut for creating a field that links to a role, given
-        the source model's metadata class.
+    @classmethod
+    def make_foreign_key(cls):
+        """
+        Shortcut for creating a field that links to a role.
 
         """
-        return exts.foreign_key(src_meta, 'Role', db_column, 'role')
+        _FKEY_KWARGS = {}
+        if hasattr(settings, 'ROLE_DB_FKEY_COLUMN'):
+            _FKEY_KWARGS['db_column'] = settings.ROLE_DB_FKEY_COLUMN
+        return models.ForeignKey(
+            cls,
+            help_text='The role associated with this item.',
+            **_FKEY_KWARGS
+        )
 
 
 class GroupType(models.Model):
@@ -103,7 +117,7 @@ class GroupRootRole(Role):
     """
     class Meta:
         db_table = 'group_root_role'  # in schema 'people'
-        app_label = 'people'
+        app_label = 'lass_lerouge'
 
     group_root_id = exts.primary_key_from_meta(Meta)
 
@@ -128,11 +142,17 @@ class GroupRootRole(Role):
 
 RoleTextMetadata = TextMetadata.make_model(
     Role,
-    'schedule',
+    'lass_lerouge',
     'RoleTextMetadata',
-    'role_metadata',
-    'role_metadata_id',
-    'role_id'
+    getattr(
+        settings, 'ROLE_TEXT_METADATA_DB_TABLE',
+        None
+    ),
+    getattr(
+        settings, 'ROLE_TEXT_METADATA_DB_ID_COLUMN',
+        None
+    ),
+    fkey=Role.make_foreign_key(),
 )
 
 
@@ -149,7 +169,7 @@ class RoleInheritance(models.Model):
         db_table = 'role_inheritance'  # in schema 'people'
         verbose_name = 'role inheritance'
         verbose_name_plural = 'role inheritances'
-        app_label = 'people'
+        app_label = 'lass_lerouge'
 
     def __unicode__(self):
         return '{0} --|> {1}'.format(self.child, self.parent)

@@ -45,6 +45,11 @@ documentation written by humans.
 The aim is to serve as one centralised location for all information
 about LASS and how to use, extend and improve it.
 
+This document covers the integrated LASS project only; for the
+individual app documentation see the
+`URY project page <http://rtfd.org/profiles/UniversityRadioYork/>`_ on
+ReadTheDocs.
+
 Is this the only documentation?
 ===============================
 

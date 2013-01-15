@@ -13,6 +13,8 @@ Contents:
 
     metadoc
     installation
+    configuration
+    structure
     lass_modules
 
 

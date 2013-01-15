@@ -115,7 +115,7 @@ def send_message(request):
                 timeslotid=timeslot.id,
                 subject=message[:255],
                 content=message,
-                statusid=2,  # No other statuses
+                statusid=1,  # Unread
                 comm_source=location)
             message_comm.save()
 
