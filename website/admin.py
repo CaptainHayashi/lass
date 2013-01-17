@@ -7,6 +7,8 @@ from website.models import Banner, BannerType
 from website.models import BannerCampaign, BannerLocation
 from website.models import BannerTimeslot
 from website.models import WebsitePackageEntry
+from website.models import WebsiteImageMetadata
+from website.models import WebsiteTextMetadata
 from django.contrib import admin
 
 
@@ -110,5 +112,6 @@ class BannerTypeAdmin(admin.ModelAdmin):
 
 admin.site.register(BannerType, BannerTypeAdmin)
 
-
-admin.site.register(WebsitePackageEntry, admin.ModelAdmin)
+admin.site.register(WebsiteTextMetadata)
+admin.site.register(WebsiteImageMetadata)
+admin.site.register(WebsitePackageEntry)

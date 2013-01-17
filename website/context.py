@@ -8,6 +8,19 @@ from django.utils import timezone
 
 from schedule.models.term import Term
 
+from website.models import Website
+
+
+def website(request):
+    """
+    Provides the Website object so that data attached to the website
+    can be accessed.
+
+    """
+    return {
+        'website': Website()
+    }
+
 
 def broadcast_info(request):
     """

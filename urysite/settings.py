@@ -107,6 +107,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.media',
     'django.core.context_processors.static',
     'website.context.broadcast_info',
+    'website.context.website',
 )
 
 MIDDLEWARE_CLASSES = MIDDLEWARE_PRE_CLASSES
