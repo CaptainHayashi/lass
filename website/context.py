@@ -31,6 +31,7 @@ def broadcast_info(request):
     # If any other ways of discerning whether broadcasting is
     # occurring, add them here!
     term = Term.of(timezone.now())
+    preterm = Term.before(timezone.now())
     return {
         # broadcasting is intended to be true when a schedule is
         # in play.
@@ -46,7 +47,9 @@ def broadcast_info(request):
         'transmitting': getattr(
             settings,
             'TRANSMITTING',
-            (term is not None
-             or Term.before(timezone.now()).name.lower() != 'summer')
+            (
+                term is not None
+                or (preterm is not None and preterm.name.lower() != 'summer')
+            )
         ),
     }
