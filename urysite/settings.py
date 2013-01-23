@@ -70,12 +70,6 @@ for fname in sorted(glob(os.path.join(PROOT, 'private', '*.yml'))):
     except IOError:
         pass
 
-# Slightly hacky method of allowing the settings file to specify it
-# wants to get its database configuration programmatically.
-if globals().get('DATABASES', None) == 'use-external':
-    from urysite.private import database
-    DATABASES = database.DATABASES
-
 ######################################################################
 ## NON-OVERRIDABLE BLOCK
 
@@ -102,6 +96,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.media',
     'django.core.context_processors.static',
     'website.context.broadcast_info',
+    'website.context.website',
 )
 
 MIDDLEWARE_CLASSES = MIDDLEWARE_PRE_CLASSES

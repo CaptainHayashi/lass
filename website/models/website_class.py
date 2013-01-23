@@ -8,6 +8,7 @@ model, we have to use a singleton class to attach metadata to it.
 """
 
 from django.conf import settings
+from django.contrib.sites.models import Site
 
 from metadata.models import PackageEntry, ImageMetadata, TextMetadata
 from metadata.mixins import MetadataSubjectMixin
@@ -24,19 +25,38 @@ class Website(MetadataSubjectMixin):
 
     def metadata_strands(self):
         return {
-            "text": self.websitetextmetadata_set,
-            "image": self.websiteimagemetadata_set,
+            "text": WebsiteTextMetadata.objects,
+            "image": WebsiteImageMetadata.objects,
         }
 
     def packages(self):
-        return self.websitepackageentry_set
+        return WebsitePackageEntry.objects
+
+    def site(self):
+        """
+        Returns the current Django Sites Framework site.
+
+        """
+        try:
+            site = Site.objects.get_current()
+        except Site.DoesNotExist:
+            site = None
+        return site
 
 
 WebsiteTextMetadata = TextMetadata.make_model(
     Website,
     'website',
-    table=getattr(settings, 'WEBSITE_TEXT_METADATA_DB_TABLE', None),
-    id_column=getattr(settings, 'WEBSITE_TEXT_METADATA_DB_ID_COLUMN', None),
+    table=getattr(
+        settings,
+        'WEBSITE_TEXT_METADATA_DB_TABLE',
+        None
+    ),
+    id_column=getattr(
+        settings,
+        'WEBSITE_TEXT_METADATA_DB_ID_COLUMN',
+        None
+    ),
     fkey=None,
 )
 
@@ -44,8 +64,16 @@ WebsiteTextMetadata = TextMetadata.make_model(
 WebsiteImageMetadata = ImageMetadata.make_model(
     Website,
     'website',
-    table=getattr(settings, 'WEBSITE_IMAGE_METADATA_DB_TABLE', None),
-    id_column=getattr(settings, 'WEBSITE_IMAGE_METADATA_DB_ID_COLUMN', None),
+    table=getattr(
+        settings,
+        'WEBSITE_IMAGE_METADATA_DB_TABLE',
+        None
+    ),
+    id_column=getattr(
+        settings,
+        'WEBSITE_IMAGE_METADATA_DB_ID_COLUMN',
+        None
+    ),
     fkey=None,
 )
 
@@ -53,7 +81,15 @@ WebsiteImageMetadata = ImageMetadata.make_model(
 WebsitePackageEntry = PackageEntry.make_model(
     Website,
     'website',
-    table=getattr(settings, 'WEBSITE_PACKAGE_ENTRY_DB_TABLE', None),
-    id_column=getattr(settings, 'WEBSITE_PACKAGE_ENTRY_DB_ID_COLUMN', None),
+    table=getattr(
+        settings,
+        'WEBSITE_PACKAGE_ENTRY_DB_TABLE',
+        None
+    ),
+    id_column=getattr(
+        settings,
+        'WEBSITE_PACKAGE_ENTRY_DB_ID_COLUMN',
+        None
+    ),
     fkey=None,
 )
