@@ -1,51 +1,56 @@
-from people.models.role import Role, RoleMetadata
-from people.models import Person, CreditType
-from people.models import GroupRootRole
 from django.contrib import admin
 
+from metadata.admin_base import TextMetadataInline
+from metadata.admin_base import ImageMetadataInline
 
-## Person ##
-
-class PersonAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'date_joined')
-    exclude = ('password',)
-
-
-admin.site.register(Person, PersonAdmin)
+from lass_lerouge.models import Role
+from lass_lerouge.models import RoleTextMetadata
+from lass_lerouge.models import RoleImageMetadata
+from lass_lerouge.models import GroupRootRole
 
 
 ## RoleMetadata ##
 
-class RoleMetadataInline(admin.StackedInline):
-    model = RoleMetadata
-    list_display = ('metadata_key', 'metadata_value')
+class RoleTextMetadataInline(TextMetadataInline):
+    model = RoleTextMetadata
 
 
-## GroupRootRole ##
-
-class GroupRootRoleAdmin(admin.ModelAdmin):
-    list_display = (
-        'id',
-        'group_root_id',
-        'alias',
-        'title',
-        'group_type')
-    inlines = [RoleMetadataInline]
-
-
-admin.site.register(GroupRootRole, GroupRootRoleAdmin)
+class RoleImageMetadataInline(ImageMetadataInline):
+    model = RoleImageMetadata
 
 
 ## Role ##
 
 class RoleAdmin(admin.ModelAdmin):
     list_display = ('id', 'alias', 'title')
-    inlines = [RoleMetadataInline]
+    inlines = [
+        RoleTextMetadataInline,
+        RoleImageMetadataInline
+    ]
+
+    # These are needed because title and description are pseudo
+    # attributes exported through the metadata system.
+
+    def title(self, obj):
+        return obj.title
+
+    def description(self, obj):
+        return obj.description
 
 
 admin.site.register(Role, RoleAdmin)
 
 
-## CreditType ##
+## GroupRootRole ##
 
-admin.site.register(CreditType)
+class GroupRootRoleAdmin(RoleAdmin):
+    list_display = (
+        'id',
+        'group_root_id',
+        'alias',
+        'title',
+        'group_type'
+    )
+
+
+admin.site.register(GroupRootRole, GroupRootRoleAdmin)

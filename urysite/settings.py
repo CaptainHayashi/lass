@@ -71,7 +71,9 @@ LESS_OUTPUT_DIR = 'LESS_CACHE'
 for fname in sorted(glob(os.path.join(PROOT, 'private', '*.yml'))):
     try:
         with open(fname) as f:
-            globals().update(yaml.load(f.read()))
+            sets = yaml.load(f.read())
+            if isinstance(sets, dict):
+                globals().update(sets)
     except IOError:
         pass
 
@@ -133,6 +135,7 @@ INSTALLED_APPS += (
     'people',
     'uryplayer',
     'schedule',
+    'lass_lerouge',
     'search',
     'getinvolved',
     'metadata',
