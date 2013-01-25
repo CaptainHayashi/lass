@@ -24,6 +24,7 @@ people.admin.register(admin.site)
 urlpatterns = patterns(
     'website.views',
     url(r'^index$', 'index', name='index-explicit'),
+    url(r'^index.php$', 'index', name='index-explicit'),
     url(r'^$',  'index', name='index'),
     url(r'^send-message$', 'send_message', name='send_message'),
 )
