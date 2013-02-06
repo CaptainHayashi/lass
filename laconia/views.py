@@ -52,7 +52,7 @@ def current_show_and_next(request):
         on_air = coming_up_list[0]
         json_data = {
             "onAir": on_air.title,
-            "onAirDesc": "none"
+            "onAirDesc": on_air.description
         }
     elif length == 2:
         on_air, up_next = coming_up_list
@@ -60,7 +60,7 @@ def current_show_and_next(request):
             "onAir": on_air.title,
             "onAirDesc": "none",
             "upNext": up_next.title,
-            "upNextDesc": "none"
+            "upNextDesc": up_next.description
         }
     else:
         raise ValueError(
