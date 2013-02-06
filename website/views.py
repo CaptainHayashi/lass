@@ -158,6 +158,6 @@ def index(request):
         request,
         'website/index.html',
         {
-            'grid': Grid.get('index')
+            'grid': Grid.get_if_exists('index')
         }
     )

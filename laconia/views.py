@@ -1,8 +1,10 @@
 from django.db.models.loading import get_model
+from schedule.utils import list
 from schedule.utils.range import ScheduleRange
 from metadata.utils.date_range import in_range
 from django.shortcuts import render
 from django.utils import timezone
+from django.utils import simplejson
 from datetime import timedelta
 from django.http import Http404, HttpResponse
 import csv
@@ -42,6 +44,29 @@ def current_show_location_and_time(request):
         content_type="text/plain"
     )
 
+def current_show_and_next(request):
+    """Sends info about the current show as JSON."""
+    coming_up_list = list.coming_up(quantity=2)
+    length = len(coming_up_list)
+    if length == 1:
+        on_air = coming_up_list[0]
+        json_data = {
+            "onAir": on_air.title,
+            "onAirDesc": "none"
+        }
+    elif length == 2:
+        on_air, up_next = coming_up_list
+        json_data = {
+            "onAir": on_air.title,
+            "onAirDesc": "none",
+            "upNext": up_next.title,
+            "upNext": "none"
+        }
+    else:
+        raise ValueError(
+            "Coming up list is incorrect size, got |{0}|".format(
+                length))
+    return HttpResponse(simplejson.dumps(json_data), content_type="application/json")
 
 def range_querystring(request, appname, modelname, format='json'):
     """

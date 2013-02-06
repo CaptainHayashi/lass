@@ -16,12 +16,23 @@ from metadata.mixins import MetadataSubjectMixin
 
 class Website(MetadataSubjectMixin):
     """
-    Singleton class representing the website itself.
+    Class representing the website itself.
 
     This does not hold any data on its own, so in order to acquire a
     website object for running metadata queries, just run Website().
 
     """
+
+    def __init__(self, request):
+        """
+        Initialises a Website object.
+
+        :param request: The HttpRequest object of the current page.
+        :type request: HttpRequest
+        :rtype: Website
+
+        """
+        self.request = request
 
     def metadata_strands(self):
         return {
@@ -31,6 +42,18 @@ class Website(MetadataSubjectMixin):
 
     def packages(self):
         return WebsitePackageEntry.objects
+
+    ## Template-exposed API ##
+    def root(self):
+        """
+        Returns the URI of the root of the website, for concatenating
+        things like STATIC_URL onto it.
+
+        Please please PLEASE try using decoupling-friendly features
+        such as 'get_absolute_uri' and whatnot before this.
+
+        """
+        return self.request.build_absolute_uri('').rstrip('/')
 
     def site(self):
         """

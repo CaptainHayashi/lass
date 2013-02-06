@@ -141,7 +141,7 @@ class Grid(Type):
 
     class Meta(Type.Meta):
         db_table = 'grid'
-        app_label = 'website'
+        app_label = 'grid'
 
     id = exts.primary_key_from_meta(Meta)
 
@@ -171,7 +171,7 @@ class GridBlockInstance(models.Model):
 
     class Meta:
         db_table = 'grid_block_instance'
-        app_label = 'website'
+        app_label = 'grid'
         unique_together = ('grid', 'x', 'y')
         ordering = ('y', 'x')
 

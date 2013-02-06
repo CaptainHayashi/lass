@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db import models
 
 from metadata.models import TextMetadata
+from metadata.models import ImageMetadata
 from metadata.mixins import MetadataSubjectMixin
 from urysite import model_extensions as exts
 
@@ -11,7 +12,7 @@ from urysite import model_extensions as exts
 class RoleVisibility(models.Model):
     class Meta:
         db_table = 'role_visibility'
-        app_label = 'people'
+        app_label = 'lass_lerouge'
 
     def __unicode__(self):
         return self.name
@@ -40,7 +41,8 @@ class Role(models.Model, MetadataSubjectMixin):
 
     def metadata_strands(self):
         return {
-            'text': self.roletextmetadata_set
+            'text': self.roletextmetadata_set,
+            'image': self.roleimagemetadata_set,
         }
 
     def email(self):
@@ -95,8 +97,8 @@ class GroupType(models.Model):
 
     """
     class Meta:
-        db_table = 'group_type'  # in schema 'people'
-        app_label = 'people'
+        db_table = 'group_type'  # in schema 'lass_lerouge'
+        app_label = 'lass_lerouge'
 
     def __unicode__(self):
         return self.name
@@ -150,6 +152,22 @@ RoleTextMetadata = TextMetadata.make_model(
     ),
     getattr(
         settings, 'ROLE_TEXT_METADATA_DB_ID_COLUMN',
+        None
+    ),
+    fkey=Role.make_foreign_key(),
+)
+
+
+RoleImageMetadata = ImageMetadata.make_model(
+    Role,
+    'lass_lerouge',
+    'RoleImageMetadata',
+    getattr(
+        settings, 'ROLE_IMAGE_METADATA_DB_TABLE',
+        None
+    ),
+    getattr(
+        settings, 'ROLE_IMAGE_METADATA_DB_ID_COLUMN',
         None
     ),
     fkey=Role.make_foreign_key(),

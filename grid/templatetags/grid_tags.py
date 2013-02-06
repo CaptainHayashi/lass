@@ -45,5 +45,6 @@ def grid(context, grid_id):
     """
     # As grid_block and for the same reasons, but obviously with
     # 'grid' instead of 'box'.
-    context['grid'] = Grid.get(grid_id)
+    context['grid'] = Grid.get_if_exists(grid_id)
+    context['grid_id'] = grid_id
     return context
