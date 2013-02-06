@@ -48,24 +48,15 @@ def current_show_and_next(request):
     """Sends info about the current show as JSON."""
     coming_up_list = list.coming_up(quantity=2)
     length = len(coming_up_list)
-    if length == 1:
-        on_air = coming_up_list[0]
-        json_data = {
-            "onAir": on_air.title,
-            "onAirDesc": on_air.description
-        }
-    elif length == 2:
-        on_air, up_next = coming_up_list
-        json_data = {
-            "onAir": on_air.title,
-            "onAirDesc": "none",
-            "upNext": up_next.title,
-            "upNextDesc": up_next.description
-        }
-    else:
-        raise ValueError(
-            "Coming up list is incorrect size, got |{0}|".format(
-                length))
+    on_air, up_next = coming_up_list
+    json_data = {
+        "onAir": on_air.title,
+        "onAirDesc": on_air.description,
+        "onAirTime": on_air.start_time,
+        "upNext": up_next.title,
+        "upNextDesc": up_next.description
+        "upNextTime": up_next.start_time,
+    }
     return HttpResponse(simplejson.dumps(json_data), content_type="application/json")
 
 def range_querystring(request, appname, modelname, format='json'):
