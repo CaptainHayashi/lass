@@ -62,11 +62,6 @@ LOGGING = {
     }
 }
 
-## LESS
-
-LESS_OUTPUT_DIR = 'LESS_CACHE'
-
-
 # Import in private settings
 for fname in sorted(glob(os.path.join(PROOT, 'private', '*.yml'))):
     try:
