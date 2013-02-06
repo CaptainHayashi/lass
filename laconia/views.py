@@ -60,7 +60,7 @@ def current_show_and_next(request):
             "onAir": on_air.title,
             "onAirDesc": "none",
             "upNext": up_next.title,
-            "upNext": "none"
+            "upNextDesc": "none"
         }
     else:
         raise ValueError(
