@@ -54,8 +54,8 @@ def current_show_and_next(request):
         "onAirDesc": on_air.description,
         "onAirTime": on_air.start_time,
         "upNext": up_next.title,
-        "upNextDesc": up_next.description
-        "upNextTime": up_next.start_time,
+        "upNextDesc": up_next.description,
+        "upNextTime": up_next.start_time
     }
     return HttpResponse(simplejson.dumps(json_data), content_type="application/json")
 
