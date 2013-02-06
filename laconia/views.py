@@ -52,10 +52,10 @@ def current_show_and_next(request):
     json_data = {
         "onAir": on_air.title,
         "onAirDesc": on_air.description,
-        "onAirTime": on_air.start_time,
+        "onAirTime": on_air.start_time.strftime(%H:%M),
         "upNext": up_next.title,
         "upNextDesc": up_next.description,
-        "upNextTime": up_next.start_time
+        "upNextTime": up_next.start_time.strftime(%H:%M)
     }
     return HttpResponse(simplejson.dumps(json_data), content_type="application/json")
 
