@@ -53,7 +53,7 @@ class Website(MetadataSubjectMixin):
         such as 'get_absolute_uri' and whatnot before this.
 
         """
-        return self.request.build_absolute_uri('').rstrip('/')
+        return self.request.build_absolute_uri('/').rstrip('/')
 
     def site(self):
         """
