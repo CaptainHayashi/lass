@@ -7,6 +7,9 @@ urlpatterns = patterns(
     url(r'^current-show-location-and-time/$',
         'current_show_location_and_time',
         name='current_show_location_and_time'),
+    url(r'^current-show-and-next/$',
+        'current_show_and_next',
+        name='current_show_and_next'),
     url(r'^range/{0}/(?P<start>[0-9]+)/(?P<end>[0-9]+.)/$'
         .format(APP_MODEL_REGEX),
         'range',
