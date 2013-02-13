@@ -31,7 +31,9 @@ def broadcast_info(request):
     # If any other ways of discerning whether broadcasting is
     # occurring, add them here!
     term = Term.of(timezone.now())
-    preterm = Term.before(timezone.now())
+    if not term:
+        preterm = Term.before(timezone.now())
+
     return {
         # broadcasting is intended to be true when a schedule is
         # in play.
