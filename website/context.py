@@ -3,10 +3,12 @@ Context processors used in the LASS project.
 
 """
 
+import datetime
+
 from django.conf import settings
 from django.utils import timezone
 
-from schedule.models.term import Term
+from schedule import models
 
 from website.models import Website
 
@@ -25,16 +27,23 @@ def website(request):
 def broadcast_info(request):
     """
     Adds information about whether the radio station is currently
-    broadcasting into the template context.
+    broadcasting into the template context, as well as the currently
+    broadcasting shows.
 
     """
+    now = timezone.now()
+
     # If any other ways of discerning whether broadcasting is
     # occurring, add them here!
-    term = Term.of(timezone.now())
+    term = models.Term.of(now)
     if not term:
-        preterm = Term.before(timezone.now())
+        preterm = models.Term.before(now)
 
     return {
+        'shows': models.Timeslot.objects.public().in_range(
+            now,
+            now + datetime.timedelta(days=1)
+        ),
         # broadcasting is intended to be true when a schedule is
         # in play.
         'broadcasting': getattr(
