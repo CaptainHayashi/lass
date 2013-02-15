@@ -139,6 +139,19 @@ class Grid(Type):
         through='GridBlockInstance'
     )
 
+    def ordered_list(self):
+        """Returns a list of blocks active on this grid, ordered to render.
+
+        Provides all the blocks
+        This grid has instances for
+        Ordered Y then X
+        """
+        return GridBlock.objects.in_bulk(
+            self.gridblockinstance_set.all().values_list(
+                'grid_block', flat=True
+            )
+        ).values()
+
     class Meta(Type.Meta):
         db_table = 'grid'
         app_label = 'grid'

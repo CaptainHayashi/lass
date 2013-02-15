@@ -5,12 +5,13 @@ Template tags for the `grid` system.
 
 from django import template
 
+from grid import views
 from grid.models import GridBlock, Grid
 
 register = template.Library()
 
 
-@register.inclusion_tag('grid/generic.html', takes_context=True)
+@register.inclusion_tag('grid/block_indirect.html', takes_context=True)
 def grid_block(context, block_id):
     """
     Renders the grid block of the given ID.
@@ -21,11 +22,14 @@ def grid_block(context, block_id):
 
     """
     # Effectively pass the entire existing context with the
-    # difference that 'box' is set to the block ID.
+    # difference that 'box' is set to the block ID and 'template' to
+    # the actual template block_indirect should render.
     # This is required for embedded views to work properly, just
     # returning a context of {'box': GridBlock.get(block_id)} causes
     # embedded views to break.
-    context['box'] = GridBlock.get(block_id)
+    box = GridBlock.get(block_id)
+    context['box'] = box
+    context['template'] = views.template_of(box)
     return context
 
 

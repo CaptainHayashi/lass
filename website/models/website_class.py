@@ -33,6 +33,7 @@ class Website(MetadataSubjectMixin):
 
         """
         self.request = request
+        self.pk = 1  # Needed for the metadata system
 
     def metadata_strands(self):
         return {

@@ -15,6 +15,4 @@ def channel_singular(channel_name):
     singular noun metadatum.
 
     """
-    return (PodcastChannel
-            .get(channel_name)
-            .metadata()['text']['singular'])
+    return PodcastChannel.get(channel_name).singular

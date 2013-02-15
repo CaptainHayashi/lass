@@ -1,11 +1,7 @@
 from django.db.models.loading import get_model
-from schedule.utils import list
-from schedule.utils.range import ScheduleRange
 from metadata.utils.date_range import in_range
 from django.shortcuts import render
-from django.utils import timezone
 from django.utils import simplejson
-from datetime import timedelta
 from django.http import Http404, HttpResponse
 import csv
 import json
@@ -34,32 +30,35 @@ def laconia_error(request, message, status=403):
 
 def current_show_location_and_time(request):
     """Sends the current show location, time and show ID as text."""
-    current_slot = ScheduleRange.within(
-        timezone.now(),
-        timedelta(days=0)).data
+    # This just expects the current show to be given by context processors now.
     return render(
         request,
         'laconia/current-show-location-and-time.txt',
-        {'timeslot': current_slot[0] if current_slot else None},
         content_type="text/plain"
     )
 
+
 def current_show_and_next(request):
     """Sends info about the current show as JSON."""
-    coming_up_list = list.coming_up(quantity=2)
-    length = len(coming_up_list)
-    on_air, up_next = coming_up_list
+    on_air, up_next = range.day(limit=2)
     json_data = {
         "onAir": on_air.title,
         "onAirDesc": on_air.description,
         "onAirPres": on_air.by_line(),
-        "onAirTime": '{:%H:%M} - {:%H:%M}'.format(on_air.start_time, on_air.end_time()) ,
+        "onAirTime": '{:%H:%M} - {:%H:%M}'.format(
+            on_air.start_time, on_air.end_time()
+        ),
         "upNext": up_next.title,
         "upNextDesc": up_next.description,
         "upNextPres": up_next.by_line(),
-        "upNextTime": '{:%H:%M} - {:%H:%M}'.format(up_next.start_time, up_next.end_time()) 
+        "upNextTime": '{:%H:%M} - {:%H:%M}'.format(
+            up_next.start_time, up_next.end_time()
+        )
     }
-    return HttpResponse(simplejson.dumps(json_data), content_type="application/json")
+    return HttpResponse(
+        simplejson.dumps(json_data), content_type="application/json"
+    )
+
 
 def range_querystring(request, appname, modelname, format='json'):
     """

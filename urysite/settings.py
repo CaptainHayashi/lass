@@ -130,6 +130,7 @@ INSTALLED_APPS += (
     'people',
     'uryplayer',
     'schedule',
+    'website',
     'lass_lerouge',
     'search',
     'getinvolved',
@@ -137,7 +138,6 @@ INSTALLED_APPS += (
     'music',
     'laconia',
     'grid',
-    'website',
 )
 
 ##############

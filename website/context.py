@@ -3,12 +3,11 @@ Context processors used in the LASS project.
 
 """
 
-import datetime
-
 from django.conf import settings
 from django.utils import timezone
 
-from schedule import models
+from schedule.models import Term
+from schedule.utils.range import day
 
 from website.models import Website
 
@@ -35,15 +34,12 @@ def broadcast_info(request):
 
     # If any other ways of discerning whether broadcasting is
     # occurring, add them here!
-    term = models.Term.of(now)
+    term = Term.of(now)
     if not term:
-        preterm = models.Term.before(now)
+        preterm = Term.before(now)
 
     return {
-        'shows': models.Timeslot.objects.public().in_range(
-            now,
-            now + datetime.timedelta(days=1)
-        ),
+        'shows_on_air': day(now),
         # broadcasting is intended to be true when a schedule is
         # in play.
         'broadcasting': getattr(

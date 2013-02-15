@@ -5,7 +5,6 @@ from grid.models import Grid
 from website.models import Blog
 from django.shortcuts import render, redirect
 from django.utils import timezone
-from schedule.utils import list
 
 
 def front_page_banner(request, block_id=None):
@@ -33,10 +32,8 @@ def send_message_form(request, block_id=None):
     Renders the front page "send a message" form.
 
     """
-    return (render(request, 'website/send_message_form.html')
-            if (list.coming_up(quantity=1)[0]
-                .show_type().can_be_messaged)
-            else render(request, 'website/send_message_deny.html'))
+    # TODO: remove me when the grid block changes to a generic one.
+    return render(request, 'grid/send_message_form.html')
 
 
 # NOTE: THE BELOW IS A TEMPORARY HACK
