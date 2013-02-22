@@ -57,7 +57,7 @@ def send_message(request):
             'website/send-message-error.html',
             {'error': "You didn't specify a message."},
             status=403)
-    elif not timeslot.can_be_messaged():
+    elif not timeslot.can_be_messaged:
         result = render(
             request,
             'website/send-message-error.html',
