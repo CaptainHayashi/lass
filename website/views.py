@@ -6,6 +6,8 @@ from website.models import Blog
 from django.shortcuts import render, redirect
 from django.utils import timezone
 
+from schedule.utils import range as s_range
+
 
 def front_page_banner(request, block_id=None):
     """
@@ -47,7 +49,7 @@ def send_message(request):
 
     """
     # Current show
-    timeslot = list.coming_up(quantity=1)[0]
+    timeslot = s_range.day(limit=1)[0]
 
     if 'comments' not in request.POST:
         result = render(
