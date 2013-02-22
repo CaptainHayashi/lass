@@ -3,6 +3,9 @@ from metadata.utils.date_range import in_range
 from django.shortcuts import render
 from django.utils import simplejson
 from django.http import Http404, HttpResponse
+
+from schedule.utils import range as s_range
+
 import csv
 import json
 
@@ -40,19 +43,19 @@ def current_show_location_and_time(request):
 
 def current_show_and_next(request):
     """Sends info about the current show as JSON."""
-    on_air, up_next = range.day(limit=2)
+    on_air, up_next = s_range.day(limit=2)
     json_data = {
         "onAir": on_air.title,
         "onAirDesc": on_air.description,
         "onAirPres": on_air.by_line(),
         "onAirTime": '{:%H:%M} - {:%H:%M}'.format(
-            on_air.start_time, on_air.end_time()
+            on_air.start_time, on_air.end_time
         ),
         "upNext": up_next.title,
         "upNextDesc": up_next.description,
         "upNextPres": up_next.by_line(),
         "upNextTime": '{:%H:%M} - {:%H:%M}'.format(
-            up_next.start_time, up_next.end_time()
+            up_next.start_time, up_next.end_time
         )
     }
     return HttpResponse(
