@@ -43,21 +43,35 @@ def current_show_location_and_time(request):
 
 def current_show_and_next(request):
     """Sends info about the current show as JSON."""
-    on_air, up_next = s_range.day(limit=2)
-    json_data = {
-        "onAir": on_air.title,
-        "onAirDesc": on_air.description,
-        "onAirPres": on_air.by_line(),
-        "onAirTime": '{:%H:%M} - {:%H:%M}'.format(
-            on_air.start_time, on_air.end_time
-        ),
-        "upNext": up_next.title,
-        "upNextDesc": up_next.description,
-        "upNextPres": up_next.by_line(),
-        "upNextTime": '{:%H:%M} - {:%H:%M}'.format(
-            up_next.start_time, up_next.end_time
+    # In case the worst happens and the schedule doesn't come back with
+    # two items, we're very cautious about the size of day.
+    day = list(s_range.day(limit=2))
+
+    json_data = {}
+    if len(day) >= 1:
+        on_air = day[0]
+        json_data.update(
+            {
+                "onAir": on_air.title,
+                "onAirDesc": on_air.description,
+                "onAirPres": on_air.by_line(),
+                "onAirTime": '{:%H:%M} - {:%H:%M}'.format(
+                    on_air.start_time, on_air.end_time
+                ),
+            }
         )
-    }
+    if len(day) >= 2:
+        up_next = day[1]
+        json_data.update(
+            {
+                "upNext": up_next.title,
+                "upNextDesc": up_next.description,
+                "upNextPres": up_next.by_line(),
+                "upNextTime": '{:%H:%M} - {:%H:%M}'.format(
+                    up_next.start_time, up_next.end_time
+                )
+            }
+        )
     return HttpResponse(
         simplejson.dumps(json_data), content_type="application/json"
     )
