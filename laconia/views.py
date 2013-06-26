@@ -3,6 +3,7 @@ from metadata.utils.date_range import in_range
 from django.shortcuts import render
 from django.utils import simplejson
 from django.http import Http404, HttpResponse
+from django.conf import settings
 
 from schedule.utils import range as s_range
 
@@ -50,6 +51,10 @@ def current_show_and_next(request):
     json_data = {}
     if len(day) >= 1:
         on_air = day[0]
+        if on_air.player_image:
+            image = on_air.player_image.url
+        else:
+            image = settings.STATIC_URL + "img/default_show_player.png"
         json_data.update(
             {
                 "onAir": on_air.title,
@@ -58,6 +63,7 @@ def current_show_and_next(request):
                 "onAirTime": '{:%H:%M} - {:%H:%M}'.format(
                     on_air.start_time, on_air.end_time
                 ),
+                "onAirImg": image,
             }
         )
     if len(day) >= 2:
