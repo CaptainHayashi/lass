@@ -2,6 +2,8 @@
 LASS
 ====
 
+**This code is no longer in use at URY and usage is strongly discouraged.  See "lass-pyramid" instead.**
+
 This repository contains the core of the University Radio York
 website, the `Longevity Assured Site System`.  It is written in Python
 2.7 using the Django 1.4+ framework, and is licenced under the terms
